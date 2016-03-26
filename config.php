@@ -19,7 +19,7 @@ $config['register']		='invite';				//normal,正常;invite,只允许邀请注册;
 $config['mailauth']		=false;					//注册时是否邮箱验证
 
 /* url配置 */
-$config['urlroot']		='http://127.0.0.1';//访问的url起始
+$config['urlroot']		='http://xss.songboy.net';//访问的url起始
 $config['urlrewrite']	=false;					//是否启用Url Rewrite
 
 /* 存储配置 */
