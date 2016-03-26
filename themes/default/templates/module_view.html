@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XSS Platform</title>
+<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
+<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
+<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
+<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
+<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+</head>
+<body>
+<div class="container">
+{include file="header.html"}
+{include file="menus.html"}
+<div class="span-19 right">
+<p>当前位置： <a href="{$url.root}/index.php">首页</a> > 查看模块信息</p>
+<form id="contentForm" action="{$url.root}/index.php?do=module&act=set_submit" method="post">
+<input type="hidden" name="token" value="{$show.user.token}" />
+<input type="hidden" name="id" value="{$module.id}" />
+<fieldset> 
+	<legend>查看模块信息</legend>
+	<div id="contentShow"></div>
+	<p> 
+		<label for="title">模块名称</label><br> 
+		<input type="text" class="title" name="title" id="title" value="{$module.title}" readonly="readonly" /> 
+	</p>
+	<p> 
+		<label for="description">模块描述</label><br> 
+		<textarea style="height:80px" name="description" id="description" disabled="disabled">{$module.description}</textarea>
+	</p>
+    <p> 
+		<label for="description">参数 (需要服务器接收的参数名)</label><br> 
+        <ul id="keyList">
+        	{foreach from=$keys item=v}
+        	<li> <input name="keys[]" value="{$v}" type="checkbox" checked="checked" disabled="disabled" /> {$v}</li>
+            {/foreach}
+        </ul>
+	</p>
+	<p> 
+		<label for="description">配置参数 (使用此模块时需要配置的参数，如参数名为user，则代码引用：{literal}{set.user}{/literal})</label><br> 
+        <ul id="setkeyList">
+        	{foreach from=$setkeys item=v}
+        	<li> <input name="setkeys[]" value="{$v}" type="checkbox" checked="checked" disabled="disabled" /> {$v}</li>
+            {/foreach}
+        </ul>
+	</p>
+    <p> 
+		<label for="description">代码</label> ({literal}{projectId}为项目id,{set.***}为***配置参数{/literal})<br> 
+		<textarea name="code" id="code" style="width:700px" disabled="disabled">{$module.code}</textarea>
+	</p>
+	{if $module.isOpen==0}
+    <p> 
+		<label for="description">是否公开</label>  
+        <input type="radio" name="isOpen" readonly="readonly" value="0"{if $module.isOpen==0} checked="checked"{/if} /> 私有 
+        <input type="radio" name="isOpen" readonly="readonly" value="1"{if $module.isOpen==1} checked="checked"{/if} /> 公开 
+        <br> 
+	</p>
+	{/if}
+	<p> 
+		<input type="button" value="返回" onclick="history.go(-1)"> 
+	</p> 
+</fieldset> 
+</form>
+</div>
+</div>
+</body>
+</html>

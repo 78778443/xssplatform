@@ -1,0 +1,92 @@
+@charset "utf-8";
+/* CSS Document */
+body,div,ul,dl,dt,dd,form,textarea { margin:0; padding:0; font:13px/1.231 arial,helvetica,clean,sans-serif }
+body { background:#FFFFFF }
+.wrapper { background:url(images/bg.png) top repeat-x #CBD2DA; overflow:hidden }
+ul { list-style:none }
+img { border:none }
+input[type=hidden] { display:none }
+a { text-decoration:none; color:#666666 }
+a:hover { text-decoration:underline; color:#333333 }
+a.btn:hover,a.smallbtn:hover { background:#666666 }
+a.whitebtn { display: inline-block; margin:0 0 5px 5px; padding:3px 9px; background:#F0F0F0; text-decoration:none; border-radius:3px }
+a.whitebtn:hover  { background:#999999; color:#FFFFFF }
+a.underline { text-decoration:underline }
+.bold { font-weight:bold }
+.noborder { border:none }
+span.point { color:#CCCCCC }
+code { display:block; padding:5px; background:#DDDDDD; border:#CCCCCC 1px solid; font-size:13px; line-height:18px }
+a.btn {
+    background: -moz-linear-gradient(center top , #999999, #888888) repeat scroll 0 0 transparent;
+	background:#999999 !important;
+    border: 1px solid #666666;
+	padding:4px 10px;
+	border-radius:3px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 rgba(0, 0, 0, 0.3);
+    color: #FFFFFF !important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.55);
+	text-decoration:none;
+	font-weight:normal;
+	font:13px/1.231 arial,helvetica,clean,sans-serif;
+	cursor:pointer
+}
+a.btn:hover { box-shadow: 0 1px 2px #666666 inset }
+
+input { border:#BBB 1px solid; padding:2px }
+input[type=submit],input[type=button] { padding:0 3px; height:23px; line-height:22px; cursor:pointer }
+div.left,span.left,a.left { float:left }
+div.right,span.right,a.right { float:right }
+.clear { clear:both }
+span.small { font-size:12px; font-weight:normal }
+.gray { color:#999999 }
+.error { color:#CC0000 }
+.correct { color:#006600 }
+.light { background:#EEEEEE }
+div.empty { padding:50px 0; text-align:center }
+div.loading { position:absolute; width:110px; text-align:center; top:1px; right:0; line-height:35px; height:35px; background:#990000; color:#FFFFFF }
+
+.nav { padding: 4px 0 3px 0; width:100%; background-color: #000000; border-bottom: 1px solid #888888; border-top: 1px solid #909090 }
+.nav .con { margin:0 auto; width:960px; padding:0 5px; height:28px }
+.nav .con .logo { float:left; margin:0 5px }
+.nav .con .search { float:left; margin-top:2px; width:230px; padding:1px; height:20px; background:#EEEEEE; border-radius:2px; overflow:hidden }
+.nav .con .search input { float:left; margin:1px 0 0 2px; width:200px; height:15px; border:none; background:#EEEEEE; color:#888888 }
+.nav .con .search a { display:block; float:right; margin:1px 1px 1px 0; padding:0; width:22px; height:18px; background:url(icon/search.gif) center no-repeat }
+
+.nav .con .topright { float:right; padding:5px 10px 0 0; color:#999999 }
+.nav .con .topright a { color:#EEEEEE; margin:0 7px; font-size:14px }
+
+/* 底部 */
+.footer { margin:0 auto; padding:15px 0; text-align:center; line-height:23px; color:#333333 }
+.footer span { color:#999999 }
+.footer a { margin:0 5px }
+
+/* page */
+div.page { overflow:hidden; text-align:center; padding:10px 0 5px 0 }
+div.page a { display:inline-block; margin:2px 1px; padding:2px 5px; background:#333333; color:#FFFFFF }
+div.page a.active { background:#CCCCCC; text-decoration:none }
+
+/* 表单 */
+.subCon { width:560px; height:auto; padding:10px 0 20px 100px }
+.subCon .tip { font-size:16px; font-weight:bold }
+.subCon table tr { height:50px }
+.subCon table th { width:60px; padding-right:15px; font-weight:normal; text-align:right }
+.subCon table td { padding:5px }
+
+/* admin */
+.main { margin:15px auto; width:960px; overflow:hidden; background:#EEEEEE }
+.menu { float:left; width:200px }
+.menu h3 { font-size:14px; margin:0; padding:10px 0 10px 15px; color:#666666 }
+.menu ul li { padding:5px 15px; margin-bottom:1px; background:#DCDCDC }
+.menu ul li.active { background:#666666 }
+.menu ul li.active a { color:#FFFFFF }
+
+.content { float:right; width:740px; padding:10px; background:#FFFFFF; min-height:400px }
+.content h3 { display:block; font-size:14px; margin:0; padding:10px; color:#333333; border-bottom:#E1E1E1 1px solid }
+.data { padding:10px }
+.data h4 { display:block; font-size:12px; margin:0; padding:10px 0 5px 0; color:#555555 }
+.data h4 span { font-weight:normal }
+
+.data table th,.data table td { text-align:left; font-weight:normal; padding:5px 10px; color:#555555 }
+.data table thead th,.data table thead td { font-weight:bold; color:#777777 }
+ul.list { overflow:hidden }
+ul.list li { float:left; margin:5px 0 5px 10px }

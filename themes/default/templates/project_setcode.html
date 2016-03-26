@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XSS Platform</title>
+<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
+<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
+<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
+<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
+<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+<script type="text/javascript">
+{literal}
+function ShowContent(id,o){
+	if($("#"+id).css("display")=="none"){
+		$("#"+id).show();
+		$(o).html("折叠");
+	}else{
+		$("#"+id).hide();
+		$(o).html("展开");	
+	}
+}
+{/literal}
+</script>
+</head>
+<body>
+<div class="container">
+{include file="header.html"}
+{include file="menus.html"}
+<div class="span-19 right">
+<p>当前位置： <a href="{$url.root}/index.php">首页</a> > 配置项目代码</p>
+<form id="contentForm" action="{$url.root}/index.php?do=project&act=setcode_submit" method="post">
+<input type="hidden" name="token" value="{$show.user.token}" />
+<input type="hidden" name="id" value="{$project.id}" />
+<input type="hidden" name="ty" value="{$ty}" />
+<fieldset> 
+	<legend>配置代码</legend>
+	<div id="contentShow"></div>
+	<p> 
+		<label for="title">项目名称</label><br> 
+		<h2>{$project.title}</h2> 
+	</p> 
+	<p> 
+		<ul id="moduleList">
+        	{foreach from=$modulesCan key=k item=v}
+        	<li style="margin-bottom:10px"> <input onclick="{literal}if(this.checked){ $('#mset_'+this.value).show() }else{ $('#mset_'+this.value).hide() }{/literal}" name="modules[]" value="{$v.id}" type="checkbox"{if $v.choosed==1} checked="checked"{/if} /> {$v.title} 
+            <a href="javascript:void(0)" onclick="ShowContent('m_{$k}',this)">展开</a>
+            {if $v.setkeys|@count>0}
+            <div id="mset_{$v.id}" style="display:{if $v.choosed==1}block{else}none{/if}">
+            需要配置的参数<br/>
+            	{foreach from=$v.setkeys item=setkey}
+            	{if $v.id==1 && $setkey.key=='keepsession'}
+	            <input type="radio" name="setkey_{$v.id}_{$setkey.key}" value="0"{if $setkey.value!=1} checked="checked"{/if} /> 无keepsession &nbsp; 
+	            <input type="radio" name="setkey_{$v.id}_{$setkey.key}" value="1"{if $setkey.value==1} checked="checked"{/if} /> keepsession
+	            {else}
+                {$setkey.key} : <input type="text" name="setkey_{$v.id}_{$setkey.key}" value="{$setkey.value}" /><br/>
+                {/if}
+                {/foreach}
+            </div>
+            {/if}
+            <ul id="m_{$k}" style="display:none">
+                <li style="list-style:none">参数:<br />{$v.keys}</li>
+                <li style="list-style:none">代码:<br />{$v.code}</li>
+            </ul>
+            </li>
+            {/foreach}
+        </ul>
+	</p>
+	<p> 
+		<label for="code"><input type="checkbox" checked="checked" disabled="disabled" /> 自定义代码</label><br> 
+		<textarea name="code" id="code"></textarea>
+	</p>
+	<p> 
+		<input type="submit" value="{if $ty=='create'}下一步{else}配置{/if}"> &nbsp;&nbsp;
+		<input type="button" value="取消" onclick="history.go(-1)"> 
+	</p> 
+</fieldset> 
+</form>
+</div>
+</div>
+</body>
+</html>

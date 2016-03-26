@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>公共模块审核 - {$show.sitename} - {$show.sitedesc}</title>
+<meta name="keywords" content="{$show.keywords}" />
+<meta name="description" content="{$show.description}" />
+<link type="text/css" rel="stylesheet" href="style/style.css" />
+<link rel="shortcut icon" href="{$url.root}/favicon.ico" />
+<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.root}/source/js/boxy/boxy.css" />
+<script type="text/javascript" src="{$url.root}/source/js/boxy/jquery.boxy.js"></script>
+<script type="text/javascript">
+{literal}
+
+{/literal}
+</script>
+</head>
+<body>
+{include file="admin_header.html"}
+<div class="wrapper">
+	<div class="main">
+		{include file="admin_menu.html"}
+		<div class="content">
+			<h3>公共模块审核</h3>
+			<div class="data">
+				<table cellpadding="0" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<td width="100">模块名称</td>
+							<td>模块描述</td>
+							<td width="60">创建人</td>
+							<td width="60">创建时间</td>
+							<td width="120">审核</td>
+							<td width="60">审核人</td>
+						</tr>
+					</thead>
+					<tbody>
+					{foreach from=$modules key=k item=v}
+						<tr{if $k%2==1} style="background:#e0e0e0"{/if}>
+							<td><a target="_blank" href="{$url.root}/index.php?do=module&act=view&id={$v.id}">{$v.title}</a></td>
+							<td>{$v.description}</td>
+							<td>{$v.userName}</td>
+							<td>{$v.addTime|@date_format:"%Y-%m-%d"}</td>
+							<td>
+								{if $v.isAudit==1}
+								<span style="color:green">已通过</span> 
+								<a href="{$url.root}/admin/index.php?do=admin_module&act=audit&isAudit=2&id={$v.id}">不通过</a>
+								{else}
+									{if $v.isAudit==0}
+									<span style="color:blue">未审核</span> 
+									<a href="{$url.root}/admin/index.php?do=admin_module&act=audit&isAudit=1&id={$v.id}">通过</a> 
+									<a href="{$url.root}/admin/index.php?do=admin_module&act=audit&isAudit=2&id={$v.id}">不通过</a>
+									{else}
+									<span style="color:green">未通过</span> 
+									<a href="{$url.root}/admin/index.php?do=admin_module&act=audit&isAudit=1&id={$v.id}">通过</a>
+									{/if}
+								{/if}
+							</td>
+							<td>{$v.managerName}</td>
+						</tr>
+					{/foreach}
+					</tbody>
+				</table>
+				<div class="page">
+				{$nav}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="admin_footer.html"}
+</body>
+</html>

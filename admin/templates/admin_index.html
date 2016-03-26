@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>后台管理 - {$show.sitename} - {$show.sitedesc}</title>
+<meta name="keywords" content="{$show.keywords}" />
+<meta name="description" content="{$show.description}" />
+<link type="text/css" rel="stylesheet" href="style/style.css" />
+<link rel="shortcut icon" href="{$url.root}/favicon.ico" />
+</head>
+<body>
+{include file="admin_header.html"}
+<div class="wrapper">
+	<div class="main">
+		{include file="admin_menu.html"}
+		<div class="content">
+			<h3>管理首页</h3>
+			<div class="data">
+				<h4>社区概况</h4>
+				<table cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr><th width="100">注册用户数</th><td>{$situation.userCount}</td></tr>
+					</tbody>
+				</table>
+				<h4>在线会员 <span>({$situation.onlineCount})</span></h4>
+				<ul class="list">
+					{foreach from=$situation.onlineUsers item=value}
+					<li><a href="javascript:void(0)">{$value.userName}</a></li>
+					{/foreach}
+				</ul>
+				<h4>系统环境</h4>
+				<table cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr><th width="100">程序版本</th><td>XF 轻量级社区系统 1.0</td></tr>
+						<tr><th>操作系统</th><td>{$sysInfo.serverOS}</td></tr>
+						<tr><th>服务器软件</th><td>{$sysInfo.serverSoftware}</td></tr>
+						<tr><th>PHP版本</th><td>{$sysInfo.phpVersion}</td></tr>
+						<tr><th>数据库版本</th><td>{$sysInfo.mysqlVersion}</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="admin_footer.html"}
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XSS Platform</title>
+<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
+<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
+<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
+<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
+<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+{literal}
+<style>
+ul { margin:0; width:220px; overflow:scroll-x; word-break:break-all}
+.ohidden ul { height:18px; overflow:hidden }
+a.oall,a.un { text-decoration:none }
+td { vertical-align:top }
+</style>
+<script>
+function CheckAll(obj){
+	if($(obj).is(":checked")){
+		$(".checon").attr("checked","checked");
+	}else{
+		$(".checon").removeAttr("checked");
+	}
+}
+</script>
+{/literal}
+</head>
+<body>
+<div class="container">
+{include file="header.html"}
+{include file="menus.html"}
+<div class="span-19 right">
+<p>当前位置： <a href="{$url.root}/index.php">首页</a> > 个人设置</p>
+<table border="0" cellspacing="0" cellpadding="0">
+	<caption>
+    <h3>
+    	个人设置：
+    </h3>
+    </caption>
+	<thead>
+		<tr>
+			<th width="20"><input type="checkbox" id="checkall" onclick="CheckAll(this)" /></th>
+		</tr>
+	</thead>
+</table>
+<form id="formSeting" action="{$url.root}/index.php?do=user&act=submit" method="post">
+<div style="padding:5px 10px">
+邮箱:{$email}
+<br>发送邮件提醒:{$input1}
+</div>
+<div style="padding:5px 10px">
+手机:<input id="phone" name="phone" type="text"  style="width:120px" maxlength="11" value="{$phone}" />
+<br>发送短信提醒:{$input2}
+<input id="btnSeting" type="submit" value="提交" /> 
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>

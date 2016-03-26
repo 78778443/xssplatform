@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XSS Platform</title>
+<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
+<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
+<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
+<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
+<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+</head>
+<body>
+<div class="container">
+	<h1>未使用的邀请码</h1>
+	<table border="0" cellspacing="0" cellpadding="0">
+		<caption><b>乌云币奖品邀请码 ({$codesWooyun|@count})</b> <a class="right" href="{$url.root}/index.php?do=user&act=createinvite&isWooyun=1">生成奖品邀请码</a></caption>
+		<thead>
+			<tr>
+				<th>邀请码 (生成时间倒序排列)</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach from=$codesWooyun item=v}
+			<tr>
+				<td>{$v.code}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+
+	<table border="0" cellspacing="0" cellpadding="0">
+		<caption><b>其它邀请码 ({$codesOther|@count})</b> <a class="right" href="{$url.root}/index.php?do=user&act=createinvite&isWooyun=0">生成其它邀请码</a></caption>
+		<thead>
+			<tr>
+				<th>邀请码 (生成时间倒序排列)</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach from=$codesOther item=v}
+			<tr>
+				<td>{$v.code}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

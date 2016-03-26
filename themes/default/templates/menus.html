@@ -1,0 +1,33 @@
+<div class="left menus">
+	<div class="menutitle">
+		<a class="left" href="{$url.root}/index.php">我的项目</a>
+		<a class="right" href="{$url.root}/index.php?do=project&act=create">创建</a>
+	</div>
+	
+	<ul>
+		{foreach from=$projects item=v}
+		<li><a href="{$url.root}/index.php?do=project&act=view&id={$v.id}">{$v.title}</a></li>
+		{/foreach}
+	</ul>
+	<div class="menutitle">
+		<a class="left" href="{$url.root}/index.php?do=module">我的模块</a>
+		<a class="right" href="{$url.root}/index.php?do=module&act=create">创建</a>
+	</div>
+	<ul>
+		{foreach from=$modules item=v}
+		{if $v.isOpen==0 || ($v.isOpen==1 && $v.isAudit==0)}
+		<li><a href="{$url.root}/index.php?do=module&act=set&id={$v.id}">{$v.title}</a></li>
+		{/if}
+		{/foreach}
+	</ul>
+	<div class="menutitle">
+		<a class="left" href="{$url.root}/index.php?do=module">公共模块</a>
+	</div>
+	<ul>
+		{foreach from=$modules item=v}
+		{if $v.isOpen==1 && $v.isAudit==1}
+		<li><a href="{$url.root}/index.php?do=module&act=view&id={$v.id}">{$v.title}</a></li>
+		{/if}
+		{/foreach}
+	</ul>
+</div>

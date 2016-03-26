@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XSS Platform</title>
+<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
+<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
+<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
+<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
+<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+{literal}
+<script type="text/javascript">
+function SubmitContent(){
+	if($("#title").val()==""){
+		ShowError("模块名称不能为空");
+		return false;
+	}
+	$("#contentForm").submit();
+}
+function ShowError(content){
+	$("#contentShow").attr("class","error");
+	$("#contentShow").html(content);
+}
+function AddKey(obj,keyname){
+	var liObj=document.createElement("li");
+	$(obj).parent().before(liObj);
+	var input=document.createElement("input");
+	$(liObj).append(input);
+	var btn=document.createElement("input");
+	$(liObj).append(btn);
+	$(liObj).append(document.createTextNode(" "));
+	btn.type="button";
+	$(btn).val("添加");
+	$(liObj).append(document.createTextNode(" "));
+	var del=document.createElement("a");
+	$(liObj).append(del);
+	$(del).attr("href","javascript:void(0)");
+	$(del).html("删除");
+	$(btn).click(function(){
+		var txt=$(input).val();
+		if(txt==""){
+			alert("请输入参数名");
+		}else{
+			$(input).remove();
+			$(btn).remove();
+			var checkObj=document.createElement("input");
+			$(del).before(checkObj);
+			checkObj.type="checkbox";
+			checkObj.checked="checked";
+			var keyName=keyname!=null ? keyname : "keys[]";
+			$(checkObj).attr("name",keyName);
+			$(checkObj).attr("value",txt);
+			$(del).before(document.createTextNode(" "+txt+" "));
+		}
+	});
+	$(del).click(function(){
+		$(liObj).remove();
+	});
+}
+</script>
+{/literal}
+</head>
+<body>
+<div class="container">
+{include file="header.html"}
+{include file="menus.html"}
+<div class="span-19 right">
+<p>当前位置： <a href="{$url.root}/index.php">首页</a> > 配置模块</p>
+<form id="contentForm" action="{$url.root}/index.php?do=module&act=set_submit" method="post">
+<input type="hidden" name="token" value="{$show.user.token}" />
+<input type="hidden" name="id" value="{$module.id}" />
+<fieldset> 
+	<legend>配置模块</legend>
+	<div id="contentShow"></div>
+	<p> 
+		<label for="title">模块名称</label><br> 
+		<input type="text" class="title" name="title" id="title" value="{$module.title}" /> 
+	</p>
+	<p> 
+		<label for="description">模块描述</label><br> 
+		<textarea style="height:80px" name="description" id="description">{$module.description}</textarea>
+	</p>
+    <p> 
+		<label for="description">参数 (需要服务器接收的参数名)</label><br> 
+        <ul id="keyList">
+        	{foreach from=$keys item=v}
+        	<li> <input name="keys[]" value="{$v}" type="checkbox" checked="checked" /> {$v}</li>
+            {/foreach}
+            <li><a href="javascript:void(0)" onclick="AddKey(this)">添加</a></li>
+        </ul>
+	</p>
+	<p> 
+		<label for="description">配置参数 (使用此模块时需要配置的参数，如参数名为user，则代码引用：{literal}{set.user}{/literal})</label><br> 
+        <ul id="setkeyList">
+        	{foreach from=$setkeys item=v}
+        	<li> <input name="setkeys[]" value="{$v}" type="checkbox" checked="checked" /> {$v}</li>
+            {/foreach}
+            <li><a href="javascript:void(0)" onclick="AddKey(this,'setkeys[]')">添加</a></li>
+        </ul>
+	</p>
+    <p> 
+		<label for="description">代码</label> ({literal}{projectId}为项目id,{set.***}为***配置参数{/literal})<br> 
+		<textarea name="code" id="code" style="width:700px">{$module.code}</textarea>
+	</p>
+    <p> 
+		<label for="description">是否公开</label>  
+        <input type="radio" name="isOpen" value="0"{if $module.isOpen==0} checked="checked"{/if} /> 私有 
+        <input type="radio" name="isOpen" value="1"{if $module.isOpen==1} checked="checked"{/if} /> 公开 
+        <br> 
+	</p>
+	<p> 
+		<input type="button" value="配置" onclick="SubmitContent()"> &nbsp;&nbsp;
+		<input type="button" value="取消" onclick="history.go(-1)"> 
+	</p> 
+</fieldset> 
+</form>
+</div>
+</div>
+</body>
+</html>

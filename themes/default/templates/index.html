@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XSS Platform</title>
+<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
+<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
+<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
+<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
+<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+</head>
+<body>
+<div class="container">
+{include file="header.html"}
+{include file="menus.html"}
+<div class="span-19 right">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<caption><b>我的项目</b> <a href="{$url.root}/index.php?do=project&act=create" class="right">创建项目</a></caption>
+		<thead>
+			<tr>
+				<th width="200">项目名称</th>
+				<th>项目描述</th>
+				<th width="100">内容数</th>
+				<th width="100">创建时间</th>
+				<th width="50">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach from=$projects item=v}
+			<tr>
+				<td><a href="{$url.root}/index.php?do=project&act=view&id={$v.id}">{$v.title}</a></td>
+				<td>{$v.description}</td>
+				<td>{$v.contentNum}</td>
+				<td>{$v.addTime|date_format:'%Y-%m-%d'}</td>
+				<td>
+				<a href="{$url.root}/index.php?do=project&act=delete&id={$v.id}&token={$show.user.token}" onclick="return confirm('确定删除吗?');">删除</a>
+				</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<h1>XSS Platform
+{if $show.user.userId>0}
+<span style="margin:20px 10px 0 0;font-weight:normal;font-size:14px" class="right">用户：{$show.user.userName} , <a href="{$url.root}/index.php?do=user&act=seting">个人设置</a> <a href="{$url.root}/index.php?do=user&act=invite">邀请</a> <a href="{$url.root}/index.php?do=login&act=logout">退出</a></span>
+{/if}
+</h1>
+<hr />
