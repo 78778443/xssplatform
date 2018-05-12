@@ -8,7 +8,7 @@
 /* 数据库连接 */
 $config['dbHost']		='127.0.0.1';			//数据库地址
 $config['dbUser']		='root';				//用户
-$config['dbPwd']		='123456';				//密码
+$config['dbPwd']		='';				//密码
 $config['database']		='xssplatform';			//数据库名
 $config['charset']		='utf8';				//数据库字符集
 $config['tbPrefix']		='oc_';					//表名前缀
@@ -51,5 +51,5 @@ $config['point']=array(
 /* 其它设置 */
 $config['timezone']		='Asia/Shanghai';		//时区，如UTC
 $config['expires']		=3600;					//过期时长(秒)
-$config['debug']		=false;					//调试模式(是否显示程序、数据库等错误)
+$config['debug']		=true;					//调试模式(是否显示程序、数据库等错误)
 ?>

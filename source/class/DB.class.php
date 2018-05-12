@@ -46,10 +46,10 @@ class DB_Mysql implements IDataBase{
 		$this->charset=$dbCharset;
 		$this->tbPrefix=$tbPrefix;
 		
-		$this->linkId=mysql_connect($this->host,$this->username,$this->password);
+		$this->linkId=mysqli_connect($this->host,$this->username,$this->password);
 		if(!empty($this->linkId)){
-			mysql_query("SET NAMES '".$this->charset."'",$this->linkId);
-			if(mysql_select_db($this->database,$this->linkId)) return $this->linkId;
+			mysqli_query($this->linkId,"SET NAMES '".$this->charset."'");
+			if(mysqli_select_db($this->linkId,$this->database)) return $this->linkId;
 		}else{
 			return false;
 		}
@@ -57,13 +57,13 @@ class DB_Mysql implements IDataBase{
 	/* disconnect to database */
 	private function Disconnect(){
 		if(!empty($this->linkId)){
-			if(!empty($this->queryId)) mysql_free_result($this->queryId);
-			return mysql_close($this->linkId);
+			if(!empty($this->queryId)) mysqli_free_result($this->queryId);
+			return mysqli_close($this->linkId);
 		}
 	}
 	/* execute without result */
 	public function Execute($sql){
-		return mysql_query($sql,$this->linkId);
+		return mysqli_query($this->linkId,$sql);
 	}
 	/* auto execute type=>insert/update */
 	public function AutoExecute($table,$array=array(),$type='INSERT',$where=''){
@@ -93,8 +93,8 @@ class DB_Mysql implements IDataBase{
 	/* return dataset of query */
 	public function Dataset($sql){
 		$this->rows=array();
-		$this->queryId=mysql_query($sql,$this->linkId);
-		while($row=mysql_fetch_assoc($this->queryId)){
+		$this->queryId=mysqli_query($this->linkId,$sql);
+		while($row=mysqli_fetch_assoc($this->queryId)){
 			$this->rows[]=$row;
 		}
 		$this->rowsNum=count($this->rows);
@@ -102,8 +102,8 @@ class DB_Mysql implements IDataBase{
 	}
 	/* return first row */
 	public function FirstRow($sql){
-		$this->queryId=mysql_query($sql,$this->linkId);
-		$row=mysql_fetch_assoc($this->queryId);
+		$this->queryId=mysqli_query($this->linkId,$sql);
+		$row=mysqli_fetch_assoc($this->queryId);
 		if(!empty($row)){
 			$this->rowsNum=1;
 			return $row;
@@ -115,8 +115,8 @@ class DB_Mysql implements IDataBase{
 	/* return first column (array) */
 	public function FirstColumn($sql){
 		$Columns=array();
-		$this->queryId=mysql_query($sql,$this->linkId);
-		while($row=@mysql_fetch_row($this->queryId)){
+		$this->queryId=mysqli_query($this->linkId,$sql);
+		while($row=@mysqli_fetch_row($this->queryId)){
 			$Columns[]=$row[0];
 		}
 		$this->rowsNum=count($Columns);
@@ -124,8 +124,8 @@ class DB_Mysql implements IDataBase{
 	}
 	/* return first value */
 	public function FirstValue($sql){
-		$this->queryId=mysql_query($sql,$this->linkId);
-		$row=@mysql_fetch_row($this->queryId);
+		$this->queryId=mysqli_query($this->linkId,$sql);
+		$row=@mysqli_fetch_row($this->queryId);
 		if(!empty($row)){
 			$this->rowsNum=1;
 			return $row[0];
@@ -136,7 +136,7 @@ class DB_Mysql implements IDataBase{
 	}
 	/* last id */
 	public function LastId(){
-		return mysql_insert_id();
+		return mysqli_insert_id($this->linkId);
 	}
 }
 ?>
