@@ -1,6 +1,7 @@
 <?php
 /**
  * DB.class.php database operator
+ *
  * @author blue,email: blueforyou@163.com
  * $databaseType: mysql,mssql,oracle..
  * ----------------------------------------------------------------
@@ -15,11 +16,11 @@ class BlueDB
     public static function DB($databaseType = 'mysql')
     {
         switch (strtolower($databaseType)) {
-            case 'mysql':
-                return new DB_Mysql;
+        case 'mysql':
+            return new DB_Mysql;
                 break;
-            default:
-                return false;
+        default:
+            return false;
                 break;
         }
     }
@@ -109,23 +110,25 @@ class DB_Mysql implements IDataBase
     {
         if (!empty($array) && !empty($table)) {
             switch (strtoupper($type)) {
-                case 'INSERT':
-                    $sql = "INSERT INTO {$table}(" . implode(',', array_keys($array)) . ") VALUES('" . implode("','",
-                            array_values($array)) . "')";
-                    break;
-                case 'UPDATE':
-                    $sql = "UPDATE {$table}";
-                    $updates = array();
-                    foreach ($array as $key => $value) {
-                        $updates[] = "{$key}='{$value}'";
-                    }
-                    $sql .= " SET " . implode(',', $updates);
-                    if (!empty($where)) {
-                        $sql .= " WHERE {$where}";
-                    }
-                    break;
-                default:
-                    break;
+            case 'INSERT':
+                $sql = "INSERT INTO {$table}(" . implode(',', array_keys($array)) . ") VALUES('" . implode(
+                    "','",
+                    array_values($array)
+                ) . "')";
+                break;
+            case 'UPDATE':
+                $sql = "UPDATE {$table}";
+                $updates = array();
+                foreach ($array as $key => $value) {
+                    $updates[] = "{$key}='{$value}'";
+                }
+                $sql .= " SET " . implode(',', $updates);
+                if (!empty($where)) {
+                    $sql .= " WHERE {$where}";
+                }
+                break;
+            default:
+                break;
             }
             return $this->Execute($sql);
         } else {

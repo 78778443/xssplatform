@@ -18,17 +18,17 @@ span.point { color:#CCCCCC }
 code { display:block; padding:5px; background:#DDDDDD; border:#CCCCCC 1px solid; font-size:13px; line-height:18px }
 a.btn {
     background: -moz-linear-gradient(center top , #999999, #888888) repeat scroll 0 0 transparent;
-	background:#999999 !important;
+    background:#999999 !important;
     border: 1px solid #666666;
-	padding:4px 10px;
-	border-radius:3px;
+    padding:4px 10px;
+    border-radius:3px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 rgba(0, 0, 0, 0.3);
     color: #FFFFFF !important;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.55);
-	text-decoration:none;
-	font-weight:normal;
-	font:13px/1.231 arial,helvetica,clean,sans-serif;
-	cursor:pointer
+    text-decoration:none;
+    font-weight:normal;
+    font:13px/1.231 arial,helvetica,clean,sans-serif;
+    cursor:pointer
 }
 a.btn:hover { box-shadow: 0 1px 2px #666666 inset }
 

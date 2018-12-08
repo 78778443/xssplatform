@@ -4,7 +4,8 @@
  * ----------------------------------------------------------------
  * OldCMS,site:http://www.oldcms.com
  */
-if(!defined('IN_OLDCMS')) die('Access Denied');
+if(!defined('IN_OLDCMS')) { die('Access Denied');
+}
 
 $db=DBConnect();
 $tbUser=$db->tbPrefix.'user';
@@ -26,13 +27,13 @@ $sysInfo['serverSoftware']=$_SERVER['SERVER_SOFTWARE'];
 $sysInfo['phpVersion']='PHP v'.PHP_VERSION;
 $sysInfo['mysqlVersion']='MySQL '.$db->FirstValue('SELECT VERSION()');
 
-include(ROOT_PATH.'/source/common.php');
+require ROOT_PATH.'/source/common.php';
 $smarty=InitSmarty(1);
 
-$smarty->assign('situation',$situation);
-$smarty->assign('sysInfo',$sysInfo);
-$smarty->assign('do',$do);
-$smarty->assign('show',$show);
-$smarty->assign('url',$url);
+$smarty->assign('situation', $situation);
+$smarty->assign('sysInfo', $sysInfo);
+$smarty->assign('do', $do);
+$smarty->assign('show', $show);
+$smarty->assign('url', $url);
 $smarty->display('admin_index.html');
 ?>

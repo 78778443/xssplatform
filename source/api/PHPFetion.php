@@ -2,7 +2,7 @@
 /**
  * PHP飞信发送类
  *
- * @author quanhengzhuang <blog.quanhz.com>
+ * @author  quanhengzhuang <blog.quanhz.com>
  * @version 1.5.0
  */
 class PHPFetion
@@ -10,43 +10,48 @@ class PHPFetion
 
     /**
      * 发送者手机号
+     *
      * @var string
      */
     protected $_mobile;
 
     /**
      * 飞信密码
+     *
      * @var string
      */
     protected $_password;
 
     /**
      * Cookie字符串
+     *
      * @var string
      */
     protected $_cookie = '';
 
     /**
      * Uid缓存
+     *
      * @var array
      */
     protected $_uids = array();
 
     /**
      * csrfToken
+     *
      * @var string
      */
     protected $_csrfToten = null;
 
     /**
      * 构造函数
-     * @param string $mobile 手机号(登录者)
+     *
+     * @param string $mobile   手机号(登录者)
      * @param string $password 飞信密码
      */
     public function __construct($mobile, $password)
     {
-        if ($mobile === '' || $password === '')
-        {
+        if ($mobile === '' || $password === '') {
             return;
         }
         
@@ -66,6 +71,7 @@ class PHPFetion
 
     /**
      * 登录
+     *
      * @return string
      */
     protected function _login()
@@ -77,8 +83,7 @@ class PHPFetion
 
         //解析Cookie
         preg_match_all('/.*?\r\nSet-Cookie: (.*?);.*?/si', $result, $matches);
-        if (isset($matches[1]))
-        {
+        if (isset($matches[1])) {
             $this->_cookie = implode('; ', $matches[1]);
         }
         
@@ -89,20 +94,19 @@ class PHPFetion
 
     /**
      * 向指定的手机号发送飞信
-     * @param string $mobile 手机号(接收者)
-     * @param string $message 短信内容
+     *
+     * @param  string $mobile  手机号(接收者)
+     * @param  string $message 短信内容
      * @return string
      */
     public function send($mobile, $message)
     {
-        if ($message === '')
-        {
+        if ($message === '') {
             return '';
         }
 
         //判断是给自己发还是给好友发
-        if ($mobile == $this->_mobile)
-        {
+        if ($mobile == $this->_mobile) {
             return $this->_toMyself($message);
         }
         else
@@ -115,13 +119,13 @@ class PHPFetion
 
     /**
      * 获取飞信ID
-     * @param string $mobile 手机号
+     *
+     * @param  string $mobile 手机号
      * @return string
      */
     protected function _getUid($mobile)
     {
-        if (empty($this->_uids[$mobile]))
-        {
+        if (empty($this->_uids[$mobile])) {
             $uri = '/im/index/searchOtherInfoList.action';
             $data = 'searchText='.$mobile;
             
@@ -138,13 +142,13 @@ class PHPFetion
 
     /**
      * 获取csrfToken，给好友发飞信时需要这个字段
-     * @param string $uid 飞信ID
+     *
+     * @param  string $uid 飞信ID
      * @return string
      */
     protected function _getCsrfToken($uid)
     {
-        if ($this->_csrfToten === null)
-        {
+        if ($this->_csrfToten === null) {
             $uri = '/im/chat/toinputMsg.action?touserid='.$uid;
             
             $result = $this->_postWithCookie($uri, '');
@@ -159,8 +163,9 @@ class PHPFetion
 
     /**
      * 向好友发送飞信
-     * @param string $uid 飞信ID
-     * @param string $message 短信内容
+     *
+     * @param  string $uid     飞信ID
+     * @param  string $message 短信内容
      * @return string
      */
     protected function _toUid($uid, $message)
@@ -176,7 +181,8 @@ class PHPFetion
 
     /**
      * 给自己发飞信
-     * @param string $message
+     *
+     * @param  string $message
      * @return string
      */
     protected function _toMyself($message)
@@ -189,6 +195,7 @@ class PHPFetion
 
     /**
      * 退出飞信
+     *
      * @return string
      */
     protected function _logout()
@@ -201,6 +208,7 @@ class PHPFetion
 
     /**
      * 携带Cookie向f.10086.cn发送POST请求
+     *
      * @param string $uri
      * @param string $data
      */
