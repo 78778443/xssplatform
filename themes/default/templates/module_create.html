@@ -67,21 +67,22 @@ function AddKey(obj,keyname){
 {include file="menus.html"}
 <div class="col-sm-9">
           <div class="panel panel-default">
-    	<div class="panel-heading">创建模块</div>  
-<form style="padding: 10px 15px;" id="contentForm" action="{$url.root}/index.php?do=module&act=create_submit" method="post">
+    	<div class="panel-heading">创建模块</div>
+<form  style="padding: 10px 15px;" id="contentForm" action="{$url.root}/index.php?do=module&act=create_submit" method="post">
 <input type="hidden" name="token" value="{$show.user.token}" />
-<fieldset> 
+<fieldset>
 	<div id="contentShow"></div>
-	<p> 
-		<label for="title">模块名称</label><br> 
-		<input type="text" class="title" name="title" id="title"> 
+
+	<div class="form-group">
+		<label for="title">模块名称</label>
+		<input type="text" class="form-control"  name="title" id="title">
+	</div>
+	<p>
+		<label for="description">模块描述</label><br>
+		<textarea style="height:80px" class="form-control" name="description" id="description"></textarea>
 	</p>
-	<p> 
-		<label for="description">模块描述</label><br> 
-		<textarea style="height:80px" name="description" id="description"></textarea>
-	</p>
-    <p> 
-		<label for="description">参数 (需要服务器接收的参数名)</label><br> 
+    <p>
+		<label for="description">参数 (需要服务器接收的参数名)</label><br>
         <ul id="keyList">
         	{foreach from=$keys item=v}
         	<li> <input name="keys[]" value="{$v.key}" type="checkbox" checked="checked" /> {$v.key} ({$v.value})</li>
@@ -89,28 +90,28 @@ function AddKey(obj,keyname){
             <li><a href="javascript:void(0)" onclick="AddKey(this)">添加</a></li>
         </ul>
 	</p>
-	<p> 
-		<label for="description">配置参数 (使用此模块时需要配置的参数，如参数名为user，则代码引用：{literal}{set.user}{/literal})</label><br> 
+	<p>
+		<label for="description">配置参数 (使用此模块时需要配置的参数，如参数名为user，则代码引用：{literal}{set.user}{/literal})</label><br>
         <ul id="setkeyList">
             <li><a href="javascript:void(0)" onclick="AddKey(this,'setkeys[]')">添加</a></li>
         </ul>
 	</p>
-    <p> 
-		<label for="description">代码</label> ({literal}{projectId}为项目id,{set.***}为***配置参数{/literal})<br> 
-		<textarea name="code" id="code" style="width:700px"></textarea>
+    <p>
+		<label for="description">代码</label> ({literal}{projectId}为项目id,{set.***}为***配置参数{/literal})<br>
+		<textarea  class="form-control" name="code" id="code" ></textarea>
 	</p>
-    <p> 
-		<label for="description">是否公开</label>  
-        <input type="radio" name="isOpen" value="0" checked="checked" /> 私有 
-        <input type="radio" name="isOpen" value="1" /> 公开 
-        <br> 
+    <p>
+		<label for="description">是否公开</label>
+        <input type="radio" name="isOpen" value="0" checked="checked" /> 私有
+        <input type="radio" name="isOpen" value="1" /> 公开
+        <br>
 	</p>
-	<p> 
+	<p>
 
 		<input class="btn btn-success" type="button" value="创建" onclick="SubmitContent()"> &nbsp;&nbsp;
-		<input class="btn btn-success" type="button" value="取消" onclick="history.go(-1)"> 
-	</p> 
-</fieldset> 
+		<input class="btn btn-success" type="button" value="取消" onclick="history.go(-1)">
+	</p>
+</fieldset>
 </form>
 </div>
 </div>

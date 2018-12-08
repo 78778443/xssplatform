@@ -12,7 +12,7 @@ $act=Val('act', 'GET');
 switch($act){
 case 'create':
     $db=DBConnect();
-    //$keys=$db->Dataset("SELECT * FROM ".Tb('config')." WHERE typeId=1");
+    $keys=$db->Dataset("SELECT * FROM ".Tb('config')." WHERE typeId=1");
 
     include 'common.php';
     $smarty=InitSmarty();

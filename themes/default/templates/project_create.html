@@ -36,14 +36,14 @@ function ShowError(content){
 <input type="hidden" name="token" value="{$show.user.token}" />
 <fieldset> 
 	<div id="contentShow"></div>
-	<p> 
-		<label for="title">项目名称</label><br> 
-		<input type="text" class="title" name="title" id="title"> 
-	</p> 
+	<div class="form-group">
+		<label for="title">项目名称</label>
+		<input type="text" class="form-control"  name="title" id="title">
+	</div>
 	
 	<p> 
 		<label for="description">项目描述</label><br> 
-		<textarea name="description" id="description"></textarea>
+		<textarea name="description" style="height: 100px" class="form-control" id="description"></textarea>
 	</p>
 	<p> 
 		<input class="btn btn-success" type="button" value="下一步" onclick="SubmitContent()"> &nbsp;&nbsp;

@@ -22,13 +22,13 @@
 <input type="hidden" name="id" value="{$module.id}" />
 <fieldset> 
 	<div id="contentShow"></div>
-	<p> 
-		<label for="title">模块名称</label><br> 
-		<input type="text" class="title" name="title" id="title" value="{$module.title}" readonly="readonly" /> 
-	</p>
+	<div class="form-group">
+		<label for="title">模块名称</label>
+		<input type="email" class="form-control" id="title" value="{$module.title}" readonly="readonly">
+	</div>
 	<p> 
 		<label for="description">模块描述</label><br> 
-		<textarea style="height:80px" name="description" id="description" disabled="disabled">{$module.description}</textarea>
+		<textarea style="height:80px" class="form-control" name="description" id="description" disabled="disabled">{$module.description}</textarea>
 	</p>
     <p> 
 		<label for="description">参数 (需要服务器接收的参数名)</label><br> 
@@ -48,7 +48,7 @@
 	</p>
     <p> 
 		<label for="description">代码</label> ({literal}{projectId}为项目id,{set.***}为***配置参数{/literal})<br> 
-		<textarea name="code" id="code" style="width:700px" disabled="disabled">{$module.code}</textarea>
+		<textarea name="code" id="code" class="form-control" disabled="disabled">{$module.code}</textarea>
 	</p>
 	{if $module.isOpen==0}
     <p> 

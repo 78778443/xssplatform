@@ -32,7 +32,7 @@ if(!empty($moduleIds)) {
             if(!empty($module['setkeys'])) {
                 $setkeys=json_decode($module['setkeys'], true);
                 foreach($setkeys as $setkey){
-                    $module['code']=str_replace('{set.'.$setkey.'}', $moduleSetKeys["setkey_{$module['id']}_{$setkey}"], $module['code']);
+                    $module['code']=str_replace('{set.'.$setkey.'}', $moduleSetKeys["setkey_{$module['id']}_{$setkey}"] ?? '', $module['code']);
                 }
             }
             echo htmlspecialchars_decode($module['code'], ENT_QUOTES);

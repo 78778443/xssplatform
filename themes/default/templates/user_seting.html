@@ -1,46 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>XSS Platform</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
-<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="{$url.themePath}/css/css.css">
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
-{literal}
-<script>
-function CheckAll(obj){
-	if($(obj).is(":checked")){
-		$(".checon").attr("checked","checked");
-	}else{
-		$(".checon").removeAttr("checked");
-	}
-}
-</script>
-{/literal}
+    <meta charset="utf-8">
+    <title>XSS Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{$url.themePath}/css/css.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    {literal}
+    <script>
+        function CheckAll(obj) {
+            if ($(obj).is(":checked")) {
+                $(".checon").attr("checked", "checked");
+            } else {
+                $(".checon").removeAttr("checked");
+            }
+        }
+    </script>
+    {/literal}
 </head>
 <body>
 {include file="header.html"}
 <div class="container">
-{include file="menus.html"}
-<div class="col-sm-9">
-          <div class="panel panel-default">
-    	<div class="panel-heading">个人设置</div>
-<form style="padding: 10px 15px;" id="formSeting" action="{$url.root}/index.php?do=user&act=submit" method="post">
-<div style="padding:5px 10px">
-邮箱:{$email}
-<br>发送邮件提醒:{$input1}
-</div>
-<div style="padding:5px 10px">
-手机:<input id="phone" name="phone" type="text"  style="width:120px" maxlength="11" value="{$phone}" />
-<p><p>
-发送短信提醒:{$input2}
-<input class="btn btn-success" id="btnSeting" type="submit" value="提交" /> 
-</form>
-</div>
-</div>
+    {include file="menus.html"}
+    <div class="col-sm-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">个人设置</div>
+            <form style="padding: 10px 15px;" id="formSeting" action="{$url.root}/index.php?do=user&act=submit"
+                  method="post">
+                <div style="padding:5px 10px">
+                    邮箱:{$email}
+                    <div class="checkbox disabled">
+                        <label>
+                            {$input1}
+                            发送邮件提醒
+                        </label>
+                    </div>
+                </div>
+                <div style="padding:5px 10px">
+                    手机:<input id="phone" class="form-control" name="phone" type="text" maxlength="11" value="{$phone}"/>
+                    <p>
+                    <div class="checkbox disabled">
+                        <label>
+                            {$input2}
+                            发送短信提醒
+                        </label>
+                    </div>
+                    <p>
+                        <input class="btn btn-success" id="btnSeting" type="submit" value="提交"/>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

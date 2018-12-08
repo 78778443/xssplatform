@@ -34,7 +34,7 @@ case 'invite':
     $smarty->assign('codesWooyun', $codesWooyun);
     $smarty->assign('codesOther', $codesOther);
     $smarty->assign('do', $do);
-    $smarty->assign('key', $key);
+//    $smarty->assign('key', $key);
     $smarty->assign('show', $show);
     $smarty->assign('url', $url);
     $smarty->display('user_invite.html');
