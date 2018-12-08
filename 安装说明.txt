@@ -1,57 +1,30 @@
-¹¦ÄÜ£º
-1¡¢ĞÂÔöÁËÓÊ¼şÌáĞÑ¹¦ÄÜ
-£¨ÈôÏëÉúĞ§×ÔĞĞĞŞ¸ÄÎÄ¼ş\source\function.php 257ĞĞ °ÑÀïÃæµÄÓÊÏäÕËºÅÃÜÂë»»Ò»ÏÂ£©
-2¡¢ĞÂÔö·ÉĞÅ¶ÌĞÅÌáĞÑ¹¦ÄÜ
-£¨Í¬ÉÏ ĞŞ¸Ä\source\api.php 72ĞĞ Ó¦¸ÃÖ»Ö§³ÖÒÆ¶¯ÊÖ»úºÅ°É?£©
-3¡¢ĞÂÔö¶ÌÍøÖ·¹¦ÄÜ
-£¨´´½¨ÏîÄ¿Ê±¾Í¿´µÃµ½ÁË ½è¼øÁËwooyun http://zone.wooyun.org/content/10175 ²»¹ıÎÒ²»ÊÇĞŞ¸ÄµÄÎÄÖĞÌáµ½µÄÎÄ¼ş
-ÎÄÖĞµÄÎÄ¼şÍÆ¶ÏÊÇÄ£°æµÄÁÙÊ±ÎÄ¼ş£©
-4¡¢Ôö¼Ó¸öÈËÉèÖÃ¹¦ÄÜ
-£¨ÆäÊµ¾ÍÊÇÎªÁË·½±ãĞŞ¸ÄÊÖ»úºÅºÍÓÊÏä¶øÒÑ~»¹¿ÉÒÔ¹Ø±ÕÓÊ¼şºÍ¶ÌĞÅÌáĞÑÅ¶~£©
+## è·¯ç”±é‡å†™èŒƒä¾‹
+### .htaccessæ–¹å¼
 
-Éı¼¶·½Ê½£º
-1¡¢Ö±½ÓÊ¹ÓÃ±¾°üÌá¹©µÄËùÓĞÎÄ¼ş£¨±ğÍüÁËĞŞ¸Äconfig.php .htaccess£©
-2¡¢ÔÚÔ­ÓĞµÄxsser.meÔ´Âë»ù´¡ÉÏÉı¼¶:
-	Ê×ÏÈÖ±½Ó¸²¸ÇËùÓĞÎÄ¼ş£¡
-	È»ºóÔÚÊı¾İ¿âÖĞ,oc_user±íÖĞÌí¼ÓÁ½¸ö×Ö¶Î£¬¸ù¾İxssplatform.sqlÌí¼ÓÏÂ°É~
-
-
-1¡¢ĞŞ¸Äconfig.phpÀïÃæµÄÊı¾İ¿âÁ¬½Ó×Ö¶Î£¬°üÀ¨ÓÃ»§Ãû£¬ÃÜÂë£¬Êı¾İ¿âÃû£¬·ÃÎÊURLÆğÊ¼ºÍÎ±¾²Ì¬µÄÉèÖÃ¡£ 
-2¡¢ÔÚweb¸ùÄ¿Â¼ÏÂÓĞÒ»¸öxssplatform.sql£¬µ¼Èë¿â¡£
-3¡¢½øÈëÊı¾İ¿âÖ´ĞĞÓï¾äĞŞ¸ÄÓòÃûÎª×Ô¼ºµÄ¡£ 
-UPDATE oc_module SET 
-code=REPLACE(code,'http://xsser.me','http://yourdomain/xss')
-Í¬Ê±Ìæ»»authtest.phpÖĞµÄÍøÖ·´úÂë
-
-±¸×¢£º×¢²á³É¹¦ÓÃ»§ºó£¬ĞŞ¸Ä¹ÜÀíÔ±±íÖĞµÄadminlevelÎª1Ê± ¿É¶¨Òå×ÔÉíÎª×î¸ß¹ÜÀíÔ±¿É·¢ËÍÑûÇëÂë
-4¡¢½¨Á¢.htaccessÎÄ¼şĞ´ÈëÒÔÏÂ´úÂë£º
-
+æ–‡ä»¶å†™å…¥ä»¥ä¸‹ä»£ç ï¼š
 RewriteEngine On
-RewriteRule ^([0-9a-zA-Z]{6})$ /xss/index.php?do=code&urlKey=$1 [L] 
-RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$  /xss/index.php?do=do&auth=$1&domain=$3 [L] 
-RewriteRule ^register/(.*?)$ /xss/index.php?do=register&key=$1 [L] 
+RewriteRule ^([0-9a-zA-Z]{6})$ /xss/index.php?do=code&urlKey=$1 [L]
+RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$  /xss/index.php?do=do&auth=$1&domain=$3 [L]
+RewriteRule ^register/(.*?)$ /xss/index.php?do=register&key=$1 [L]
 RewriteRule ^register-validate/(.*?)$ /xss/index.php?do=register&act=validate&key=$1 [L]
 RewriteRule ^login$ /xss/index.php?do=login [L]
 
 
 
-·¶Àı£º
-//apache
+
+### apacheæ–¹å¼
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
-RewriteRule ^([0-9a-zA-Z]{6})$ /index.php?do=code&urlKey=$1 [L] 
-RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$  /index.php?do=do&auth=$1&domain=$3 [L] 
-RewriteRule ^register/(.*?)$ /index.php?do=register&key=$1 [L] 
+RewriteRule ^([0-9a-zA-Z]{6})$ /index.php?do=code&urlKey=$1 [L]
+RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$  /index.php?do=do&auth=$1&domain=$3 [L]
+RewriteRule ^register/(.*?)$ /index.php?do=register&key=$1 [L]
 RewriteRule ^register-validate/(.*?)$ /index.php?do=register&act=validate&key=$1 [L]
 </IfModule>
 
 
-//nginx
+#### nginxæ–¹å¼
 rewrite "^/([0-9a-zA-Z]{6})$" /index.php?do=code&urlKey=$1 last;
 rewrite "^/do/auth/(\w+?)(/domain/([\w\.]+?))?$" /index.php?do=do&auth=$1&domain=$3 last;
 rewrite "^/register/(.*?)$" /index.php?do=register&key=$1 last;
 rewrite "^/register-validate/(.*?)$" /index.php?do=register&act=validate&key=$1 last;
-
-±¸×¢-×îÈ«ĞŞ¸ÄÖ¸ÄÏ£º
-http://blog.csdn.net/cnsecs/article/details/9159357
