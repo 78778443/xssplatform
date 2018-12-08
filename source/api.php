@@ -38,7 +38,7 @@ if($id){
 	$judgeCookie=in_array('cookie',$keys) ? true : false;
 	/* cookie hash */
 	$cookieHash=md5($project['id'].'_'.$content['cookie'].'_'.$content['location'].'_'.$content['toplocation']);
-	$cookieExisted=$db->FirstValue("SELECT COUNT(*) FROM ".Tb('project_content')." WHERE projectId='{$project[id]}' AND cookieHash='{$cookieHash}'");
+	$cookieExisted=$db->FirstValue("SELECT COUNT(*) FROM ".Tb('project_content')." WHERE projectId='{$project['id']}' AND cookieHash='{$cookieHash}'");
 	if(!$judgeCookie || $cookieExisted<=0){
 		//服务器获取的content
 		$serverContent=array();
@@ -83,7 +83,7 @@ if($id){
                 }
 		
 	}else{
-		$db->Execute("UPDATE ".Tb('project_content')." SET num=num+1,updateTime='".time()."' WHERE projectId='{$project[id]}' AND cookieHash='{$cookieHash}'");
+		$db->Execute("UPDATE ".Tb('project_content')." SET num=num+1,updateTime='".time()."' WHERE projectId='{$project['id']}' AND cookieHash='{$cookieHash}'");
 	}
 
 	header("Location: $_SERVER[HTTP_REFERER] ");

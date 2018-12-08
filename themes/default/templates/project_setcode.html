@@ -43,17 +43,17 @@ function ShowContent(id,o){
 	<p> 
 		<ul id="moduleList">
         	{foreach from=$modulesCan key=k item=v}
-        	<li style="margin-bottom:10px"> <input onclick="{literal}if(this.checked){ $('#mset_'+this.value).show() }else{ $('#mset_'+this.value).hide() }{/literal}" name="modules[]" value="{$v.id}" type="checkbox"{if $v.choosed==1} checked="checked"{/if} /> {$v.title} 
+        	<li style="margin-bottom:10px"> <input onclick="{literal}if(this.checked){ $('#mset_'+this.value).show() }else{ $('#mset_'+this.value).hide() }{/literal}" name="modules[]" value="{$v.id}" type="checkbox"{if isset($v.choosed) && $v.choosed==1} checked="checked"{/if} /> {$v.title}
             <a href="javascript:void(0)" onclick="ShowContent('m_{$k}',this)">展开</a>
-            {if $v.setkeys|@count>0}
-            <div id="mset_{$v.id}" style="display:{if $v.choosed==1}block{else}none{/if}">
+            {if is_array($v.setkeys) && $v.setkeys|@count>0}
+            <div id="mset_{$v.id}" style="display:{if isset($v.choosed) && $v.choosed==1}block{else}none{/if}">
             需要配置的参数<br/>
             	{foreach from=$v.setkeys item=setkey}
             	{if $v.id==1 && $setkey.key=='keepsession'}
-	            <input type="radio" name="setkey_{$v.id}_{$setkey.key}" value="0"{if $setkey.value!=1} checked="checked"{/if} /> 无keepsession &nbsp; 
-	            <input type="radio" name="setkey_{$v.id}_{$setkey.key}" value="1"{if $setkey.value==1} checked="checked"{/if} /> keepsession
+	            <input type="radio" name="setkey_{$v.id}_{$setkey.key}" value="0"{if empty($setkey.value) ||  $setkey.value!=1} checked="checked"{/if} /> 无keepsession &nbsp;
+	            <input type="radio" name="setkey_{$v.id}_{$setkey.key}" value="1"{if isset($setkey.value) &&  $setkey.value==1} checked="checked"{/if} /> keepsession
 	            {else}
-                {$setkey.key} : <input type="text" name="setkey_{$v.id}_{$setkey.key}" value="{$setkey.value}" /><br/>
+                {$setkey.key} : <input type="text" name="setkey_{$v.id}_{$setkey.key}" value="{isset($setkey.value) && $setkey.value}" /><br/>
                 {/if}
                 {/foreach}
             </div>

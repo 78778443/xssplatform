@@ -16,7 +16,7 @@
             <li><a href="#contact">博客</a></li>
 			-->
           </ul>
-		  {if isset($show.user) &&  $show.user.userId<1}
+		  {if empty($show.user) ||  $show.user.userId<1}
 		  	<ul class="nav navbar-nav navbar-right ng-scope" ng-controller="user_ctrl" id="header_me">
                 <li>
                     <a class="mr_15" wt-tracker="Header|Menu|Goto Signin" href="{$url.root}/index.php?do=login">登录</a>

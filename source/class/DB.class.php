@@ -78,7 +78,7 @@ class DB_Mysql implements IDataBase
 
         $this->linkId = mysqli_connect($this->host, $this->username, $this->password);
         if (!empty($this->linkId)) {
-            mysqli_query($this->linkId,"SET NAMES '" . $this->charset . "'");
+            mysqli_query($this->linkId, "SET NAMES '" . $this->charset . "'");
             if (mysqli_select_db($this->linkId, $this->database)) {
                 return $this->linkId;
             }
@@ -188,7 +188,7 @@ class DB_Mysql implements IDataBase
     /* last id */
     public function LastId()
     {
-        return mysqli_insert_id();
+        return mysqli_insert_id($this->linkId);
     }
 }
 
