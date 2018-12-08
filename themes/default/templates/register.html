@@ -1,71 +1,77 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
 <title>XSS Platform</title>
-<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
-<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
-<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
-<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
-<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
-<style type="text/css">
-{literal}
-tbody tr:nth-child(even) td, tbody tr.even td { background: #FFFFFF }
-tbody tr td { background: #FFFFFF; height:55px }
-tbody tr td .error { margin-bottom:0 }
-{/literal}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/css.css">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
 	{include file="header.html"}
-	<div class="main">
-		<form id="formRegister" action="{$url.root}/index.php?do=register&act=submit" method="post">
-		<fieldset>
-			<legend>注册</legend>
-			<table class="formTable">
-			<tr>
-				<th width="100">邀请码</th>
-				<td width="150"><input id="key" name="key" type="text" style="width:200px" value="{$key}" /></td>
-				<td><div id="key_check"></div></td>
-			</tr>
-			<tr>
-				<th width="100">用户名</th>
-				<td width="150"><input id="user" name="user" type="text" style="width:200px" maxlength="20" /></td>
-				<td><div id="user_check">4-20个字符(字母、汉字、数字、下划线)</div></td>
-			</tr>
-			<tr>
-				<th>邮箱</th>
-				<td><input id="email" name="email" type="text"  style="width:200px" maxlength="50" /></td>
-				<td><div id="email_check">可以使用邮箱登录</div></td>
-			</tr>
-            			<tr>
-				<th>手机</th>
-				<td><input id="phone" name="phone" type="text"  style="width:200px" maxlength="11" /></td>
-				<td><div id="email_check">可以用来接收短信提醒（可空）</div></td>
-			</tr>
-			<tr>
-				<th>密码</th>
-				<td><input id="pwd" name="pwd" type="password" style="width:200px" maxlength="20" /></td>
-				<td><div id="pwd_check">6-20个字符(字母、数字、下划线)</div></td>
-			</tr>
-			<tr>
-				<th>密码确认</th>
-				<td><input id="pwd2" name="pwd2" type="password" style="width:200px" maxlength="20" /></td>
-				<td><div id="pwd2_check"></div></td>
-			</tr>
-			<tr><th></th>
-				<td colspan="2"><input id="btnRegister" type="submit" value="提交注册" />  
-						<span style="margin-left:20px">
-							已经拥有账号? <a href="{$url.login}">直接登录</a>
-						</span>
-				</td>
-			</tr>
-			</table>
-		</fieldset>
-		</form>
-	</div><!-- main End -->
+<div class="container">
+<form class="form-register" id="formRegister" action="{$url.root}/index.php?do=register&act=submit" method="post">
+<div class="panel panel-default">
+  <div class="panel-heading">注册</div>
+  <div class="panel-body">
+<div class="form-group">
+<div class="input-group">
+<span class="input-group-addon">
+<i class="glyphicon glyphicon-heart"></i>
+</span>
+<input class="form-control ng-pristine ng-invalid ng-invalid-required valid" type="text" placeholder="请输入邀请码" id="key" name="key">
+<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></div>
 </div>
+<div class="form-group">
+<div class="input-group">
+<span class="input-group-addon">
+<i class="glyphicon glyphicon-user"></i>
+</span>
+<input class="form-control ng-pristine ng-invalid ng-invalid-required valid" type="text" placeholder="请输入用户名 4-20个字符(字母、汉字、数字、下划线)" id="user" name="user">
+<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></div>
+</div>
+<div class="form-group">
+<div class="input-group">
+<span class="input-group-addon">
+<i class="glyphicon glyphicon-envelope"></i>
+</span>
+<input class="form-control ng-pristine ng-invalid ng-invalid-required valid" type="text" placeholder="请输入邮箱 可以使用邮箱登录" id="email" name="email">
+<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></div>
+</div>
+<div class="form-group">
+<div class="input-group">
+<span class="input-group-addon">
+<i class="glyphicon glyphicon-phone"></i>
+</span>
+<input class="form-control ng-pristine ng-invalid ng-invalid-required valid" type="text" placeholder="请输入手机号 可以用来接收短信提醒（可空）" id="phone" name="phone">
+<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></div>
+</div>
+<div class="form-group">
+<div class="input-group">
+<span class="input-group-addon">
+<i class="glyphicon glyphicon-lock"></i>
+</span>
+<input class="form-control ng-pristine ng-invalid ng-invalid-required valid" type="password" placeholder="请输入密码 6-20个字符(字母、数字、下划线)" id="pwd" name="pwd">
+<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></div>
+</div>
+<div class="form-group">
+<div class="input-group">
+<span class="input-group-addon">
+<i class="glyphicon glyphicon-ok-sign"></i>
+</span>
+<input class="form-control ng-pristine ng-invalid ng-invalid-required valid" type="password" placeholder="请再次输入密码" id="pwd2" name="pwd2">
+<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></div>
+</div>
+						
+<button type="submit" class="btn btn-success" style="float:right;">提交注册</button>
+</div>
+</div>
+</div>
+</form>
+	<!-- main End -->
 
 <script type="text/javascript">
 {literal}

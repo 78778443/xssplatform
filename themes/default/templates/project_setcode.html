@@ -1,13 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
 <title>XSS Platform</title>
-<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
-<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
-<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
-<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
-<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/css.css">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 {literal}
 function ShowContent(id,o){
@@ -23,17 +24,17 @@ function ShowContent(id,o){
 </script>
 </head>
 <body>
-<div class="container">
 {include file="header.html"}
+<div class="container">
 {include file="menus.html"}
-<div class="span-19 right">
-<p>当前位置： <a href="{$url.root}/index.php">首页</a> > 配置项目代码</p>
-<form id="contentForm" action="{$url.root}/index.php?do=project&act=setcode_submit" method="post">
+<div class="col-sm-9">
+          <div class="panel panel-default">
+    	<div class="panel-heading">配置代码</div>
+<form style="padding: 10px 15px;" id="contentForm" action="{$url.root}/index.php?do=project&act=setcode_submit" method="post">
 <input type="hidden" name="token" value="{$show.user.token}" />
 <input type="hidden" name="id" value="{$project.id}" />
 <input type="hidden" name="ty" value="{$ty}" />
 <fieldset> 
-	<legend>配置代码</legend>
 	<div id="contentShow"></div>
 	<p> 
 		<label for="title">项目名称</label><br> 
@@ -58,8 +59,8 @@ function ShowContent(id,o){
             </div>
             {/if}
             <ul id="m_{$k}" style="display:none">
-                <li style="list-style:none">参数:<br />{$v.keys}</li>
-                <li style="list-style:none">代码:<br />{$v.code}</li>
+                <li style="list-style:none">参数:<br /><pre>{$v.keys}</pre></li>
+                <li style="list-style:none">代码:<br /><pre>{$v.code}</pre></li>
             </ul>
             </li>
             {/foreach}
@@ -70,11 +71,12 @@ function ShowContent(id,o){
 		<textarea name="code" id="code"></textarea>
 	</p>
 	<p> 
-		<input type="submit" value="{if $ty=='create'}下一步{else}配置{/if}"> &nbsp;&nbsp;
-		<input type="button" value="取消" onclick="history.go(-1)"> 
+		<input class="btn btn-success" type="submit" value="{if $ty=='create'}下一步{else}配置{/if}"> &nbsp;&nbsp;
+		<input class="btn btn-success" type="button" value="取消" onclick="history.go(-1)"> 
 	</p> 
 </fieldset> 
 </form>
+</div>
 </div>
 </div>
 </body>

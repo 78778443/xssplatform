@@ -48,7 +48,11 @@ if($id){
 		$domain=StripStr($domain);
 		$serverContent['HTTP_REFERER']=StripStr($_SERVER['HTTP_REFERER']);
 		$serverContent['HTTP_USER_AGENT']=StripStr($_SERVER['HTTP_USER_AGENT']);
-		$serverContent['REMOTE_ADDR']=StripStr($_SERVER['HTTP_X_FORWARDED_FOR']);
+		$user_ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+		if ($user_ip==''){
+		$user_ip=$_SERVER['REMOTE_ADDR'];
+		}
+		$serverContent['REMOTE_ADDR']=StripStr($user_ip);
 		$values=array(
 			'projectId'=>$project['id'],
 			'content'=>JsonEncode($content),

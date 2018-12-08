@@ -42,6 +42,7 @@ switch($act){
 		$smarty->assign('do',$do);
 		$smarty->assign('show',$show);
 		$smarty->assign('url',$url);
+
 		$smarty->display('login.html');
 		break;
 }

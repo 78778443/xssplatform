@@ -1,13 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
 <title>XSS Platform</title>
-<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
-<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
-<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
-<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
-<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/css.css">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
 {literal}
 <style>
 ul { margin:0}
@@ -15,31 +16,33 @@ ul { margin:0}
 {/literal}
 </head>
 <body>
-<div class="container">
 {include file="header.html"}
+<div class="container">
 {include file="menus.html"}
-<div class="span-19 right">
-<p>当前位置： <a href="{$url.root}/index.php">首页</a> > 项目代码</p>
+<div class="col-sm-9">
+          <div class="panel panel-default">
+    	<div class="panel-heading">项目代码</div>
+		<div style="padding: 10px 15px;">
 <caption><h3>项目名称: {$project.title}</h3></caption>
 <p>
 <label>项目代码：</label>
-<code>
+<pre>
 {$code}
-</code>
+</pre>
 </p>
 <label>如何使用：</label>
 <p>将如下代码植入怀疑出现xss的地方（注意'的转义），即可在 <a href="{$url.root}/index.php?do=project&act=view&id={$project.id}">项目内容</a> 观看XSS效果。</p>
-<code>
+<pre>
 {$scriptShow1}
-</code>
+</pre>
 </p>
 <p>
 或者
 </p>
 <p>
-<code>
+<pre>
 {$scriptShow2}
-</code>
+</pre>
 </p>
 
 <p>
@@ -49,9 +52,9 @@ ul { margin:0}
 </p>
 
 <p>
-<code>
+<pre>
 {$codeurl}
-</code>
+</pre>
 </p>
 <p> 
 *************************************************网址缩短************************************************* 
@@ -63,9 +66,9 @@ ul { margin:0}
 </p> 
 
 <p> 
-<code>
+<pre>
 {$shortShow1}
-</code>
+</pre>
 </p>
 <p> 
 
@@ -74,9 +77,9 @@ ul { margin:0}
 </p> 
 
 <p> 
-<code>
+<pre>
 {$shortShow2}
-</code>
+</pre>
 </p>
 
 <p> 
@@ -86,18 +89,20 @@ ul { margin:0}
 </p> 
 
 <p> 
-<code>
+<pre>
 {$shortShow3}
-</code>
+</pre>
 </p>
 
 <p>
 {if $ty=='create'}
-<input type="button" value="完成" onclick="location.href='{$url.root}/index.php'" />
+<input class="btn btn-success" type="button" value="完成" onclick="location.href='{$url.root}/index.php'" />
 {else}
-<input type="button" value="返回首页" onclick="location.href='{$url.root}/index.php'" />
+<input class="btn btn-success" type="button" value="返回首页" onclick="location.href='{$url.root}/index.php'" />
 {/if}
 </p>
+</div>
+</div>
 </div>
 </div>
 </body>

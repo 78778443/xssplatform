@@ -1,0 +1,19 @@
+code {
+    background-color: #F8F8F8;
+    border: 1px solid #CCCCCC;
+    color: #333333;
+    display: block;
+    font-family: Lucida Console,Courier New,Courier,mono,monospace;
+    font-size: 12px;
+    line-height: 18px;
+    margin: 0 auto;
+    overflow: auto;
+    padding: 4px 8px;
+    word-wrap: break-word;
+}
+
+.menus { padding:10px; width:150px; margin-right:10px; border:#e0e0e0 1px solid }
+.menus .menutitle { font-size:14px; font-weight:bold; width:100%;overflow: hidden }
+.menus .menutitle a { text-decoration:none }
+.menus .menutitle a.right { font-size:12px; font-weight: normal; }
+.menus ul,menus li { list-style:none }

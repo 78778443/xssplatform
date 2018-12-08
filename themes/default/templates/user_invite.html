@@ -1,19 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
 <title>XSS Platform</title>
-<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
-<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
-<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
-<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
-<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/css.css">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+{include file="header.html"}
 <div class="container">
-	<h1>未使用的邀请码</h1>
-	<table border="0" cellspacing="0" cellpadding="0">
-		<caption><b>乌云币奖品邀请码 ({$codesWooyun|@count})</b> <a class="right" href="{$url.root}/index.php?do=user&act=createinvite&isWooyun=1">生成奖品邀请码</a></caption>
+<div class="col-sm-12">
+          <div class="panel panel-default">
+    	<div class="panel-heading">邀请码生成</div>
+		<div style="padding: 10px 15px;">
+	<h3>未使用的邀请码</h3>
+	<table class="table" border="0" cellspacing="0" cellpadding="0">
+		<b>乌云币奖品邀请码 ({$codesWooyun|@count})</b> 
+		<a style="float: right;" href="{$url.root}/index.php?do=user&act=createinvite&isWooyun=1">生成奖品邀请码</a>
 		<thead>
 			<tr>
 				<th>邀请码 (生成时间倒序排列)</th>
@@ -28,8 +35,8 @@
 		</tbody>
 	</table>
 
-	<table border="0" cellspacing="0" cellpadding="0">
-		<caption><b>其它邀请码 ({$codesOther|@count})</b> <a class="right" href="{$url.root}/index.php?do=user&act=createinvite&isWooyun=0">生成其它邀请码</a></caption>
+	<table class="table" border="0" cellspacing="0" cellpadding="0">
+		<b>其它邀请码 ({$codesOther|@count})</b> <a style="float: right;" href="{$url.root}/index.php?do=user&act=createinvite&isWooyun=0">生成其它邀请码</a>
 		<thead>
 			<tr>
 				<th>邀请码 (生成时间倒序排列)</th>
@@ -43,6 +50,9 @@
 			{/foreach}
 		</tbody>
 	</table>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

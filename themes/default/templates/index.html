@@ -1,21 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
 <title>XSS Platform</title>
-<link rel="stylesheet" href="{$url.themePath}/style/screen.css" type="text/css" media="screen, projection"> 
-<link rel="stylesheet" href="{$url.themePath}/style/print.css" type="text/css" media="print"> 
-<!--[if lt IE 8]><link rel="stylesheet" href="{$url.themePath}/style/ie.css" type="text/css" media="screen, projection"><![endif]-->
-<link rel="stylesheet" href="{$url.themePath}/style/style.css" type="text/css" media="screen, projection">
-<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/css.css">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
 {include file="header.html"}
+<div class="container">
 {include file="menus.html"}
-<div class="span-19 right">
-	<table border="0" cellspacing="0" cellpadding="0">
-		<caption><b>我的项目</b> <a href="{$url.root}/index.php?do=project&act=create" class="right">创建项目</a></caption>
+<div class="col-sm-9">
+            	<div class="panel panel-default">
+    			<div class="panel-heading">我的项目<a href="{$url.root}/index.php?do=project&act=create" style="float:right;">创建项目</a></div>   
+	<table border="0" cellspacing="0" cellpadding="0" class="table">
 		<thead>
 			<tr>
 				<th width="200">项目名称</th>
@@ -39,6 +41,8 @@
 			{/foreach}
 		</tbody>
 	</table>
+</div>
+
 </div>
 </div>
 </body>

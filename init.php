@@ -32,7 +32,7 @@ $show=$config['show'];
 $pointConfig=$config['point'];
 
 //mail设置
-$mailConfig=$config['mail'];
+$mailConfig=$config['mail'] ?? [];
 
 //时区设置
 @date_default_timezone_set($config['timezone']);

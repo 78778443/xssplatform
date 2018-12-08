@@ -1,0 +1,17 @@
+body{font-family:"Helvetica Neue",Helvetica,"Hiragino Sans GB","Segoe UI","Microsoft Yahei",Tahoma,Arial,STHeiti,sans-serif;font-size:14px;line-height:1.428571429;color:#333;background-color:#fff;}
+html body{background:#fbfbfb;overflow-x:hidden;padding-top: 60px;}
+.form-signin {
+  max-width: 330px;
+  margin: 0 auto;
+}
+.form-register {
+  max-width: 600px;
+  margin: 0 auto;
+}
+a {
+padding-left: 1px;
+}
+a, a:hover {
+color: #77CCDD;
+text-decoration: none;
+}

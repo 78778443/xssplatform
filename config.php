@@ -6,20 +6,20 @@
  */
 
 /* 数据库连接 */
-$config['dbHost']		='127.0.0.1';			//数据库地址
+$config['dbHost']		='127.0.0.1:3309';			//数据库地址
 $config['dbUser']		='root';				//用户
-$config['dbPwd']		='';				//密码
+$config['dbPwd']		='123';				//密码
 $config['database']		='xssplatform';			//数据库名
 $config['charset']		='utf8';				//数据库字符集
 $config['tbPrefix']		='oc_';					//表名前缀
 $config['dbType']		='mysql';				//数据库类型(目前只支持mysql)
 
 /* 注册配置 */
-$config['register']		='invite';				//normal,正常;invite,只允许邀请注册;close,关闭注册功能 注：当邀请开启时,未生成邀请码,邀请将不生效
+$config['register']		='normal';				//normal,正常;invite,只允许邀请注册;close,关闭注册功能 注：当邀请开启时,未生成邀请码,邀请将不生效
 $config['mailauth']		=false;					//注册时是否邮箱验证
 
 /* url配置 */
-$config['urlroot']		='http://xss.songboy.net';//访问的url起始
+$config['urlroot']		= "http://{$_SERVER['HTTP_HOST']}";//访问的url起始
 $config['urlrewrite']	=false;					//是否启用Url Rewrite
 
 /* 存储配置 */
