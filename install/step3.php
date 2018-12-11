@@ -67,10 +67,10 @@ function addOldData($link, $dbname)
     $password = md5('OldCMS|' . $_POST['password']);
 //    var_dump($username,$_POST['password']);die;;
     //导入最新的数据格式
-    $sql = "create database $dbname;";
+    $sql = "CREATE DATABASE IF NOT EXISTS $dbname DEFAULT CHARSET utf8 COLLATE utf8_general_ci;";
     $sql .= "use {$dbname};\n";
     $sql .= file_get_contents("../xssplatform.sql") . "\n";
-    $sql .= "UPDATE $password.oc_user SET userName='{$username}',userPwd='$password',adminLevel=1 ORDER BY id ASC LIMIT 1";
+    $sql .= "UPDATE $dbname.oc_user SET userName='{$username}',userPwd='$password',adminLevel=1 ORDER BY id ASC LIMIT 1";
 
     //正则替换域名
     $pattern = "/http:\/\/(.*?)\//";
