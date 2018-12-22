@@ -4,7 +4,7 @@ if (version_compare(PHP_VERSION, '7.0', '<')) {
     die('此程序需PHP版本大于7.0 !');
 }
 if (!file_exists("./install/install.lock")) {
-    header("location:install/step1.php");
+    header("location:http://{$_SERVER['HTTP_HOST']}/install/step1.php");
 }
 
 require 'init.php';

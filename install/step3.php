@@ -74,7 +74,7 @@ function addOldData($link, $dbname)
 
     //正则替换域名
     $pattern = "/http:\/\/(.*?)\//";
-    $newStr = "http://{$_SERVER['HTTP_HOST']}:{$_SERVER['SERVER_PORT']}/";
+    $newStr = "http://{$_SERVER['HTTP_HOST']}/";
     $sql = preg_replace($pattern, $newStr, $sql);
 
 
