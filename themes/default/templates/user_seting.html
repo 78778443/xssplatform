@@ -45,11 +45,22 @@
                     <div class="checkbox disabled">
                         <label>
                             {$input2}
-                            发送短信提醒
+                            发送短信提醒(暂时已废弃)
                         </label>
                     </div>
+                </div>
+                <div style="padding:5px 10px">
+                    钉钉机器人Key:<input id="dingding" class="form-control" name="dingding" type="text" maxlength="11" value="{$dingding}"/>
                     <p>
-                        <input class="btn btn-success" id="btnSeting" type="submit" value="提交"/>
+                    <div class="checkbox disabled">
+                        <label>
+                            {$input3}
+                            发送钉钉通知
+                        </label>
+                    </div>
+                </div>
+                <p>
+                    <input class="btn btn-success" id="btnSeting" type="submit" value="提交"/>
             </form>
         </div>
     </div>

@@ -203,6 +203,7 @@ CREATE TABLE `oc_user` (
   `userPwd` varchar(50) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
+  `dingding` varchar(255) DEFAULT NULL,
   `message` varchar(255) DEFAULT NULL,
   `validated` tinyint(1) DEFAULT '0',
   `validateKey` varchar(255) DEFAULT NULL,
@@ -227,7 +228,7 @@ CREATE TABLE `oc_user` (
 -- Records of oc_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `oc_user` VALUES (2, 1, 'admin', '72728ceaae55e0ac4698d6add4edd67c', '78778443@qq.com', '', NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 0, 0, NULL, 0, 0, 0, 0, 1544240839, 1544240824);
+INSERT INTO `oc_user` VALUES (2, 1, 'admin', '72728ceaae55e0ac4698d6add4edd67c', '78778443@qq.com', '','', NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 0, 0, NULL, 0, 0, 0, 0, 1544240839, 1544240824);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -16,7 +16,7 @@ if (!basename($path) == 'step1.php') {
 <body>
 <div id="form" style="width: 400px;margin: 50 auto;">
     <form class="form-horizontal" action='step3.php' method='post'>
-        数据库地址：<input class="form-control" type='text' name='DB_HOST' value='localhost'/><br/>
+        数据库地址：<input class="form-control" type='text' name='DB_HOST' value='127.0.0.1'/><br/>
         数据库用户名：<input class="form-control" type='text' name='DB_USER' value='root'/><br/>
         数据库密码：<input class="form-control" type='password' name='DB_PASS'/><br/>
         数据库名称：<input class="form-control" type='text' name='DB_NAME' value='xssplatform'/><br/>
