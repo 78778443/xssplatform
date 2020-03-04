@@ -1,3 +1,7 @@
+## 推荐使用docker方式搭建
+
+参考文章：https://segmentfault.com/a/1190000021899373          使用docker快速搭建xssPlatform测试平台实践
+
 ## 一、背景
 XSS Platform 是一个非常经典的XSS渗透测试管理系统，原作者在2011年所开发，由于后来长时间没有人维护，导致目前在PHP7环境下无法运行。
 
