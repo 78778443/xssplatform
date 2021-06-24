@@ -1,9 +1,9 @@
 <?php
-include "./common.php"; ?>
+require "./common.php"; ?>
     <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title><?= $project ?></title>
+        <title><?php echo $project ?></title>
         <link href="..//themes/default/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
@@ -65,7 +65,7 @@ function addOldData($link, $dbname)
     //账户信息
     $username = addslashes($_POST['username']);
     $password = md5('OldCMS|' . $_POST['password']);
-//    var_dump($username,$_POST['password']);die;;
+    //    var_dump($username,$_POST['password']);die;;
     //导入最新的数据格式
     $sql = "CREATE DATABASE IF NOT EXISTS $dbname DEFAULT CHARSET utf8 COLLATE utf8_general_ci;";
     $sql .= "use {$dbname};\n";

@@ -1,5 +1,5 @@
 <?php
-include "./common.php";
+require "./common.php";
 
 header("content-type:text/html;charset=utf-8");
 $path = $_SERVER['HTTP_REFERER'];
@@ -10,7 +10,7 @@ if (!basename($path) == 'step1.php') {
 ?>
 <html>
 <head>
-    <title><?= $project ?></title>
+    <title><?php echo $project ?></title>
     <link href="..//themes/default/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>

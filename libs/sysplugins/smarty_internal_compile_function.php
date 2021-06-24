@@ -179,8 +179,12 @@ class Smarty_Internal_Compile_Functionclose extends Smarty_Internal_CompileBase
         $output .= "function {$_funcName}(Smarty_Internal_Template \$_smarty_tpl,\$params) {\n";
         $output .= $_paramsCode;
         $output .= "foreach (\$params as \$key => \$value) {\n\$_smarty_tpl->tpl_vars[\$key] = new Smarty_Variable(\$value, \$_smarty_tpl->isRenderingCache);\n}\n";
-        $output .= $compiler->compileCheckPlugins(array_merge($compiler->required_plugins[ 'compiled' ],
-            $compiler->required_plugins[ 'nocache' ]));
+        $output .= $compiler->compileCheckPlugins(
+            array_merge(
+                $compiler->required_plugins[ 'compiled' ],
+                $compiler->required_plugins[ 'nocache' ]
+            )
+        );
         $output .= "?>\n";
         $compiler->parser->current_buffer->append_subtree(
             $compiler->parser,

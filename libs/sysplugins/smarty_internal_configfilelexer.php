@@ -153,7 +153,7 @@ class Smarty_Internal_Configfilelexer
     /**
      * constructor
      *
-     * @param   string                             $data template source
+     * @param string                               $data     template source
      * @param Smarty_Internal_Config_File_Compiler $compiler
      */
     public function __construct($data, Smarty_Internal_Config_File_Compiler $compiler)
@@ -262,12 +262,14 @@ class Smarty_Internal_Configfilelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state START');
+                                        ) . '... state START'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -292,8 +294,10 @@ class Smarty_Internal_Configfilelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -362,12 +366,14 @@ class Smarty_Internal_Configfilelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state VALUE');
+                                        ) . '... state VALUE'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -392,8 +398,10 @@ class Smarty_Internal_Configfilelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -436,8 +444,9 @@ class Smarty_Internal_Configfilelexer
 
     public function yy_r2_7()
     {
-        if (!$this->configBooleanize ||
-            !in_array(strtolower($this->value), array('true', 'false', 'on', 'off', 'yes', 'no'))) {
+        if (!$this->configBooleanize 
+            || !in_array(strtolower($this->value), array('true', 'false', 'on', 'off', 'yes', 'no'))
+        ) {
             $this->yypopstate();
             $this->yypushstate(self::NAKED_STRING_VALUE);
             return true; //reprocess in new state
@@ -479,12 +488,14 @@ class Smarty_Internal_Configfilelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state NAKED_STRING_VALUE');
+                                        ) . '... state NAKED_STRING_VALUE'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -509,8 +520,10 @@ class Smarty_Internal_Configfilelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -541,12 +554,14 @@ class Smarty_Internal_Configfilelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state COMMENT');
+                                        ) . '... state COMMENT'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -571,8 +586,10 @@ class Smarty_Internal_Configfilelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -613,12 +630,14 @@ class Smarty_Internal_Configfilelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state SECTION');
+                                        ) . '... state SECTION'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -643,8 +662,10 @@ class Smarty_Internal_Configfilelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -680,12 +701,14 @@ class Smarty_Internal_Configfilelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state TRIPPLE');
+                                        ) . '... state TRIPPLE'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -710,8 +733,10 @@ class Smarty_Internal_Configfilelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);

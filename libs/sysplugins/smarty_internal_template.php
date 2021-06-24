@@ -226,7 +226,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             } else {
                 if ((!$this->caching || $this->cached->has_nocache_code || $this->source->handler->recompiled)
                     && !$no_output_filter && (isset($this->smarty->autoload_filters[ 'output' ])
-                                              || isset($this->smarty->registered_filters[ 'output' ]))
+                    || isset($this->smarty->registered_filters[ 'output' ]))
                 ) {
                     echo $this->smarty->ext->_filterHandler->runFilter('output', ob_get_clean(), $this);
                 } else {
@@ -249,7 +249,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             if (!$no_output_filter
                 && (!$this->caching || $this->cached->has_nocache_code || $this->source->handler->recompiled)
                 && (isset($this->smarty->autoload_filters[ 'output' ])
-                    || isset($this->smarty->registered_filters[ 'output' ]))
+                || isset($this->smarty->registered_filters[ 'output' ]))
             ) {
                 return $this->smarty->ext->_filterHandler->runFilter('output', ob_get_clean(), $this);
             }
@@ -344,7 +344,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         if (!isset(self::$tplObjCache[ $tpl->templateId ]) && !$tpl->source->handler->recompiled) {
             // check if template object should be cached
             if ($forceTplCache || (isset(self::$subTplInfo[ $tpl->template_resource ])
-                                   && self::$subTplInfo[ $tpl->template_resource ] > 1)
+                && self::$subTplInfo[ $tpl->template_resource ] > 1)
                 || ($tpl->_isSubTpl() && isset(self::$tplObjCache[ $tpl->parent->templateId ]))
             ) {
                 self::$tplObjCache[ $tpl->templateId ] = $tpl;
@@ -684,20 +684,20 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
     public function __get($property_name)
     {
         switch ($property_name) {
-            case 'compiled':
-                $this->loadCompiled();
-                return $this->compiled;
-            case 'cached':
-                $this->loadCached();
-                return $this->cached;
-            case 'compiler':
-                $this->loadCompiler();
-                return $this->compiler;
-            default:
-                // Smarty property ?
-                if (property_exists($this->smarty, $property_name)) {
-                    return $this->smarty->$property_name;
-                }
+        case 'compiled':
+            $this->loadCompiled();
+            return $this->compiled;
+        case 'cached':
+            $this->loadCached();
+            return $this->cached;
+        case 'compiler':
+            $this->loadCompiler();
+            return $this->compiler;
+        default:
+            // Smarty property ?
+            if (property_exists($this->smarty, $property_name)) {
+                return $this->smarty->$property_name;
+            }
         }
         throw new SmartyException("template property '$property_name' does not exist.");
     }
@@ -713,17 +713,17 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
     public function __set($property_name, $value)
     {
         switch ($property_name) {
-            case 'compiled':
-            case 'cached':
-            case 'compiler':
-                $this->$property_name = $value;
+        case 'compiled':
+        case 'cached':
+        case 'compiler':
+            $this->$property_name = $value;
+            return;
+        default:
+            // Smarty property ?
+            if (property_exists($this->smarty, $property_name)) {
+                $this->smarty->$property_name = $value;
                 return;
-            default:
-                // Smarty property ?
-                if (property_exists($this->smarty, $property_name)) {
-                    $this->smarty->$property_name = $value;
-                    return;
-                }
+            }
         }
         throw new SmartyException("invalid template property '$property_name'.");
     }

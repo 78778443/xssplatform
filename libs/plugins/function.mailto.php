@@ -65,22 +65,22 @@ function smarty_function_mailto($params)
     $mail_parms = array();
     foreach ($params as $var => $value) {
         switch ($var) {
-            case 'cc':
-            case 'bcc':
-            case 'followupto':
-                if (!empty($value)) {
-                    $mail_parms[] = $var . '=' . str_replace($search, $replace, rawurlencode($value));
-                }
-                break;
-            case 'subject':
-            case 'newsgroups':
-                $mail_parms[] = $var . '=' . rawurlencode($value);
-                break;
-            case 'extra':
-            case 'text':
-                $$var = $value;
+        case 'cc':
+        case 'bcc':
+        case 'followupto':
+            if (!empty($value)) {
+                $mail_parms[] = $var . '=' . str_replace($search, $replace, rawurlencode($value));
+            }
+            break;
+        case 'subject':
+        case 'newsgroups':
+            $mail_parms[] = $var . '=' . rawurlencode($value);
+            break;
+        case 'extra':
+        case 'text':
+            $$var = $value;
             // no break
-            default:
+        default:
         }
     }
     if ($mail_parms) {

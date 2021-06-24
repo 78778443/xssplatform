@@ -311,8 +311,8 @@ abstract class Smarty_CacheResource_KeyValueStore extends Smarty_CacheResource
     {
         extract(unpack('N1s/N1m/a*content', $content));
         /**
-         * @var  int $s
-         * @var  int $m
+         * @var int $s
+         * @var int $m
          */
         return $s + ($m / 100000000);
     }

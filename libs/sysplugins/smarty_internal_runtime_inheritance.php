@@ -110,7 +110,7 @@ class Smarty_Internal_Runtime_Inheritance
             $this->state = 2;
         }
         if (isset($template) && (($tpl->parent->_isTplObj() && $tpl->parent->source->type !== 'extends')
-                                 || $tpl->smarty->extends_recursion)
+            || $tpl->smarty->extends_recursion)
         ) {
             $tpl->_subTemplateRender(
                 $template,
@@ -133,9 +133,9 @@ class Smarty_Internal_Runtime_Inheritance
      * - otherwise process inheritance and render
      *
      * @param \Smarty_Internal_Template $tpl
-     * @param                           $className
+     * @param $className
      * @param string                    $name
-     * @param int|null                  $tplIndex index of outer level {block} if nested
+     * @param int|null                  $tplIndex  index of outer level {block} if nested
      *
      * @throws \SmartyException
      */

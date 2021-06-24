@@ -383,8 +383,8 @@ abstract class Smarty_Internal_TemplateCompilerBase
     /**
      * Method to compile a Smarty template
      *
-     * @param Smarty_Internal_Template                  $template template object to compile
-     * @param bool                                      $nocache  true is shall be compiled in nocache mode
+     * @param Smarty_Internal_Template                  $template        template object to compile
+     * @param bool                                      $nocache         true is shall be compiled in nocache mode
      * @param null|Smarty_Internal_TemplateCompilerBase $parent_compiler
      *
      * @return bool true if compiling succeeded, false if it failed
@@ -415,7 +415,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
      * Compile template source and run optional post filter
      *
      * @param \Smarty_Internal_Template             $template
-     * @param null|bool                             $nocache flag if template must be compiled in nocache mode
+     * @param null|bool                             $nocache         flag if template must be compiled in nocache mode
      * @param \Smarty_Internal_TemplateCompilerBase $parent_compiler
      *
      * @return string
@@ -580,13 +580,13 @@ abstract class Smarty_Internal_TemplateCompilerBase
             // not a variable variable
             $var = trim($variable, '\'');
             $this->tag_nocache = $this->tag_nocache |
-                                 $this->template->ext->getTemplateVars->_getVariable(
-                                     $this->template,
-                                     $var,
-                                     null,
-                                     true,
-                                     false
-                                 )->nocache;
+                                $this->template->ext->getTemplateVars->_getVariable(
+                                    $this->template,
+                                    $var,
+                                    null,
+                                    true,
+                                    false
+                                )->nocache;
             // todo $this->template->compiled->properties['variables'][$var] = $this->tag_nocache | $this->nocache;
         }
         return '$_smarty_tpl->tpl_vars[' . $variable . ']->value';
@@ -796,7 +796,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
     /**
      * Check for plugins and return function name
      *
-     * @param        $plugin_name
+     * @param $plugin_name
      * @param string $plugin_type type of plugin
      *
      * @return string call name of function
@@ -1029,7 +1029,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
     }
 
     /**
-     * @param array $_attr tag attributes
+     * @param array $_attr       tag attributes
      * @param array $validScopes
      *
      * @return int|string
@@ -1103,14 +1103,14 @@ abstract class Smarty_Internal_TemplateCompilerBase
         )
         ) {
             $templateName = $this->template->source->type . ':' . trim(
-                    preg_replace(
-                        '![\t\r\n]+!',
-                        ' ',
-                        strlen($lex->data) > 40 ?
+                preg_replace(
+                    '![\t\r\n]+!',
+                    ' ',
+                    strlen($lex->data) > 40 ?
                             substr($lex->data, 0, 40) .
                             '...' : $lex->data
-                    )
-                );
+                )
+            );
         } else {
             $templateName = $this->template->source->type . ':' . $this->template->source->filepath;
         }
@@ -1212,20 +1212,20 @@ abstract class Smarty_Internal_TemplateCompilerBase
         $this->ldelLength = strlen($ldel);
         $this->ldelPreg = '';
         foreach (str_split($ldel, 1) as $chr) {
-            $this->ldelPreg .= '[' . preg_quote($chr,'/') . ']';
+            $this->ldelPreg .= '[' . preg_quote($chr, '/') . ']';
         }
         $rdel = $this->smarty->getRightDelimiter();
         $this->rdelLength = strlen($rdel);
         $this->rdelPreg = '';
         foreach (str_split($rdel, 1) as $chr) {
-            $this->rdelPreg .= '[' . preg_quote($chr,'/') . ']';
+            $this->rdelPreg .= '[' . preg_quote($chr, '/') . ']';
         }
         $literals = $this->smarty->getLiterals();
         if (!empty($literals)) {
             foreach ($literals as $key => $literal) {
                 $literalPreg = '';
                 foreach (str_split($literal, 1) as $chr) {
-                    $literalPreg .= '[' . preg_quote($chr,'/') . ']';
+                    $literalPreg .= '[' . preg_quote($chr, '/') . ']';
                 }
                 $literals[ $key ] = $literalPreg;
             }
@@ -1444,7 +1444,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
     /**
      * method to compile a Smarty template
      *
-     * @param mixed $_content template source
+     * @param mixed $_content         template source
      * @param bool  $isTemplateSource
      *
      * @return bool true if compiling succeeded, false if it failed
@@ -1493,7 +1493,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
         if (($_output = $this->callTagCompiler($tag, $args, $parameter)) === false) {
             if (isset($this->parent_compiler->tpl_function[ $tag ])
                 || (isset($this->template->smarty->ext->_tplFunction)
-                    && $this->template->smarty->ext->_tplFunction->getTplFunction($this->template, $tag) !== false)
+                && $this->template->smarty->ext->_tplFunction->getTplFunction($this->template, $tag) !== false)
             ) {
                 // template defined by {template} tag
                 $args[ '_attr' ][ 'name' ] = "'{$tag}'";
@@ -1526,7 +1526,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
                     $method = $parameter[ 'object_method' ];
                     if (!in_array($method, $this->smarty->registered_objects[ $tag ][ 3 ])
                         && (empty($this->smarty->registered_objects[ $tag ][ 1 ])
-                            || in_array($method, $this->smarty->registered_objects[ $tag ][ 1 ]))
+                        || in_array($method, $this->smarty->registered_objects[ $tag ][ 1 ]))
                     ) {
                         return $this->callTagCompiler('private_object_function', $args, $parameter, $tag, $method);
                     } elseif (in_array($method, $this->smarty->registered_objects[ $tag ][ 3 ])) {
@@ -1591,7 +1591,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
                     if ($plugin_type === Smarty::PLUGIN_COMPILER
                         && $this->smarty->loadPlugin('smarty_compiler_' . $tag)
                         && (!isset($this->smarty->security_policy)
-                            || $this->smarty->security_policy->isTrustedTag($tag, $this))
+                        || $this->smarty->security_policy->isTrustedTag($tag, $this))
                     ) {
                         $plugin = 'smarty_compiler_' . $tag;
                         if (is_callable($plugin)) {

@@ -21,7 +21,7 @@ function smarty_make_timestamp($string)
         // use "now":
         return time();
     } elseif ($string instanceof DateTime
-              || (interface_exists('DateTimeInterface', false) && $string instanceof DateTimeInterface)
+        || (interface_exists('DateTimeInterface', false) && $string instanceof DateTimeInterface)
     ) {
         return (int)$string->format('U'); // PHP 5.2 BC
     } elseif (strlen($string) === 14 && ctype_digit($string)) {

@@ -264,7 +264,7 @@ class Smarty_Security
      * Check if PHP function is trusted.
      *
      * @param string $function_name
-     * @param object $compiler compiler object
+     * @param object $compiler      compiler object
      *
      * @return boolean                 true if function is trusted
      */
@@ -283,7 +283,7 @@ class Smarty_Security
      * Check if static class is trusted.
      *
      * @param string $class_name
-     * @param object $compiler compiler object
+     * @param object $compiler   compiler object
      *
      * @return boolean                 true if class is trusted
      */
@@ -303,7 +303,7 @@ class Smarty_Security
      *
      * @param string $class_name
      * @param string $params
-     * @param object $compiler compiler object
+     * @param object $compiler   compiler object
      *
      * @return boolean                 true if class method is trusted
      */
@@ -340,7 +340,7 @@ class Smarty_Security
      * Check if PHP modifier is trusted.
      *
      * @param string $modifier_name
-     * @param object $compiler compiler object
+     * @param object $compiler      compiler object
      *
      * @return boolean                 true if modifier is trusted
      */
@@ -419,7 +419,7 @@ class Smarty_Security
      * Check if modifier plugin is trusted.
      *
      * @param string $modifier_name
-     * @param object $compiler compiler object
+     * @param object $compiler      compiler object
      *
      * @return boolean                 true if tag is trusted
      */
@@ -441,7 +441,7 @@ class Smarty_Security
                 );
             }
         } elseif (in_array($modifier_name, $this->allowed_modifiers)
-                  && !in_array($modifier_name, $this->disabled_modifiers)
+            && !in_array($modifier_name, $this->disabled_modifiers)
         ) {
             return true;
         } else {
@@ -624,7 +624,7 @@ class Smarty_Security
      * Check if file is inside a valid directory
      *
      * @param string $filepath
-     * @param array  $dirs valid directories
+     * @param array  $dirs     valid directories
      *
      * @return array|bool
      * @throws \SmartyException

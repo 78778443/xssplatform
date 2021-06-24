@@ -316,8 +316,8 @@ class Smarty_Internal_Configfileparser
     public static function yy_destructor($yymajor, $yypminor)
     {
         switch ($yymajor) {
-            default:
-                break;   /* If no destructor action specified: do nothing */
+        default:
+            break;   /* If no destructor action specified: do nothing */
         }
     }
 
@@ -471,8 +471,8 @@ class Smarty_Internal_Configfileparser
                                 return array_unique($expected);
                             }
                         } else {
-                            if ($res4[ $nextstate ][ $token ] =
-                                in_array($token, self::$yyExpectedTokens[ $nextstate ], true)) {
+                            if ($res4[ $nextstate ][ $token ] =in_array($token, self::$yyExpectedTokens[ $nextstate ], true)
+                            ) {
                                 $this->yyidx = $yyidx;
                                 $this->yystack = $stack;
                                 return array_unique($expected);
@@ -556,9 +556,9 @@ class Smarty_Internal_Configfileparser
                             return true;
                         }
                     } else {
-                        if ($res2[ $nextstate ][ $token ] =
-                            (isset(self::$yyExpectedTokens[ $nextstate ]) &&
-                             in_array($token, self::$yyExpectedTokens[ $nextstate ], true))) {
+                        if ($res2[ $nextstate ][ $token ] =(isset(self::$yyExpectedTokens[ $nextstate ]) 
+                            && in_array($token, self::$yyExpectedTokens[ $nextstate ], true))
+                        ) {
                             $this->yyidx = $yyidx;
                             $this->yystack = $stack;
                             return true;
@@ -616,14 +616,18 @@ class Smarty_Internal_Configfileparser
             return self::YY_NO_ACTION;
         }
         $i += $iLookAhead;
-        if ($i < 0 || $i >= self::YY_SZ_ACTTAB ||
-            self::$yy_lookahead[ $i ] != $iLookAhead) {
+        if ($i < 0 || $i >= self::YY_SZ_ACTTAB 
+            || self::$yy_lookahead[ $i ] != $iLookAhead
+        ) {
             if (count(self::$yyFallback) && $iLookAhead < count(self::$yyFallback)
-                && ($iFallback = self::$yyFallback[ $iLookAhead ]) != 0) {
+                && ($iFallback = self::$yyFallback[ $iLookAhead ]) != 0
+            ) {
                 if ($this->yyTraceFILE) {
-                    fwrite($this->yyTraceFILE, $this->yyTracePrompt . 'FALLBACK ' .
+                    fwrite(
+                        $this->yyTraceFILE, $this->yyTracePrompt . 'FALLBACK ' .
                                                $this->yyTokenName[ $iLookAhead ] . ' => ' .
-                                               $this->yyTokenName[ $iFallback ] . "\n");
+                        $this->yyTokenName[ $iFallback ] . "\n"
+                    );
                 }
                 return $this->yy_find_shift_action($iFallback);
             }
@@ -647,8 +651,9 @@ class Smarty_Internal_Configfileparser
             return self::YY_NO_ACTION;
         }
         $i += $iLookAhead;
-        if ($i < 0 || $i >= self::YY_SZ_ACTTAB ||
-            self::$yy_lookahead[ $i ] != $iLookAhead) {
+        if ($i < 0 || $i >= self::YY_SZ_ACTTAB 
+            || self::$yy_lookahead[ $i ] != $iLookAhead
+        ) {
             return self::$yy_default[ $stateno ];
         } else {
             return self::$yy_action[ $i ];
@@ -805,7 +810,8 @@ class Smarty_Internal_Configfileparser
     public function yy_reduce($yyruleno)
     {
         if ($this->yyTraceFILE && $yyruleno >= 0
-            && $yyruleno < count(self::$yyRuleName)) {
+            && $yyruleno < count(self::$yyRuleName)
+        ) {
             fprintf(
                 $this->yyTraceFILE,
                 "%sReduce (%d) [%s].\n",
@@ -902,8 +908,9 @@ class Smarty_Internal_Configfileparser
         }
         do {
             $yyact = $this->yy_find_shift_action($yymajor);
-            if ($yymajor < self::YYERRORSYMBOL &&
-                !$this->yy_is_expected_token($yymajor)) {
+            if ($yymajor < self::YYERRORSYMBOL 
+                && !$this->yy_is_expected_token($yymajor)
+            ) {
                 // force a syntax error
                 $yyact = self::YY_ERROR_ACTION;
             }

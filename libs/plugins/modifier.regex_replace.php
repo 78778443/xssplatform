@@ -35,7 +35,7 @@ function smarty_modifier_regex_replace($string, $search, $replace, $limit = -1)
 }
 
 /**
- * @param  string $search string(s) that should be replaced
+ * @param string $search string(s) that should be replaced
  *
  * @return string
  * @ignore

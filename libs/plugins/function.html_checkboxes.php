@@ -39,7 +39,7 @@
  * @param Smarty_Internal_Template $template template object
  *
  * @return string
- * @uses    smarty_function_escape_special_chars()
+ * @uses   smarty_function_escape_special_chars()
  * @throws \SmartyException
  */
 function smarty_function_html_checkboxes($params, Smarty_Internal_Template $template)
@@ -64,91 +64,91 @@ function smarty_function_html_checkboxes($params, Smarty_Internal_Template $temp
     $extra = '';
     foreach ($params as $_key => $_val) {
         switch ($_key) {
-            case 'name':
-            case 'separator':
-                $$_key = (string)$_val;
-                break;
-            case 'escape':
-            case 'labels':
-            case 'label_ids':
-                $$_key = (bool)$_val;
-                break;
-            case 'options':
-                $$_key = (array)$_val;
-                break;
-            case 'values':
-            case 'output':
-                $$_key = array_values((array)$_val);
-                break;
-            case 'checked':
-            case 'selected':
-                if (is_array($_val)) {
-                    $selected = array();
-                    foreach ($_val as $_sel) {
-                        if (is_object($_sel)) {
-                            if (method_exists($_sel, '__toString')) {
-                                $_sel = smarty_function_escape_special_chars((string)$_sel->__toString());
-                            } else {
-                                trigger_error(
-                                    'html_checkboxes: selected attribute contains an object of class \'' .
-                                    get_class($_sel) . '\' without __toString() method',
-                                    E_USER_NOTICE
-                                );
-                                continue;
-                            }
+        case 'name':
+        case 'separator':
+            $$_key = (string)$_val;
+            break;
+        case 'escape':
+        case 'labels':
+        case 'label_ids':
+            $$_key = (bool)$_val;
+            break;
+        case 'options':
+            $$_key = (array)$_val;
+            break;
+        case 'values':
+        case 'output':
+            $$_key = array_values((array)$_val);
+            break;
+        case 'checked':
+        case 'selected':
+            if (is_array($_val)) {
+                $selected = array();
+                foreach ($_val as $_sel) {
+                    if (is_object($_sel)) {
+                        if (method_exists($_sel, '__toString')) {
+                            $_sel = smarty_function_escape_special_chars((string)$_sel->__toString());
                         } else {
-                            $_sel = smarty_function_escape_special_chars((string)$_sel);
+                            trigger_error(
+                                'html_checkboxes: selected attribute contains an object of class \'' .
+                                get_class($_sel) . '\' without __toString() method',
+                                E_USER_NOTICE
+                            );
+                            continue;
                         }
-                        $selected[ $_sel ] = true;
-                    }
-                } elseif (is_object($_val)) {
-                    if (method_exists($_val, '__toString')) {
-                        $selected = smarty_function_escape_special_chars((string)$_val->__toString());
                     } else {
-                        trigger_error(
-                            'html_checkboxes: selected attribute is an object of class \'' . get_class($_val) .
-                            '\' without __toString() method',
-                            E_USER_NOTICE
-                        );
+                        $_sel = smarty_function_escape_special_chars((string)$_sel);
                     }
+                    $selected[ $_sel ] = true;
+                }
+            } elseif (is_object($_val)) {
+                if (method_exists($_val, '__toString')) {
+                    $selected = smarty_function_escape_special_chars((string)$_val->__toString());
                 } else {
-                    $selected = smarty_function_escape_special_chars((string)$_val);
+                    trigger_error(
+                        'html_checkboxes: selected attribute is an object of class \'' . get_class($_val) .
+                        '\' without __toString() method',
+                        E_USER_NOTICE
+                    );
+                }
+            } else {
+                $selected = smarty_function_escape_special_chars((string)$_val);
+            }
+            break;
+        case 'checkboxes':
+            trigger_error(
+                'html_checkboxes: the use of the "checkboxes" attribute is deprecated, use "options" instead',
+                E_USER_WARNING
+            );
+            $options = (array)$_val;
+            break;
+        case 'assign':
+            break;
+        case 'strict':
+            break;
+        case 'disabled':
+        case 'readonly':
+            if (!empty($params[ 'strict' ])) {
+                if (!is_scalar($_val)) {
+                    trigger_error(
+                        "html_options: {$_key} attribute must be a scalar, only boolean true or string '{$_key}' will actually add the attribute",
+                        E_USER_NOTICE
+                    );
+                }
+                if ($_val === true || $_val === $_key) {
+                    $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
                 }
                 break;
-            case 'checkboxes':
-                trigger_error(
-                    'html_checkboxes: the use of the "checkboxes" attribute is deprecated, use "options" instead',
-                    E_USER_WARNING
-                );
-                $options = (array)$_val;
-                break;
-            case 'assign':
-                break;
-            case 'strict':
-                break;
-            case 'disabled':
-            case 'readonly':
-                if (!empty($params[ 'strict' ])) {
-                    if (!is_scalar($_val)) {
-                        trigger_error(
-                            "html_options: {$_key} attribute must be a scalar, only boolean true or string '{$_key}' will actually add the attribute",
-                            E_USER_NOTICE
-                        );
-                    }
-                    if ($_val === true || $_val === $_key) {
-                        $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_key) . '"';
-                    }
-                    break;
-                }
+            }
             // omit break; to fall through!
             // no break
-            default:
-                if (!is_array($_val)) {
-                    $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
-                } else {
-                    trigger_error("html_checkboxes: extra attribute '{$_key}' cannot be an array", E_USER_NOTICE);
-                }
-                break;
+        default:
+            if (!is_array($_val)) {
+                $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
+            } else {
+                trigger_error("html_checkboxes: extra attribute '{$_key}' cannot be an array", E_USER_NOTICE);
+            }
+            break;
         }
     }
     if (!isset($options) && !isset($values)) {
@@ -195,14 +195,14 @@ function smarty_function_html_checkboxes($params, Smarty_Internal_Template $temp
 }
 
 /**
- * @param      $name
- * @param      $value
- * @param      $output
- * @param      $selected
- * @param      $extra
- * @param      $separator
- * @param      $labels
- * @param      $label_ids
+ * @param $name
+ * @param $value
+ * @param $output
+ * @param $selected
+ * @param $extra
+ * @param $separator
+ * @param $labels
+ * @param $label_ids
  * @param bool $escape
  *
  * @return string

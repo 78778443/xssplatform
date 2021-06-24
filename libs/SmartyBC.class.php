@@ -154,8 +154,8 @@ class SmartyBC extends Smarty
     /**
      * Registers block function to be used in templates
      *
-     * @param string $block      name of template block
-     * @param string $block_impl PHP function to register
+     * @param string $block       name of template block
+     * @param string $block_impl  PHP function to register
      * @param bool   $cacheable
      * @param mixed  $cache_attrs
      *
@@ -356,7 +356,7 @@ class SmartyBC extends Smarty
     /**
      * test to see if valid cache exists for this template
      *
-     * @param string $tpl_file name of template file
+     * @param string $tpl_file   name of template file
      * @param string $cache_id
      * @param string $compile_id
      *

@@ -947,7 +947,7 @@ class Smarty extends Smarty_Internal_TemplateBase
 
     /**
      *
-     * @param  string $compile_dir directory to store compiled templates in
+     * @param string $compile_dir directory to store compiled templates in
      *
      * @return Smarty current Smarty instance for chaining
      */
@@ -1363,7 +1363,6 @@ class Smarty extends Smarty_Internal_TemplateBase
      *
      * @param string $name  property name
      * @param mixed  $value parameter passed to setter
-     *
      */
     public function __set($name, $value)
     {

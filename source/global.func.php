@@ -19,7 +19,7 @@ function UrlInvite($inviteKey)
  * 钉钉通知
  *
  * @param  $message
- * @param string $remote_server
+ * @param  string $remote_server
  * @return array|mixed
  */
 function dingdingNotice($message, $key)

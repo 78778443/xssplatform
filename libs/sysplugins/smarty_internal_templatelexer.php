@@ -13,7 +13,6 @@
  * This is the template file lexer.
  * It is generated from the smarty_internal_templatelexer.plex file
  *
- *
  * @author Uwe Tews <uwe.tews@googlemail.com>
  */
 class Smarty_Internal_Templatelexer
@@ -222,7 +221,7 @@ class Smarty_Internal_Templatelexer
     /**
      * constructor
      *
-     * @param   string                             $source template source
+     * @param string                               $source   template source
      * @param Smarty_Internal_TemplateCompilerBase $compiler
      */
     public function __construct($source, Smarty_Internal_TemplateCompilerBase $compiler)
@@ -243,7 +242,6 @@ class Smarty_Internal_Templatelexer
 
     /**
      * open lexer/parser trace file
-     *
      */
     public function PrintTrace()
     {
@@ -282,27 +280,35 @@ class Smarty_Internal_Templatelexer
     public function yypushstate($state)
     {
         if ($this->yyTraceFILE) {
-            fprintf($this->yyTraceFILE, "%sState push %s\n", $this->yyTracePrompt,
-                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state);
+            fprintf(
+                $this->yyTraceFILE, "%sState push %s\n", $this->yyTracePrompt,
+                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state
+            );
         }
         array_push($this->_yy_stack, $this->_yy_state);
         $this->_yy_state = $state;
         if ($this->yyTraceFILE) {
-            fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt,
-                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state);
+            fprintf(
+                $this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt,
+                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state
+            );
         }
     }
 
     public function yypopstate()
     {
         if ($this->yyTraceFILE) {
-            fprintf($this->yyTraceFILE, "%sState pop %s\n", $this->yyTracePrompt,
-                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state);
+            fprintf(
+                $this->yyTraceFILE, "%sState pop %s\n", $this->yyTracePrompt,
+                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state
+            );
         }
         $this->_yy_state = array_pop($this->_yy_stack);
         if ($this->yyTraceFILE) {
-            fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt,
-                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state);
+            fprintf(
+                $this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt,
+                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state
+            );
         }
     }
 
@@ -310,8 +316,10 @@ class Smarty_Internal_Templatelexer
     {
         $this->_yy_state = $state;
         if ($this->yyTraceFILE) {
-            fprintf($this->yyTraceFILE, "%sState set %s\n", $this->yyTracePrompt,
-                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state);
+            fprintf(
+                $this->yyTraceFILE, "%sState set %s\n", $this->yyTracePrompt,
+                isset($this->state_name[ $this->_yy_state ]) ? $this->state_name[ $this->_yy_state ] : $this->_yy_state
+            );
         }
     }
 
@@ -335,12 +343,14 @@ class Smarty_Internal_Templatelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state TEXT');
+                                        ) . '... state TEXT'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -365,8 +375,10 @@ class Smarty_Internal_Templatelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -379,8 +391,10 @@ class Smarty_Internal_Templatelexer
 
     public function yy_r1_2()
     {
-        preg_match("/[*]{$this->compiler->getRdelPreg()}[\n]?/", $this->data, $match, PREG_OFFSET_CAPTURE,
-            $this->counter);
+        preg_match(
+            "/[*]{$this->compiler->getRdelPreg()}[\n]?/", $this->data, $match, PREG_OFFSET_CAPTURE,
+            $this->counter
+        );
         if (isset($match[ 0 ][ 1 ])) {
             $to = $match[ 0 ][ 1 ] + strlen($match[ 0 ][ 0 ]);
         } else {
@@ -448,12 +462,14 @@ class Smarty_Internal_Templatelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state TAG');
+                                        ) . '... state TAG'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -478,8 +494,10 @@ class Smarty_Internal_Templatelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -589,12 +607,14 @@ class Smarty_Internal_Templatelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state TAGBODY');
+                                        ) . '... state TAGBODY'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -619,8 +639,10 @@ class Smarty_Internal_Templatelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -778,8 +800,8 @@ class Smarty_Internal_Templatelexer
     public function yy_r3_43()
     {
         // resolve conflicts with shorttag and right_delimiter starting with '='
-        if (substr($this->data, $this->counter + strlen($this->value) - 1, $this->compiler->getRdelLength()) ===
-            $this->smarty->getRightDelimiter()) {
+        if (substr($this->data, $this->counter + strlen($this->value) - 1, $this->compiler->getRdelLength()) ===$this->smarty->getRightDelimiter()
+        ) {
             preg_match('/\s+/', $this->value, $match);
             $this->value = $match[ 0 ];
             $this->token = Smarty_Internal_Templateparser::TP_SPACE;
@@ -879,12 +901,14 @@ class Smarty_Internal_Templatelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state LITERAL');
+                                        ) . '... state LITERAL'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -909,8 +933,10 @@ class Smarty_Internal_Templatelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);
@@ -958,12 +984,14 @@ class Smarty_Internal_Templatelexer
                     $yymatches = array_filter($yymatches);
                 }
                 if (empty($yymatches)) {
-                    throw new Exception('Error: lexing failed because a rule matched' .
+                    throw new Exception(
+                        'Error: lexing failed because a rule matched' .
                                         ' an empty string.  Input "' . substr(
                                             $this->data,
                                             $this->counter,
                                             5
-                                        ) . '... state DOUBLEQUOTEDSTRING');
+                                        ) . '... state DOUBLEQUOTEDSTRING'
+                    );
                 }
                 next($yymatches); // skip global match
                 $this->token = key($yymatches); // token number
@@ -988,8 +1016,10 @@ class Smarty_Internal_Templatelexer
                     continue;
                 }
             } else {
-                throw new Exception('Unexpected input at line' . $this->line .
-                                    ': ' . $this->data[ $this->counter ]);
+                throw new Exception(
+                    'Unexpected input at line' . $this->line .
+                    ': ' . $this->data[ $this->counter ]
+                );
             }
             break;
         } while (true);

@@ -25,7 +25,7 @@ class Smarty_Internal_Runtime_UpdateCache
      *
      * @param \Smarty_Template_Cached   $cached
      * @param \Smarty_Internal_Template $_template
-     * @param                           $no_output_filter
+     * @param $no_output_filter
      *
      * @throws \Exception
      */
@@ -118,7 +118,7 @@ class Smarty_Internal_Runtime_UpdateCache
         }
         if (!$no_output_filter && !$_template->cached->has_nocache_code
             && (isset($_template->smarty->autoload_filters[ 'output' ])
-                || isset($_template->smarty->registered_filters[ 'output' ]))
+            || isset($_template->smarty->registered_filters[ 'output' ]))
         ) {
             $content = $_template->smarty->ext->_filterHandler->runFilter('output', $content, $_template);
         }

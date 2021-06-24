@@ -300,9 +300,9 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data
      * @api  Smarty::registerFilter()
      * @link http://www.smarty.net/docs/en/api.register.filter.tpl
      *
-     * @param string      $type filter type
+     * @param string      $type     filter type
      * @param callback    $callback
-     * @param string|null $name optional filter name
+     * @param string|null $name     optional filter name
      *
      * @return \Smarty|\Smarty_Internal_Template
      * @throws \SmartyException

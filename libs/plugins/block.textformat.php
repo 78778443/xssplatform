@@ -20,7 +20,7 @@
  * - indent_char   - string (" ")
  * - wrap_boundary - boolean (true)
  *
- * @link   http://www.smarty.net/manual/en/language.function.textformat.php {textformat}
+ * @link http://www.smarty.net/manual/en/language.function.textformat.php {textformat}
  *         (Smarty online manual)
  *
  * @param array                    $params   parameters
@@ -57,22 +57,22 @@ function smarty_block_textformat($params, $content, Smarty_Internal_Template $te
     $assign = null;
     foreach ($params as $_key => $_val) {
         switch ($_key) {
-            case 'style':
-            case 'indent_char':
-            case 'wrap_char':
-            case 'assign':
-                $$_key = (string)$_val;
-                break;
-            case 'indent':
-            case 'indent_first':
-            case 'wrap':
-                $$_key = (int)$_val;
-                break;
-            case 'wrap_cut':
-                $$_key = (bool)$_val;
-                break;
-            default:
-                trigger_error("textformat: unknown attribute '{$_key}'");
+        case 'style':
+        case 'indent_char':
+        case 'wrap_char':
+        case 'assign':
+            $$_key = (string)$_val;
+            break;
+        case 'indent':
+        case 'indent_first':
+        case 'wrap':
+            $$_key = (int)$_val;
+            break;
+        case 'wrap_cut':
+            $$_key = (bool)$_val;
+            break;
+        default:
+            trigger_error("textformat: unknown attribute '{$_key}'");
         }
     }
     if ($style === 'email') {

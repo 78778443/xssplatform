@@ -97,7 +97,6 @@ function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = fals
 }
 
 /**
- *
  * Bug: create_function() use exhausts memory when used in long loops
  * Fix: use declared functions for callbacks instead of using create_function()
  * Note: This can be fixed using anonymous functions instead, but that requires PHP >= 5.3

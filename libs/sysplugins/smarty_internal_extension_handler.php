@@ -175,7 +175,6 @@ class Smarty_Internal_Extension_Handler
      *
      * @param string $property_name property name
      * @param mixed  $value         value
-     *
      */
     public function __set($property_name, $value)
     {

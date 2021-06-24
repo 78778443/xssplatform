@@ -11,7 +11,8 @@ if (!defined('IN_OLDCMS')) {
 /**
  * DBConnect 数据库连接方法
  *
- * @param  $configFile        string    数据库配置文件
+ * @param  $configFile string   
+ *                     数据库配置文件
  * @return $db                object    BlueDB类对象
  */
 function DBConnect($configFile = '')
@@ -41,7 +42,8 @@ function InitSmarty($isAdmin = 0)
 /**
  * OCEncrypt oldcms加密
  *
- * @param  $str    string    待加密的字符
+ * @param  $str string   
+ *              待加密的字符
  * @return $str    string    密码串
  */
 function OCEncrypt($str)
@@ -85,10 +87,14 @@ function HTTP_REFERER()
 /**
  * Val 获得提交的值
  *
- * @param  $name        string            参数名
- * @param  $method        string            获取途径(GET/POST/COOKIE/REQUEST)
- * @param  $type        string/int        过滤类型('string'/0=>string,'int'/1=>int,其它/2=>不过滤)
- * @param  $isArray    int                0=>非数组,1=>数组
+ * @param  $name    string           
+ *                  参数名
+ * @param  $method  string           
+ *                  获取途径(GET/POST/COOKIE/REQUEST)
+ * @param  $type    string/int       
+ *                  过滤类型('string'/0=>string,'int'/1=>int,其它/2=>不过滤)
+ * @param  $isArray int               
+ *                  0=>非数组,1=>数组
  * @return $value        string/int
  */
 function Val($name, $method = 'GET', $type = 0, $isArray = 0)
@@ -414,7 +420,6 @@ function LongUrltoShortUrl($longurl = '')
     $shortUrl = json_decode($Url, true);
     return $shortUrl[0]['url_short'];
 }
-
 
 
 ?>

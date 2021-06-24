@@ -89,22 +89,22 @@ class Smarty_Internal_Method_ClearCompiledTemplate
                     continue;
                 }
                 $unlink = false;
-                if ((!isset($_compile_id) ||
-                     (isset($_filepath[ $_compile_id_part_length ]) &&
-                      $a = !strncmp($_filepath, $_compile_id_part, $_compile_id_part_length)))
+                if ((!isset($_compile_id) 
+                    || (isset($_filepath[ $_compile_id_part_length ]) 
+                    && $a = !strncmp($_filepath, $_compile_id_part, $_compile_id_part_length)))
                     && (!isset($resource_name) || (isset($_filepath[ $_resource_part_1_length ])
-                                                   && substr_compare(
-                                                          $_filepath,
-                                                          $_resource_part_1,
-                                                          -$_resource_part_1_length,
-                                                          $_resource_part_1_length
-                                                      ) === 0) || (isset($_filepath[ $_resource_part_2_length ])
-                                                                   && substr_compare(
-                                                                          $_filepath,
-                                                                          $_resource_part_2,
-                                                                          -$_resource_part_2_length,
-                                                                          $_resource_part_2_length
-                                                                      ) === 0))
+                    && substr_compare(
+                        $_filepath,
+                        $_resource_part_1,
+                        -$_resource_part_1_length,
+                        $_resource_part_1_length
+                    ) === 0) || (isset($_filepath[ $_resource_part_2_length ])
+                    && substr_compare(
+                        $_filepath,
+                        $_resource_part_2,
+                        -$_resource_part_2_length,
+                        $_resource_part_2_length
+                    ) === 0))
                 ) {
                     if (isset($exp_time)) {
                         if (is_file($_filepath) && time() - filemtime($_filepath) >= $exp_time) {

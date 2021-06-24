@@ -190,7 +190,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
     /**
      * Opens a window for the Smarty Debugging Console and display the data
      *
-     * @param Smarty_Internal_Template|Smarty $obj object to debug
+     * @param Smarty_Internal_Template|Smarty $obj  object to debug
      * @param bool                            $full
      *
      * @throws \Exception
@@ -210,8 +210,10 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
         // copy the working dirs from application
         $debObj->setCompileDir($smarty->getCompileDir());
         // init properties by hand as user may have edited the original Smarty class
-        $debObj->setPluginsDir(is_dir(dirname(__FILE__) . '/../plugins') ? dirname(__FILE__) .
-                                                                           '/../plugins' : $smarty->getPluginsDir());
+        $debObj->setPluginsDir(
+            is_dir(dirname(__FILE__) . '/../plugins') ? dirname(__FILE__) .
+            '/../plugins' : $smarty->getPluginsDir()
+        );
         $debObj->force_compile = false;
         $debObj->compile_check = Smarty::COMPILECHECK_ON;
         $debObj->left_delimiter = '{';

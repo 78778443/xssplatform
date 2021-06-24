@@ -24,7 +24,6 @@ class Smarty_Internal_ErrorHandler
 
     /**
      * Enable error handler to mute expected messages
-     *
      */
     public static function muteExpectedErrors()
     {
@@ -57,11 +56,11 @@ class Smarty_Internal_ErrorHandler
      *
      * @link http://php.net/set_error_handler
      *
-     * @param integer $errno Error level
-     * @param         $errstr
-     * @param         $errfile
-     * @param         $errline
-     * @param         $errcontext
+     * @param integer $errno      Error level
+     * @param $errstr
+     * @param $errfile
+     * @param $errline
+     * @param $errcontext
      *
      * @return bool
      */
