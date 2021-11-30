@@ -35,12 +35,13 @@ $config = array(
     'timezone' => 'Asia/Shanghai',
     'expires' => 3600,
     'debug' => true,
-    // 邮件配置（）
+    // 邮件配置
     'email'=>[
         'host'=>'', // 服务器地址 如：smtp.qq.com
         'username'=>'', // 用户名
         'password'=>'', // 授权码
     ],
+    // 钉钉配置
     'dingding'=>[
         'keyword'=>'最新消息'
     ]
