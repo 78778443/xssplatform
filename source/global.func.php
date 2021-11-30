@@ -24,8 +24,10 @@ function UrlInvite($inviteKey)
  */
 function dingdingNotice($message, $key)
 {
+    $config = [];
+    require ROOT_PATH . '/config.php';
     $remote_server =  "https://oapi.dingtalk.com/robot/send?access_token={$key}";
-    $data = array('msgtype' => 'text', 'text' => array('content' => $message));
+    $data = array('msgtype' => 'text', 'text' => array('content' => "{$config['dingding']['keyword']}：".$message));
     $post_string = json_encode($data);
 
     $ch = curl_init();
@@ -34,8 +36,12 @@ function dingdingNotice($message, $key)
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json;charset=utf-8'));
     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //不验证证书
     $data = curl_exec($ch);
+    if(curl_error($ch)){
+        return curl_error($ch);
+    }
     curl_close($ch);
 
     return $data;
