@@ -16,7 +16,7 @@
 {include file="menus.html"}
 <div class="col-sm-9">
             	<div class="panel panel-default">
-    			<div class="panel-heading">我的项目<a href="{$url.root}/index.php?do=project&act=create" style="float:right;">创建项目</a></div>   
+    			<div class="panel-heading">我的项目<a href="/index.php?do=project&act=create" style="float:right;">创建项目</a></div>
 	<table border="0" cellspacing="0" cellpadding="0" class="table">
 		<thead>
 			<tr>
@@ -30,12 +30,12 @@
 		<tbody>
 			{foreach from=$projects item=v}
 			<tr>
-				<td><a href="{$url.root}/index.php?do=project&act=view&id={$v.id}">{$v.title}</a></td>
+				<td><a href="/index.php?do=project&act=view&id={$v.id}">{$v.title}</a></td>
 				<td>{$v.description}</td>
 				<td>{$v.contentNum}</td>
 				<td>{$v.addTime|date_format:'%Y-%m-%d'}</td>
 				<td>
-				<a href="{$url.root}/index.php?do=project&act=delete&id={$v.id}&token={$show.user.token}" onclick="return confirm('确定删除吗?');">删除</a>
+				<a href="/index.php?do=project&act=delete&id={$v.id}&token={$show.user.token}" onclick="return confirm('确定删除吗?');">删除</a>
 				</td>
 			</tr>
 			{/foreach}

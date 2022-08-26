@@ -1,22 +1,22 @@
 <div class="col-sm-3">
 	<div class="panel panel-default">
-		<div class="panel-heading"><a style="color: #2a6496;" href="{$url.root}/index.php">我的项目</a><a style="float:right;" href="{$url.root}/index.php?do=project&act=create">创建</a></div> 
+		<div class="panel-heading"><a style="color: #2a6496;" href="/index.php">我的项目</a><a style="float:right;" href="/index.php?do=project&act=create">创建</a></div>
 			<div class="panel-body">
       			<ul class="nav nav-stacked">
 						{foreach from=$projects item=v}
-						<li><a href="{$url.root}/index.php?do=project&act=view&id={$v.id}">{$v.title}</a></li>
+						<li><a href="/index.php?do=project&act=view&id={$v.id}">{$v.title}</a></li>
 						{/foreach}
 						</ul>
 	</div>
 	</div>
 	
 	<div class="panel panel-default">
-		<div class="panel-heading"><a style="color: #2a6496;" href="{$url.root}/index.php?do=module">我的模块</a><a style="float:right;" href="{$url.root}/index.php?do=module&act=create">创建</a></div> 
+		<div class="panel-heading"><a style="color: #2a6496;" href="/index.php?do=module">我的模块</a><a style="float:right;" href="/index.php?do=module&act=create">创建</a></div>
 			<div class="panel-body">
       			<ul class="nav nav-stacked">
 		{foreach from=$modules item=v}
 		{if $v.isOpen==0 || ($v.isOpen==1 && $v.isAudit==0)}
-		<li><a href="{$url.root}/index.php?do=module&act=set&id={$v.id}">{$v.title}</a></li>
+		<li><a href="/index.php?do=module&act=set&id={$v.id}">{$v.title}</a></li>
 		{/if}
 		{/foreach}
 						</ul>
@@ -24,12 +24,12 @@
 	</div>
 	
 	<div class="panel panel-default">
-		<div class="panel-heading"><a style="color: #2a6496;" href="{$url.root}/index.php?do=module">公共模块</a></div> 
+		<div class="panel-heading"><a style="color: #2a6496;" href="/index.php?do=module">公共模块</a></div>
 			<div class="panel-body">
       			<ul class="nav nav-stacked">
 		{foreach from=$modules item=v}
 		{if $v.isOpen==1 && $v.isAudit==1}
-		<li><a href="{$url.root}/index.php?do=module&act=view&id={$v.id}">{$v.title}</a></li>
+		<li><a href="/index.php?do=module&act=view&id={$v.id}">{$v.title}</a></li>
 		{/if}
 		{/foreach}
 						</ul>

@@ -72,9 +72,9 @@ function IP()
 /* StripStr 过滤字符 */
 function StripStr($str)
 {
-    if (get_magic_quotes_gpc()) {
-        $str = stripslashes($str);
-    }
+//    if (get_magic_quotes_gpc()) {
+//        $str = stripslashes($str);
+//    }
     return addslashes(htmlspecialchars($str, ENT_QUOTES));
 }
 

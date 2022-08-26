@@ -16,7 +16,7 @@
 {include file="menus.html"}
 <div class="col-sm-9" style="float:right;">
             	<div class="panel panel-default">
-    			<div class="panel-heading">我的模块<a href="{$url.root}/index.php?do=module&act=create" style="float:right;">创建模块</a></div>  
+    			<div class="panel-heading">我的模块<a href="/index.php?do=module&act=create" style="float:right;">创建模块</a></div>
 	<table class="table" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
@@ -33,8 +33,8 @@
 				<td>{$v.description}</td>
 				<td>{$v.addTime|date_format:'%Y-%m-%d'}</td>
 				<td>
-				<a href="{$url.root}/index.php?do=module&act=set&id={$v.id}">配置</a> &nbsp; 
-				<a href="{$url.root}/index.php?do=module&act=delete&id={$v.id}&token={$show.user.token}" onclick="return confirm('确定删除吗?');">删除</a>
+				<a href="/index.php?do=module&act=set&id={$v.id}">配置</a> &nbsp;
+				<a href="/index.php?do=module&act=delete&id={$v.id}&token={$show.user.token}" onclick="return confirm('确定删除吗?');">删除</a>
 				</td>
 			</tr>
 			{/foreach}

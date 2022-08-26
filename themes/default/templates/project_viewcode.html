@@ -31,7 +31,7 @@ ul { margin:0}
 </pre>
 </p>
 <label>如何使用：</label>
-<p>将如下代码植入怀疑出现xss的地方（注意'的转义），即可在 <a href="{$url.root}/index.php?do=project&act=view&id={$project.id}">项目内容</a> 观看XSS效果。</p>
+<p>将如下代码植入怀疑出现xss的地方（注意'的转义），即可在 <a href="/index.php?do=project&act=view&id={$project.id}">项目内容</a> 观看XSS效果。</p>
 <pre>
 {$scriptShow1}
 </pre>
@@ -85,9 +85,9 @@ ul { margin:0}
 
 <p>
 {if $ty=='create'}
-<input class="btn btn-success" type="button" value="完成" onclick="location.href='{$url.root}/index.php'" />
+<input class="btn btn-success" type="button" value="完成" onclick="location.href='/index.php'" />
 {else}
-<input class="btn btn-success" type="button" value="返回首页" onclick="location.href='{$url.root}/index.php'" />
+<input class="btn btn-success" type="button" value="返回首页" onclick="location.href='/index.php'" />
 {/if}
 </p>
 </div>

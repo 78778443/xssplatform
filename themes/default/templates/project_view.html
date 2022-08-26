@@ -118,8 +118,8 @@ function cookie(d,n,v)
 {include file="menus.html"}
 <div class="col-sm-9">
           <div class="panel panel-default">
-    	<div class="panel-heading">项目内容<a style="font-size:12px; margin-left:10px; float:right;" href="{$url.root}/index.php?do=project&act=viewcode&id={$project.id}">查看代码</a>
-    	<a style="font-size:12px;float:right;" href="{$url.root}/index.php?do=project&act=setcode&id={$project.id}">配置</a>
+    	<div class="panel-heading">项目内容<a style="font-size:12px; margin-left:10px; float:right;" href="/index.php?do=project&act=viewcode&id={$project.id}">查看代码</a>
+    	<a style="font-size:12px;float:right;" href="/index.php?do=project&act=setcode&id={$project.id}">配置</a>
 		</div>
 <table class="table" border="0" cellspacing="0" cellpadding="0">
 	<div style="padding: 10px 15px;">
@@ -127,14 +127,14 @@ function cookie(d,n,v)
     	项目名称: {$project.title}
     </h3>
     Domain: 
-    <select onchange="location.href='{$url.root}/index.php?do=project&act=view&id={$project.id}&domain='+this.value">
+    <select onchange="location.href='/index.php?do=project&act=view&id={$project.id}&domain='+this.value">
     	<option value="">全部</option>
         {foreach from=$domains item=v}
         <option value="{$v}"{if $v==$domain} selected="selected"{/if}>{$v}</option>
         {/foreach}
     </select> 
     <br />
-    接口地址: {$url.root}/do/auth/{$project.authCode} ( 加 /domain/xxx 可通过域名过滤内容) <a id="plugin" href="/xsser.crx" download><button class="btn btn-success">安装插件</button></a>
+    接口地址: /do/auth/{$project.authCode} ( 加 /domain/xxx 可通过域名过滤内容) <a id="plugin" href="/xsser.crx" download><button class="btn btn-success">安装插件</button></a>
     </div>
 	<thead>
 		<tr>

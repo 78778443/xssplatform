@@ -6,11 +6,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{$url.root}/index.php">Xss平台</a>
+          <a class="navbar-brand" href="/index.php">Xss平台</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="{$url.root}/index.php">主页</a></li>
+            <li class="active"><a href="/index.php">主页</a></li>
 			<!--
             <li><a href="#about">关于</a></li>
             <li><a href="#contact">博客</a></li>
@@ -19,10 +19,10 @@
 		  {if empty($show.user) ||  $show.user.userId<1}
 		  	<ul class="nav navbar-nav navbar-right ng-scope" ng-controller="user_ctrl" id="header_me">
                 <li>
-                    <a class="mr_15" wt-tracker="Header|Menu|Goto Signin" href="{$url.root}/index.php?do=login">登录</a>
+                    <a class="mr_15" wt-tracker="Header|Menu|Goto Signin" href="/index.php?do=login">登录</a>
                 <iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></li>
                 <li>
-                    <a href="{$url.root}/index.php?do=register" wt-tracker="Header|Menu|Goto Apply">注册</a>
+                    <a href="/index.php?do=register" wt-tracker="Header|Menu|Goto Apply">注册</a>
                 </li>
                 
             </ul>
@@ -33,15 +33,15 @@
                     <a href="#" wt-tracker="Header|Menu|Goto Apply">用户：{$show.user.userName}</a>
                 <iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></li>
                 <li>
-                    <a href="{$url.root}/index.php?do=user&act=seting" wt-tracker="Header|Menu|Goto Apply">个人设置</a>
+                    <a href="/index.php?do=user&act=seting" wt-tracker="Header|Menu|Goto Apply">个人设置</a>
                 </li>
 				{if $show.user.adminLevel>0}
 				  <li>
-                    <a href="{$url.root}/index.php?do=user&act=invite" wt-tracker="Header|Menu|Goto Apply">邀请</a>
+                    <a href="/index.php?do=user&act=invite" wt-tracker="Header|Menu|Goto Apply">邀请</a>
                 </li>
 				{/if}
                 <li>
-                    <a href="{$url.root}/index.php?do=login&act=logout" wt-tracker="Header|Menu|Goto Apply">退出登陆</a>
+                    <a href="/index.php?do=login&act=logout" wt-tracker="Header|Menu|Goto Apply">退出登陆</a>
                 </li>
             </ul>
 			{/if}
