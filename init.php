@@ -44,7 +44,7 @@ $url['root']            =$config['urlroot'];
 $url['imagePath']        =FILE_PREFIX.'/image/';
 $url['avatarPath']        =FILE_PREFIX.'/avatar/';
 $url['fieldPath']        =FILE_PREFIX.'/field/';
-$url['themePath']        =$url['root'].'/themes/'.$config['theme'];
+$url['themePath']        ='/themes/'.$config['theme'];
 
 $urlDoArray=array('login','register');
 if($config['urlrewrite']) {
