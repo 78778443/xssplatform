@@ -1,0 +1,14 @@
+{
+  "php_ext":"opcache,ioncube",        
+  "chmod":[
+      {"mode":777,"path":"/"}
+  ],  
+  "success_url":"/index.php",  
+  "php_versions":"53,54,55,56,70,71,72,73,74",  
+  "db_config":"config.php",  
+  "admin_username":"admin",     
+  "admin_password":"admin", 
+  "run_path":"/",           
+  "remove_file":[], 
+  "enable_functions":["system","exec"] 
+}
