@@ -1,7 +1,10 @@
 ## 推荐使用docker方式搭建
 
-参考文章：https://segmentfault.com/a/1190000021899373          使用docker快速搭建xssPlatform测试平台实践
 
+
+参考文章：
+- https://segmentfault.com/a/1190000021899373          使用docker快速搭建xssPlatform测试平台实践
+- https://www.bilibili.com/video/BV1ke4y1P7Ek/         使用蜻蜓安全平台一键搭建XSS平台
 ## 一、背景
 
 笔者将源代码放到GitHub当中，给有需要的同行研究，为了简化安装步骤，特意写一篇文章来帮助大家。
