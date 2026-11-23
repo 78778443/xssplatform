@@ -70,6 +70,8 @@ class User
     /* 登录 */
     public function login(string $username = '', string $password = '', int $autoLogin = 0): bool
     {
+        // Legacy passwords were hashed after StripStr; keep the same transform.
+        $password = StripStr($password);
         $field = strpos($username, '@') !== false ? 'email' : 'userName';
         $row = $this->db->FirstRow(
             'SELECT id,adminLevel,userName,email,userPwd FROM ' . $this->tbUser . ' WHERE ' . $field . '=?',

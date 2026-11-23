@@ -20,12 +20,15 @@ $ranFiles = 0;
 
 foreach ($dirs as $dir) {
     $path = $root . '/' . ltrim($dir, '/');
-    if (!is_dir($path)) {
+    if (is_file($path) && str_ends_with($path, '_test.php')) {
+        $files = [$path];
+    } elseif (is_dir($path)) {
+        $files = glob($path . '/*_test.php') ?: [];
+        sort($files);
+    } else {
         echo "SKIP  {$dir} (missing)\n";
         continue;
     }
-    $files = glob($path . '/*_test.php') ?: [];
-    sort($files);
     if ($files === []) {
         echo "SKIP  {$dir} (no *_test.php)\n";
         continue;

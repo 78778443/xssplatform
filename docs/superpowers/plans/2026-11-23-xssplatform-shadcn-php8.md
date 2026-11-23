@@ -57,7 +57,7 @@
   - `Validate::email(string $value): bool` — 正则 `^(\w+\.)*?\w+@(\w+\.)+\w+$`。
   - `Validate::password(string $value): bool` — 6–20 任意字符。
   - 测试 helper：`assertSame($expected, $actual, $label = '')`、`assertTrue($actual, $label = '')`、`assertFalse(...)`、`assertThrows(string $class, callable $fn, $label = '')`、`test(string $name, callable $fn)`。
-- 测试运行器约定：`tests/run.php [dir ...]`；无参数时默认运行 `tests/unit` 与 `tests/integration`。每个目录 `glob('*_test.php')`，每个测试文件用独立 PHP 进程执行（`PHP_BINARY $file`），任一失败退出码非 0。HTTP/安全测试必须显式传目录：`php tests/run.php tests/http tests/security`。
+- 测试运行器约定：`tests/run.php [dir|file ...]`；无参数时默认运行 `tests/unit` 与 `tests/integration`。目录 `glob('*_test.php')`，文件参数直接执行；每个测试文件用独立 PHP 进程（`PHP_BINARY $file`），任一失败退出码非 0。HTTP/安全测试必须显式传目录或文件：`php tests/run.php tests/http tests/security`、`php tests/run.php tests/http/auth_test.php`。
 
 - [ ] **Step 1: 写失败的测试**
 

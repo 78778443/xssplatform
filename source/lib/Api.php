@@ -24,8 +24,37 @@ final class Api
 
             switch ($action) {
             case 'meta':
+                $data = self::sessionPayload($installed, false);
+                break;
             case 'session':
-                $data = self::sessionPayload($installed, $action === 'session');
+                if ($installed) {
+                    require_once ROOT_PATH . '/source/services/AuthService.php';
+                    $data = (new AuthService())->session();
+                } else {
+                    $data = self::sessionPayload(false, true);
+                }
+                break;
+            case 'login':
+            case 'logout':
+            case 'register.check':
+            case 'register.submit':
+                if (!$installed) {
+                    throw new AppError('not_installed', 409, '尚未安装');
+                }
+                require_once ROOT_PATH . '/source/services/AuthService.php';
+                $auth = new AuthService();
+                if ($action === 'login') {
+                    $data = $auth->login($input);
+                } elseif ($action === 'logout') {
+                    if (!current_user()->checkToken((string) ($server['HTTP_X_CSRF_TOKEN'] ?? ''))) {
+                        throw new AppError('operation_failed', 419, '操作失败');
+                    }
+                    $data = $auth->logout();
+                } elseif ($action === 'register.check') {
+                    $data = $auth->registerCheck($input);
+                } else {
+                    $data = $auth->register($input);
+                }
                 break;
             case 'install.status':
             case 'install.testDb':
@@ -143,7 +172,7 @@ final class Api
         header('Content-Type: application/json; charset=utf-8');
         header('Cache-Control: no-store');
         header('X-Content-Type-Options: nosniff');
-        echo json_encode(['ok' => true, 'data' => $data], JSON_UNESCAPED_UNICODE);
+        echo json_encode(['ok' => true, 'data' => $data], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
@@ -163,7 +192,7 @@ final class Api
         if ($error->fields !== []) {
             $payload['error']['fields'] = $error->fields;
         }
-        echo json_encode($payload, JSON_UNESCAPED_UNICODE);
+        echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
 }
