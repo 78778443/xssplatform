@@ -4,6 +4,7 @@ final class FrontendShell
     public static function render(): void
     {
         header('Content-Type: text/html; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
         header('X-Frame-Options: SAMEORIGIN');
         header('Referrer-Policy: same-origin');
         header("Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; frame-ancestors 'self'");
