@@ -122,6 +122,41 @@ final class Api
                     $data = $moduleService->delete($input);
                 }
                 break;
+            case 'user.settings.get':
+            case 'user.settings.save':
+            case 'user.invites':
+            case 'user.invite.create':
+                if (!$installed) {
+                    throw new AppError('not_installed', 409, '尚未安装');
+                }
+                require_once ROOT_PATH . '/source/services/UserService.php';
+                $userService = new UserService();
+                if ($action === 'user.settings.get') {
+                    $data = $userService->settingsGet();
+                } elseif ($action === 'user.settings.save') {
+                    $data = $userService->settingsSave($input);
+                } elseif ($action === 'user.invites') {
+                    $data = $userService->invites();
+                } else {
+                    $data = $userService->createInvite($input);
+                }
+                break;
+            case 'admin.overview':
+            case 'admin.modules':
+            case 'admin.module.audit':
+                if (!$installed) {
+                    throw new AppError('not_installed', 409, '尚未安装');
+                }
+                require_once ROOT_PATH . '/source/services/AdminService.php';
+                $adminService = new AdminService();
+                if ($action === 'admin.overview') {
+                    $data = $adminService->overview();
+                } elseif ($action === 'admin.modules') {
+                    $data = $adminService->modules($input);
+                } else {
+                    $data = $adminService->audit($input);
+                }
+                break;
             case 'install.status':
             case 'install.testDb':
             case 'install.submit':
