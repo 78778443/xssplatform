@@ -256,15 +256,35 @@ final class Api
         if (!is_string($candidateHost) || $candidateHost === '') {
             return false;
         }
-        $expected = '';
+        $expectedHosts = [];
         if (defined('URL_ROOT') && URL_ROOT !== '') {
-            $expected = (string) parse_url(URL_ROOT, PHP_URL_HOST);
+            $rootHost = parse_url(URL_ROOT, PHP_URL_HOST);
+            if (is_string($rootHost) && $rootHost !== '') {
+                $expectedHosts[] = $rootHost;
+            }
         }
-        if ($expected === '') {
-            $expected = (string) ($server['HTTP_HOST'] ?? '');
-            $expected = explode(':', $expected)[0];
+        $requestHost = self::hostOnly((string) ($server['HTTP_HOST'] ?? ''));
+        if ($requestHost !== '') {
+            $expectedHosts[] = $requestHost;
         }
-        return $expected !== '' && hash_equals(strtolower($expected), strtolower($candidateHost));
+        foreach ($expectedHosts as $expected) {
+            if (hash_equals(strtolower($expected), strtolower($candidateHost))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static function hostOnly(string $hostHeader): string
+    {
+        if ($hostHeader === '') {
+            return '';
+        }
+        if ($hostHeader[0] === '[') {
+            $end = strpos($hostHeader, ']');
+            return $end === false ? $hostHeader : substr($hostHeader, 0, $end + 1);
+        }
+        return explode(':', $hostHeader)[0];
     }
 
     public static function respond(array $data, int $status = 200): void

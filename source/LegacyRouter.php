@@ -63,15 +63,29 @@ final class LegacyRouter
         if (!is_string($host) || $host === '') {
             return false;
         }
-        $expected = '';
+        $expectedHosts = [];
         if (defined('URL_ROOT') && URL_ROOT !== '') {
-            $expected = (string) parse_url(URL_ROOT, PHP_URL_HOST);
+            $rootHost = parse_url(URL_ROOT, PHP_URL_HOST);
+            if (is_string($rootHost) && $rootHost !== '') {
+                $expectedHosts[] = $rootHost;
+            }
         }
-        if ($expected === '') {
-            $expected = (string) ($server['HTTP_HOST'] ?? '');
-            $expected = explode(':', $expected)[0];
+        $requestHost = (string) ($server['HTTP_HOST'] ?? '');
+        if ($requestHost !== '') {
+            if ($requestHost[0] === '[') {
+                $end = strpos($requestHost, ']');
+                $requestHost = $end === false ? $requestHost : substr($requestHost, 0, $end + 1);
+            } else {
+                $requestHost = explode(':', $requestHost)[0];
+            }
+            $expectedHosts[] = $requestHost;
         }
-        return $expected !== '' && hash_equals(strtolower($expected), strtolower($host));
+        foreach ($expectedHosts as $expected) {
+            if (hash_equals(strtolower($expected), strtolower($host))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static function isAction(string $do, string $act): bool

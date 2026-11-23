@@ -71,6 +71,19 @@ test('csrf, origin, auth, injection and install guards', function () {
     $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' '{$base}/api.php?action=nope'");
     assertSame('404', trim($r), 'unknown action 404');
 
+    // The configured urlroot is 127.0.0.1 but browsers may use localhost; same-origin
+    // must accept the request host while still rejecting a foreign Origin.
+    $lhJar = '/tmp/xssp-sec-localhost.cookies';
+    @unlink($lhJar);
+    $lh = '--resolve localhost:18081:127.0.0.1';
+    $r = (string) shell_exec("curl -sS {$lh} -c {$lhJar} -X POST 'http://localhost:18081/api.php?action=login' -H 'Content-Type: application/json' -d '{\"user\":\"admin\",\"pwd\":\"pw123456\"}'");
+    $lhCsrf = (string) (json_decode($r, true)['data']['csrf'] ?? '');
+    assertTrue($lhCsrf !== '', 'login through localhost');
+    $r = (string) shell_exec("curl -sS {$lh} -b {$lhJar} -H 'Referer: http://localhost:18081/' 'http://localhost:18081/api.php?action=dashboard'");
+    assertTrue(str_contains($r, '"ok":true'), 'localhost origin accepted: ' . substr($r, 0, 160));
+    $r = (string) shell_exec("curl -sS {$lh} -b {$lhJar} -H 'Origin: http://evil.example' -X POST 'http://localhost:18081/api.php?action=project.create' -H 'X-CSRF-Token: {$lhCsrf}' -H 'Content-Type: application/json' -d '{\"title\":\"x\",\"description\":\"\"}'");
+    assertTrue(str_contains($r, 'no_permission'), 'cross origin still rejected with alternate host');
+
     // security headers
     $r = (string) shell_exec("curl -sS -i '{$base}/'");
     assertTrue(str_contains($r, 'X-Content-Type-Options: nosniff'), 'nosniff header');
