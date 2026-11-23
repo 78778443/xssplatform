@@ -46,8 +46,8 @@ $config = array(
         'fromName' => 'Mailer',
     ),
 
-    /* 钉钉配置 */
-    'dingding' => array(
+    /* 飞书机器人配置（endpoint 仅用于本地 mock 测试） */
+    'feishu' => array(
         'keyword' => '最新消息',
         'endpoint' => '',
     ),

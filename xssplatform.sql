@@ -203,7 +203,7 @@ CREATE TABLE `oc_user` (
   `userPwd` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  `dingding` varchar(255) DEFAULT NULL,
+  `feishu` varchar(500) DEFAULT NULL,
   `message` varchar(255) DEFAULT NULL,
   `validated` tinyint(1) DEFAULT '0',
   `validateKey` varchar(255) DEFAULT NULL,

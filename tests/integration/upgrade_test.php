@@ -10,6 +10,13 @@ test('upgrade widens password and session columns idempotently', function () use
     assertTrue($db->Connect($cfg['dbHost'], $cfg['dbUser'], $cfg['dbPwd'], $cfg['database'], $cfg['charset'], $cfg['tbPrefix']));
     $db->Execute('ALTER TABLE oc_user MODIFY userPwd varchar(100) NULL');
     $db->Execute('ALTER TABLE oc_session MODIFY data varchar(255) NULL');
+    $col = $db->FirstRow(
+        "SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='oc_user' AND COLUMN_NAME='feishu'",
+        [$cfg['database']]
+    );
+    if ($col !== false) {
+        $db->Execute('ALTER TABLE oc_user CHANGE feishu dingding varchar(255) NULL');
+    }
 
     $cmd = 'XSSP_CONFIG=' . escapeshellarg(realpath(__DIR__ . '/../config.test.php'))
         . ' php ' . escapeshellarg(dirname(__DIR__, 2) . '/install/upgrade.php') . ' 2>&1';
@@ -25,6 +32,12 @@ test('upgrade widens password and session columns idempotently', function () use
         [$cfg['database']]
     );
     assertSame('text', $col['DATA_TYPE']);
+    $col = $db->FirstRow(
+        "SELECT COLUMN_NAME, COLUMN_TYPE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='oc_user' AND COLUMN_NAME='feishu'",
+        [$cfg['database']]
+    );
+    assertTrue($col !== false, 'dingding column renamed to feishu');
+    assertSame('varchar(500)', $col['COLUMN_TYPE'], 'feishu column width');
 
     // second run must be a no-op, not an error
     $out = shell_exec($cmd);

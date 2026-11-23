@@ -13,11 +13,11 @@ vi.mock('../lib/api', () => ({
 }))
 
 describe('SettingsPage', () => {
-  it('saves dingding key and two toggles without phone fields', async () => {
+  it('saves the feishu webhook and two toggles without phone fields', async () => {
     const mocked = (apiModule.api as unknown as ReturnType<typeof vi.fn>)
     mocked.mockImplementation(async (action: string) => {
       if (action === 'user.settings.get') {
-        return { email: 'a@b.c', dingding: 'k', emsg: '0', dmsg: '0' }
+        return { email: 'a@b.c', feishu: 'k', emsg: '0', fmsg: '0' }
       }
       return {}
     })
@@ -27,14 +27,14 @@ describe('SettingsPage', () => {
     expect(screen.queryByText(/短信/i)).toBeNull()
     fireEvent.click(screen.getAllByRole('switch')[0])
     fireEvent.click(screen.getAllByRole('switch')[1])
-    fireEvent.change(screen.getByLabelText(/钉钉机器人Key/i), { target: { value: 'new-key' } })
+    fireEvent.change(screen.getByLabelText(/飞书机器人 Webhook/i), { target: { value: 'new-key' } })
     fireEvent.click(screen.getByRole('button', { name: /提交/i }))
     await waitFor(() => {
       expect(mocked).toHaveBeenCalledWith(
         'user.settings.save',
         expect.objectContaining({
           method: 'POST',
-          body: expect.objectContaining({ dingding: 'new-key', emsg: '1', dmsg: '1' }),
+          body: expect.objectContaining({ feishu: 'new-key', emsg: '1', fmsg: '1' }),
         }),
       )
     })

@@ -1,6 +1,6 @@
 <?php
 /**
- * Notification facade backed by PHPMailer 6 and curl for DingTalk.
+ * Notification facade backed by PHPMailer 6 and curl for Feishu bot webhooks.
  */
 final class Notify
 {
@@ -45,19 +45,30 @@ final class Notify
         }
     }
 
-    public static function sendDing(string $message, string $key): bool
+    public static function validWebhook(string $url): bool
     {
-        if ($key === '') {
+        return preg_match('~^https://open\.feishu\.cn/open-apis/bot/v2/hook/[A-Za-z0-9-]+$~', $url) === 1;
+    }
+
+    public static function sendFeishu(string $message, string $webhook): bool
+    {
+        if ($webhook === '') {
             return false;
         }
-        $ding = Config::get('dingding', []);
-        $endpoint = (string) ($ding['endpoint'] ?? '');
+        $feishu = Config::get('feishu', []);
+        // Tests use a local mock endpoint; production always uses the saved webhook.
+        $endpoint = (string) ($feishu['endpoint'] ?? '');
         if ($endpoint === '') {
-            $endpoint = 'https://oapi.dingtalk.com/robot/send?access_token=' . rawurlencode($key);
+            if (!self::validWebhook($webhook)) {
+                return false;
+            }
+            $endpoint = $webhook;
         }
+        $keyword = (string) ($feishu['keyword'] ?? '');
+        $text = ($keyword !== '' ? $keyword . '：' : '') . $message;
         $data = [
-            'msgtype' => 'text',
-            'text' => ['content' => (string) ($ding['keyword'] ?? '') . '：' . $message],
+            'msg_type' => 'text',
+            'content' => ['text' => $text],
         ];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -65,14 +76,26 @@ final class Notify
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json;charset=utf-8']);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
-        $ok = $result !== false;
-        if (!$ok) {
-            error_log('DingTalk notification failed: ' . curl_error($ch));
+        $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($result === false) {
+            error_log('Feishu notification failed: ' . curl_error($ch));
         }
         curl_close($ch);
-        return $ok;
+        if ($result === false || $status < 200 || $status >= 300) {
+            error_log('Feishu notification rejected: HTTP ' . $status . ' ' . (string) $result);
+            return false;
+        }
+        $decoded = json_decode((string) $result, true);
+        if (is_array($decoded)) {
+            $code = $decoded['code'] ?? $decoded['StatusCode'] ?? 0;
+            if ((int) $code !== 0) {
+                error_log('Feishu notification rejected: ' . (string) $result);
+                return false;
+            }
+        }
+        return true;
     }
 }

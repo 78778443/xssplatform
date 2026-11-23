@@ -96,8 +96,8 @@ final class ReceiveService
                 if (!empty($userInfo['email']) && ($message[0] ?? '0') === '1') {
                     Notify::sendMail((string) $userInfo['email'], URL_ROOT . '饼干商城', $sendStr);
                 }
-                if (!empty($userInfo['dingding']) && ($message[2] ?? '0') === '1') {
-                    Notify::sendDing($sendStr, (string) $userInfo['dingding']);
+                if (!empty($userInfo['feishu']) && ($message[2] ?? '0') === '1') {
+                    Notify::sendFeishu($sendStr, Display::decode((string) $userInfo['feishu']));
                 }
             }
         } else {

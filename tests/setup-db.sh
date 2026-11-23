@@ -25,7 +25,7 @@ cat > tests/config.test.php <<PHP
  'urlrewrite' => false, 'timezone' => 'Asia/Shanghai', 'expires' => 3600, 'debug' => true,
  'show' => array('sitename' => 'XSS平台', 'sitedesc' => '', 'keywords' => '', 'description' => '', 'adminmail' => ''),
  'email' => array('host' => '', 'username' => '', 'password' => '', 'port' => 465, 'secure' => 'ssl', 'auth' => true, 'fromName' => 'Mailer'),
- 'dingding' => array('keyword' => '最新消息', 'endpoint' => ''),
+ 'feishu' => array('keyword' => '最新消息', 'endpoint' => ''),
 );
 return \$config;
 PHP

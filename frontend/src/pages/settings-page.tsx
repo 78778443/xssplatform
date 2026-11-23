@@ -14,9 +14,9 @@ import { Switch } from '@/components/ui/switch'
 
 interface SettingsData {
   email: string
-  dingding: string
+  feishu: string
   emsg: string
-  dmsg: string
+  fmsg: string
 }
 
 export function SettingsPage() {
@@ -26,15 +26,15 @@ export function SettingsPage() {
     queryKey: ['settings'],
     queryFn: () => api<SettingsData>('user.settings.get'),
   })
-  const [dingding, setDingding] = useState('')
+  const [feishu, setFeishu] = useState('')
   const [emsg, setEmsg] = useState(false)
-  const [dmsg, setDmsg] = useState(false)
+  const [fmsg, setFmsg] = useState(false)
 
   useEffect(() => {
     if (!query.data) return
-    setDingding(query.data.dingding)
+    setFeishu(query.data.feishu)
     setEmsg(query.data.emsg === '1')
-    setDmsg(query.data.dmsg === '1')
+    setFmsg(query.data.fmsg === '1')
   }, [query.data])
 
   const save = useMutation({
@@ -44,8 +44,8 @@ export function SettingsPage() {
         csrf: session?.csrf,
         body: {
           emsg: emsg ? '1' : '0',
-          dmsg: dmsg ? '1' : '0',
-          dingding,
+          fmsg: fmsg ? '1' : '0',
+          feishu,
         },
       }),
     onSuccess: async () => {
@@ -60,7 +60,7 @@ export function SettingsPage() {
       <PageHeader
         eyebrow="Account"
         title="个人设置"
-        description="配置收包提醒方式，邮件与钉钉通知会作用于你的所有项目。"
+        description="配置收包提醒方式，邮件与飞书通知会作用于你的所有项目。"
       />
 
       {query.isError && <QueryError error={query.error} />}
@@ -72,7 +72,7 @@ export function SettingsPage() {
           </span>
           <div className="flex flex-col gap-1">
             <CardTitle>通知设置</CardTitle>
-            <CardDescription>收到新的收包内容时，通过邮件或钉钉提醒你。</CardDescription>
+            <CardDescription>收到新的收包内容时，通过邮件或飞书提醒你。</CardDescription>
           </div>
         </CardHeader>
         <CardContent className="flex max-w-2xl flex-col gap-5">
@@ -90,23 +90,27 @@ export function SettingsPage() {
             <Switch id="emsg" checked={emsg} onCheckedChange={setEmsg} />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="dingding">钉钉机器人Key</Label>
-            <Input
-              id="dingding"
-              className="h-10"
-              value={dingding}
-              onChange={(event) => setDingding(event.target.value)}
-              placeholder="填写钉钉机器人 Webhook 的 access_token"
-            />
-          </div>
-
-          <div className="flex items-center justify-between gap-4 rounded-xl border border-border/70 px-3 py-3">
-            <div className="flex flex-col gap-0.5">
-              <Label htmlFor="dmsg">发送钉钉通知</Label>
-              <span className="text-xs text-muted-foreground">新内容到达时推送到钉钉群</span>
+          <div className="flex flex-col gap-3 rounded-xl border border-border/70 px-3 py-3">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="feishu">飞书机器人 Webhook</Label>
+              <Input
+                id="feishu"
+                className="h-10 font-mono text-xs"
+                value={feishu}
+                onChange={(event) => setFeishu(event.target.value)}
+                placeholder="https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxxx"
+              />
+              <span className="text-xs text-muted-foreground">
+                在飞书群「设置 → 群机器人」添加自定义机器人后复制 Webhook 地址。
+              </span>
             </div>
-            <Switch id="dmsg" checked={dmsg} onCheckedChange={setDmsg} />
+            <div className="flex items-center justify-between gap-4 border-t border-border/70 pt-3">
+              <div className="flex flex-col gap-0.5">
+                <Label htmlFor="fmsg">发送飞书通知</Label>
+                <span className="text-xs text-muted-foreground">新内容到达时推送到飞书群</span>
+              </div>
+              <Switch id="fmsg" checked={fmsg} onCheckedChange={setFmsg} />
+            </div>
           </div>
 
           <Button onClick={() => save.mutate()} disabled={save.isPending} className="self-start">

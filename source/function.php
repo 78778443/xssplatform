@@ -179,8 +179,8 @@ function SendMail($to = '', $subject = '', $body = '')
     return Notify::sendMail((string) $to, (string) $subject, (string) $body);
 }
 
-/* 钉钉通知（兼容旧调用；Task 10 收包端点改为直接调用 Notify） */
-function dingdingNotice($message, $key)
+/* 飞书通知（兼容旧调用） */
+function feishuNotice($message, $webhook)
 {
-    return Notify::sendDing((string) $message, (string) $key);
+    return Notify::sendFeishu((string) $message, (string) $webhook);
 }

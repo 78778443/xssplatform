@@ -89,7 +89,7 @@ XSSP_CONFIG=/path/to/config.php php install/upgrade.php
 - 注册（普通 / 邀请 / 关闭三种模式）、登录、自动登录、邀请码管理
 - 项目 CRUD、内容收包查看、域名过滤、批量删除、代码查看
 - 模块 CRUD、公共模块审核
-- 邮件提醒（PHPMailer 6）、钉钉机器人通知
+- 邮件提醒（PHPMailer 6）、飞书机器人通知
 - 收包端点：`index.php?do=code|api|do|keepsession`、`authtest.php`
 - keepsession 定时任务：`XSSP_CONFIG=/path/to/config.php php scripts/keepsession.php`
 - 明暗主题、移动端布局、代码/内容一键复制
@@ -110,7 +110,7 @@ bash tests/http/setup-installed.sh
 php tests/run.php tests/http tests/security
 kill $(cat /tmp/xssp-http-installed.pid)
 
-# 通知链路需要 MailHog（1025/8025）与 mock 钉钉（19090）
+# 通知链路需要 MailHog（1025/8025）与 mock 飞书（19090）
 bash tests/http/start-notify-services.sh
 
 # 前端开发与测试
@@ -128,7 +128,7 @@ npx playwright test e2e/screenshots.spec.ts   # 重新生成 docs/screenshots/
 bash tests/http/install-ui-e2e.sh
 ```
 
-通知链路的集成测试需要 MailHog（`8025`）与 mock 钉钉端点（`19090`）；未启动时该用例会显示 SKIP。
+通知链路的集成测试需要 MailHog（`8025`）与 mock 飞书端点（`19090`）；未启动时该用例会显示 SKIP。
 
 ## 代码结构
 

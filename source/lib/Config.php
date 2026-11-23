@@ -61,7 +61,7 @@ final class Config
                 'auth' => true,
                 'fromName' => 'Mailer',
             ],
-            'dingding' => [
+            'feishu' => [
                 'keyword' => '最新消息',
                 'endpoint' => '',
             ],

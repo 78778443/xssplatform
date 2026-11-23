@@ -17,20 +17,20 @@ final class UserService
         $parts = explode('|', $message);
         return [
             'emsg' => (string) ($parts[0] ?? '0'),
-            'dmsg' => (string) ($parts[2] ?? '0'),
+            'fmsg' => (string) ($parts[2] ?? '0'),
         ];
     }
 
     public function settingsGet(): array
     {
         $user = $this->requireUser();
-        $row = db()->FirstRow('SELECT email,dingding FROM ' . Tb('user') . ' WHERE id=?', [$user->userId]);
+        $row = db()->FirstRow('SELECT email,feishu FROM ' . Tb('user') . ' WHERE id=?', [$user->userId]);
         $flags = $this->flags($user);
         return [
             'email' => Display::decode((string) ($row['email'] ?? '')),
-            'dingding' => Display::decode((string) ($row['dingding'] ?? '')),
+            'feishu' => Display::decode((string) ($row['feishu'] ?? '')),
             'emsg' => $flags['emsg'],
-            'dmsg' => $flags['dmsg'],
+            'fmsg' => $flags['fmsg'],
         ];
     }
 
@@ -38,12 +38,15 @@ final class UserService
     {
         $user = $this->requireUser();
         $emsg = $this->flag((string) ($input['emsg'] ?? ''));
-        $dmsg = $this->flag((string) ($input['dmsg'] ?? ''));
-        $dingding = StripStr((string) ($input['dingding'] ?? ''));
+        $fmsg = $this->flag((string) ($input['fmsg'] ?? $input['dmsg'] ?? ''));
+        $webhook = trim((string) ($input['feishu'] ?? $input['dingding'] ?? ''));
+        if ($webhook !== '' && !Notify::validWebhook($webhook)) {
+            throw new AppError('feishu_webhook_invalid', 400, '飞书机器人 Webhook 格式不正确');
+        }
         // middle segment belongs to the removed SMS channel; keep it as 0 for old data.
         db()->Update(Tb('user'), [
-            'message' => $emsg . '|0|' . $dmsg,
-            'dingding' => $dingding,
+            'message' => $emsg . '|0|' . $fmsg,
+            'feishu' => StripStr($webhook),
         ], 'id=?', [$user->userId]);
         return [];
     }

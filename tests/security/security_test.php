@@ -67,6 +67,10 @@ test('csrf, origin, auth, injection and install guards', function () {
         assertSame('404', trim($r), 'not web accessible: ' . $u);
     }
 
+    // invalid Feishu webhook is rejected (only official bot URLs are accepted)
+    $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' -b {$jar} -X POST '{$base}/api.php?action=user.settings.save' -H 'X-CSRF-Token: {$csrf}' -H 'Content-Type: application/json' -d '{\"emsg\":\"0\",\"fmsg\":\"0\",\"feishu\":\"http://127.0.0.1:19090/send\"}'");
+    assertSame('400', trim($r), 'non-feishu webhook rejected');
+
     // unknown API action
     $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' '{$base}/api.php?action=nope'");
     assertSame('404', trim($r), 'unknown action 404');

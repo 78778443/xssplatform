@@ -36,4 +36,25 @@ if ($col !== false && strtolower((string) $col['DATA_TYPE']) !== 'text') {
     echo "altered {$sessionTable}.data to TEXT\n";
 }
 
+// DingTalk was replaced by Feishu webhooks; rename the column (or add it for very old schemas).
+$col = $db->FirstRow(
+    'SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? AND COLUMN_NAME=?',
+    [$schema, $userTable, 'feishu']
+);
+if ($col === false) {
+    $old = $db->FirstRow(
+        'SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? AND COLUMN_NAME=?',
+        [$schema, $userTable, 'dingding']
+    );
+    if ($old !== false) {
+        $db->Execute('ALTER TABLE `' . $userTable . '` CHANGE dingding feishu varchar(500) NULL');
+        echo "renamed {$userTable}.dingding to feishu\n";
+    } else {
+        $db->Execute('ALTER TABLE `' . $userTable . '` ADD feishu varchar(500) NULL');
+        echo "added {$userTable}.feishu\n";
+    }
+} else {
+    $db->Execute('ALTER TABLE `' . $userTable . '` MODIFY feishu varchar(500) NULL');
+}
+
 echo "upgrade complete\n";
