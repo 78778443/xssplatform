@@ -27,7 +27,9 @@ if (in_array($do, $receivers, true)) {
     exit;
 }
 
-// Legacy UI routes are handled by LegacyRouter in Task 11.
-http_response_code(404);
-header('Content-Type: text/plain; charset=utf-8');
-echo 'Not Found';
+require ROOT_PATH . '/init.php';
+require_once ROOT_PATH . '/source/lib/AppError.php';
+require_once ROOT_PATH . '/source/lib/UrlMap.php';
+require_once ROOT_PATH . '/source/LegacyRouter.php';
+
+LegacyRouter::route($do, $_GET, $_POST, $_SERVER);
