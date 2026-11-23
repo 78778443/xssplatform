@@ -1,3 +1,5 @@
 temp
 admin/templates_c
 .idea
+tests/config.test.php
+frontend/node_modules
