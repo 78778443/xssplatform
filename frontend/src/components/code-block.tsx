@@ -34,20 +34,20 @@ export function CodeBlock({
   }
 
   return (
-    <div className={cn('overflow-hidden rounded-xl border border-border/70 bg-card shadow-sm', className)}>
-      <div className="flex h-11 items-center justify-between gap-2 border-b border-border/70 bg-muted/40 px-3">
-        <span className="flex items-center gap-2 text-xs font-semibold tracking-wide text-foreground">
+    <div className={cn('overflow-hidden rounded-xl border border-border/60 bg-card', className)}>
+      <div className="flex h-11 items-center justify-between gap-2 border-b border-border/60 bg-muted/25 px-3.5">
+        <span className="flex items-center gap-2 text-xs font-semibold text-foreground">
           <span className="flex size-6 items-center justify-center rounded-md bg-primary/10 text-primary">
             <Code2 className="size-3.5" />
           </span>
           {label}
         </span>
-        <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={copy}>
+        <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-muted-foreground" onClick={copy}>
           <Copy className="size-3.5" />
           复制
         </Button>
       </div>
-      <pre className="max-h-72 overflow-auto bg-muted/15 p-4 font-mono text-xs leading-relaxed break-all whitespace-pre-wrap">
+      <pre className="max-h-72 overflow-auto bg-card p-4 font-mono text-xs leading-relaxed break-all whitespace-pre-wrap">
         <code>{value}</code>
       </pre>
     </div>

@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import type { ProjectConfig } from '@/lib/types'
+import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
@@ -31,6 +32,7 @@ export function ProjectConfigPage({ id }: { id?: number }) {
   })
 
   const [selected, setSelected] = useState<Record<number, boolean>>({})
+  const [openModules, setOpenModules] = useState<Record<number, boolean>>({})
   const [setkeyValues, setSetkeyValues] = useState<Record<string, string>>({})
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
@@ -115,26 +117,48 @@ export function ProjectConfigPage({ id }: { id?: number }) {
                       : 'border-border/70 hover:bg-muted/40',
                   )}
                 >
-                  <label className="flex cursor-pointer items-start gap-3 px-3 py-3">
+                  <div className="flex items-start gap-3 px-3.5 py-3">
                     <Checkbox
+                      id={`module-check-${module.id}`}
                       className="mt-0.5"
                       checked={checked}
                       onCheckedChange={(value) =>
                         setSelected((prev) => ({ ...prev, [module.id]: value === true }))
                       }
                     />
-                    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                      <div className="flex flex-wrap items-center gap-2">
+                    <label
+                      htmlFor={`module-check-${module.id}`}
+                      className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5"
+                    >
+                      <span className="flex flex-wrap items-center gap-2">
                         <span className="text-sm font-medium">{module.title}</span>
                         <Badge variant={isPublic ? 'secondary' : 'outline'}>
                           {isPublic ? '公共' : '私有'}
                         </Badge>
-                      </div>
+                      </span>
                       <span className="line-clamp-1 text-xs text-muted-foreground">
                         {module.description || '暂无描述'}
                       </span>
-                    </div>
-                  </label>
+                    </label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="xs"
+                      className="mt-0.5 shrink-0 text-muted-foreground"
+                      aria-expanded={Boolean(openModules[module.id])}
+                      onClick={() =>
+                        setOpenModules((prev) => ({ ...prev, [module.id]: !prev[module.id] }))
+                      }
+                    >
+                      参数与代码
+                      <ChevronDown
+                        className={cn(
+                          'size-3.5 transition-transform',
+                          openModules[module.id] && 'rotate-180',
+                        )}
+                      />
+                    </Button>
+                  </div>
 
                   {checked && (module.setkeys ?? []).length > 0 && (
                     <div className="flex flex-col gap-3 border-t border-border/60 px-3 py-3 pl-10">
@@ -176,14 +200,10 @@ export function ProjectConfigPage({ id }: { id?: number }) {
                     </div>
                   )}
 
-                  <details className="group border-t border-border/60 px-3 py-2 pl-10">
-                    <summary className="cursor-pointer list-none text-xs text-muted-foreground hover:text-foreground">
-                      <span className="group-open:hidden">展开查看参数与代码</span>
-                      <span className="hidden group-open:inline">收起参数与代码</span>
-                    </summary>
-                    <div className="mt-2 flex flex-col gap-2 pb-2">
+                  {openModules[module.id] && (
+                    <div className="flex flex-col gap-2 border-t border-border/60 px-3.5 py-3 pl-10">
                       <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
-                        <span>参数</span>
+                        <span>接收参数</span>
                         {module.keys ? (
                           String(module.keys)
                             .split(',')
@@ -197,11 +217,11 @@ export function ProjectConfigPage({ id }: { id?: number }) {
                           <span>无</span>
                         )}
                       </div>
-                      <pre className="max-h-48 overflow-auto rounded-lg border border-border/70 bg-muted/40 p-3 font-mono text-xs break-all whitespace-pre-wrap">
+                      <pre className="max-h-48 overflow-auto rounded-lg border border-border/60 bg-muted/30 p-3 font-mono text-xs break-all whitespace-pre-wrap">
                         {module.code}
                       </pre>
                     </div>
-                  </details>
+                  )}
                 </div>
               )
             })}
@@ -219,9 +239,9 @@ export function ProjectConfigPage({ id }: { id?: number }) {
           </div>
 
           {error && <p className="text-sm text-destructive">{error}</p>}
-          <div className="flex items-center gap-2 border-t border-border/70 pt-4">
+          <div className="-mx-4 -mb-4 flex items-center gap-2.5 rounded-b-2xl border-t border-border/70 bg-muted/20 px-4 py-3.5">
             <Button onClick={save} disabled={pending}>
-              {created ? '下一步' : '配置'}
+              {created ? '下一步' : '保存配置'}
             </Button>
             <Button variant="outline" onClick={() => history.go(-1)}>
               取消

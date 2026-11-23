@@ -29,8 +29,8 @@ export function ProjectTable({
 }) {
   return (
     <div className="overflow-x-auto">
-      <Table className="table-fixed">
-        <TableHeader className="bg-muted/40">
+      <Table className={projects.length > 0 ? 'min-w-[680px] table-fixed' : 'table-fixed'}>
+        <TableHeader className="bg-muted/30">
           <TableRow>
             <TableHead className="w-[30%]">项目</TableHead>
             <TableHead className="w-[34%]">描述</TableHead>

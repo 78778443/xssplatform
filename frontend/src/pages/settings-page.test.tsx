@@ -28,7 +28,7 @@ describe('SettingsPage', () => {
     fireEvent.click(screen.getAllByRole('switch')[0])
     fireEvent.click(screen.getAllByRole('switch')[1])
     fireEvent.change(screen.getByLabelText(/飞书机器人 Webhook/i), { target: { value: 'new-key' } })
-    fireEvent.click(screen.getByRole('button', { name: /提交/i }))
+    fireEvent.click(screen.getByRole('button', { name: /保存设置/i }))
     await waitFor(() => {
       expect(mocked).toHaveBeenCalledWith(
         'user.settings.save',

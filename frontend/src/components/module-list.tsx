@@ -30,7 +30,7 @@ export function ModuleList({
           <li key={module.id}>
             <Link
               to={href(module)}
-              className="group flex items-center gap-3 rounded-xl border border-border/70 bg-card px-3 py-3 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+              className="group flex items-center gap-3 rounded-xl border border-border/70 bg-card px-3.5 py-3 transition-colors hover:border-primary/30 hover:bg-primary/[0.02]"
             >
               <span
                 className={cn(

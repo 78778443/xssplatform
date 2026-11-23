@@ -53,10 +53,10 @@ export function ContentTable({
   const allChecked = contents.length > 0 && contents.every((item) => selected[item.id])
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+    <div className="flex flex-col">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-4 pt-3 text-sm">
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 text-muted-foreground">
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
             <Checkbox
               checked={allChecked}
               onCheckedChange={(checked) => {
@@ -75,9 +75,8 @@ export function ContentTable({
           )}
         </div>
         <Button
-          variant="outline"
+          variant="destructive"
           size="sm"
-          className="text-destructive"
           disabled={selectedIds.length === 0}
           onClick={() => {
             onDeleteMany(selectedIds)
@@ -89,9 +88,9 @@ export function ContentTable({
         </Button>
       </div>
 
-      <div className="overflow-x-auto">
-        <Table className="table-fixed">
-          <TableHeader className="bg-muted/40">
+      <div className="mt-2 overflow-x-auto">
+        <Table className={contents.length > 0 ? 'min-w-[760px] table-fixed' : 'table-fixed'}>
+          <TableHeader className="bg-muted/30">
             <TableRow>
               <TableHead className="w-10" />
               <TableHead className="w-20">详情</TableHead>
@@ -156,7 +155,7 @@ export function ContentTable({
                             <KeyList data={item.content} />
                           </section>
                           <section className="flex flex-col gap-1">
-                            <h4 className="text-xs font-medium text-muted-foreground">Request Headers</h4>
+                            <h4 className="text-xs font-medium text-muted-foreground">请求头</h4>
                             <KeyList data={item.serverContent} />
                           </section>
                         </div>

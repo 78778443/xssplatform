@@ -35,7 +35,11 @@ export function ConfirmDelete({
             size="sm"
             aria-label={label}
             title={label}
-            className={variant === 'ghost' ? 'px-1 text-destructive' : 'text-destructive'}
+            className={
+              variant === 'ghost'
+                ? 'px-1.5 text-muted-foreground/60 hover:bg-destructive/10 hover:text-destructive'
+                : 'text-destructive'
+            }
           >
             {icon ?? label}
           </Button>

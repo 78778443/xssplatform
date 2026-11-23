@@ -65,9 +65,10 @@ export function AdminModulesPage() {
           description="审核用户提交的公共模块，通过后会出现在所有用户的模块库中。"
         />
       <Card>
-        <CardContent className="flex flex-col gap-4">
-          <Table>
-            <TableHeader className="bg-muted/40">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+          <Table className={(query.data?.items ?? []).length > 0 ? 'min-w-[720px]' : undefined}>
+            <TableHeader className="bg-muted/30">
               <TableRow>
                 <TableHead className="w-[28%]">模块名称</TableHead>
                 <TableHead>描述</TableHead>
@@ -92,7 +93,15 @@ export function AdminModulesPage() {
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={module.isAudit === 1 ? 'secondary' : 'destructive'}>
+                    <Badge
+                      variant="outline"
+                      className={
+                        module.isAudit === 1
+                          ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
+                          : 'border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-400'
+                      }
+                    >
+                      <span className="size-1.5 rounded-full bg-current" />
                       {module.isAudit === 1 ? '已通过' : '待审核'}
                     </Badge>
                   </TableCell>
@@ -100,8 +109,8 @@ export function AdminModulesPage() {
                     {module.isAudit === 1 ? (
                       <Button
                         size="sm"
-                        variant="outline"
-                        className="gap-1.5"
+                        variant="ghost"
+                        className="text-muted-foreground hover:text-foreground"
                         onClick={() => audit.mutate({ id: module.id, isAudit: 0 })}
                       >
                         <RotateCcw className="size-3.5" />
@@ -110,7 +119,6 @@ export function AdminModulesPage() {
                     ) : (
                       <Button
                         size="sm"
-                        className="gap-1.5"
                         onClick={() => audit.mutate({ id: module.id, isAudit: 1 })}
                       >
                         <Check className="size-3.5" />
@@ -129,16 +137,16 @@ export function AdminModulesPage() {
               )}
             </TableBody>
           </Table>
+          </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-3 text-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 bg-muted/15 px-4 py-3">
             <span className="text-xs text-muted-foreground">
               第 {pno} / {pages} 页 · 共 {total} 条
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
-                className="gap-1"
                 disabled={pno <= 1}
                 onClick={() => setPno(pno - 1)}
               >
@@ -146,9 +154,8 @@ export function AdminModulesPage() {
                 上一页
               </Button>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
-                className="gap-1"
                 disabled={pno >= pages}
                 onClick={() => setPno(pno + 1)}
               >

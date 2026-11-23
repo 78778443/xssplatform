@@ -22,7 +22,7 @@ test('settings and invites persist through the UI', async ({ page }) => {
   await page.getByLabel(/飞书机器人 Webhook/).fill('https://open.feishu.cn/open-apis/bot/v2/hook/e2e-key')
   const switches = page.getByRole('switch')
   if ((await switches.nth(0).getAttribute('aria-checked')) !== 'true') await switches.nth(0).click()
-  await page.getByRole('button', { name: /^提交$/ }).click()
+  await page.getByRole('button', { name: /^保存设置$/ }).click()
   await expect(page.getByText('修改成功')).toBeVisible()
   await page.reload()
   await expect(page.getByLabel(/飞书机器人 Webhook/)).toHaveValue('https://open.feishu.cn/open-apis/bot/v2/hook/e2e-key')

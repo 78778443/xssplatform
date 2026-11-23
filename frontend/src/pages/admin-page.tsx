@@ -14,6 +14,13 @@ interface Overview {
   sysInfo: Record<string, string>
 }
 
+const SYS_LABELS: Record<string, string> = {
+  serverOS: '操作系统',
+  serverSoftware: '服务端软件',
+  phpVersion: 'PHP 版本',
+  mysqlVersion: 'MySQL 版本',
+}
+
 function Stat({
   label,
   value,
@@ -57,50 +64,57 @@ export function AdminPage() {
           <Stat label="在线用户总数" value={query.data?.onlineCount ?? '-'} icon={<Activity className="size-5" />} />
         </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>在线用户</CardTitle>
-            <Link to="/admin/modules" className={buttonVariants({ variant: 'outline', size: 'sm' })}>
-              模块审核
-            </Link>
-          </CardHeader>
-          <CardContent className="text-sm">
-            {query.data?.onlineUsers.length ? (
-              <ul className="flex flex-wrap gap-2">
-                {query.data.onlineUsers.map((user) => (
-                  <li
-                    key={user.id}
-                    className="flex items-center gap-2 rounded-full border bg-background py-1 pr-3 pl-1"
-                  >
-                    <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
-                      {user.userName.slice(0, 1).toUpperCase()}
-                    </span>
-                    {user.userName}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted-foreground">暂无在线用户</p>
-            )}
-          </CardContent>
-        </Card>
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>在线用户</CardTitle>
+              <Link to="/admin/modules" className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+                模块审核
+              </Link>
+            </CardHeader>
+            <CardContent className="text-sm">
+              {query.data?.onlineUsers.length ? (
+                <ul className="flex flex-wrap gap-2">
+                  {query.data.onlineUsers.map((user) => (
+                    <li
+                      key={user.id}
+                      className="flex items-center gap-2 rounded-full border border-border/70 bg-muted/20 py-1 pr-3 pl-1"
+                    >
+                      <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
+                        {user.userName.slice(0, 1).toUpperCase()}
+                      </span>
+                      {user.userName}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-muted-foreground">暂无在线用户</p>
+              )}
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Server className="size-4 text-muted-foreground" />
-            <CardTitle>系统环境</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <dl className="grid gap-2 text-sm sm:grid-cols-2">
-              {Object.entries(query.data?.sysInfo ?? {}).map(([key, value]) => (
-                <div key={key} className="flex flex-col gap-0.5 rounded-lg border bg-background px-3 py-2">
-                  <dt className="text-xs text-muted-foreground">{key}</dt>
-                  <dd className="font-mono text-xs break-all">{value}</dd>
-                </div>
-              ))}
-            </dl>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center gap-2">
+              <Server className="size-4 text-muted-foreground" />
+              <CardTitle>系统环境</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <dl className="grid gap-2 text-sm sm:grid-cols-2">
+                {Object.entries(query.data?.sysInfo ?? {}).map(([key, value]) => (
+                  <div
+                    key={key}
+                    className="flex flex-col gap-0.5 rounded-lg border border-border/70 bg-muted/20 px-3 py-2"
+                  >
+                    <dt className="text-xs text-muted-foreground">
+                      {SYS_LABELS[key] ?? key}
+                    </dt>
+                    <dd className="font-mono text-xs break-all">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </AdminGuard>
   )

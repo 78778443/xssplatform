@@ -129,15 +129,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <SheetTitle className="px-2 text-sm">导航</SheetTitle>
               <div className="flex flex-col gap-6 px-2" onClick={() => setOpen(false)}>
                 <NavLinks isAdmin={isAdmin} />
+                <div className="flex flex-col gap-1 border-t border-border/60 pt-4">
+                  <Link
+                    to="/settings"
+                    className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                  >
+                    <Settings className="size-4" />
+                    个人设置
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      to="/invites"
+                      className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                    >
+                      <Ticket className="size-4" />
+                      邀请码
+                    </Link>
+                  )}
+                </div>
                 <SidebarNote />
               </div>
             </SheetContent>
           </Sheet>
 
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex shrink-0 items-center gap-3">
             <BrandMark />
             <div className="flex flex-col leading-none">
-              <span className="text-sm font-semibold tracking-tight">
+              <span className="text-sm font-semibold tracking-tight whitespace-nowrap">
                 {data?.config.sitename ?? 'XSS平台'}
               </span>
               <span className="mt-1 hidden text-[9px] font-medium tracking-[0.22em] text-muted-foreground uppercase sm:block">
@@ -157,7 +175,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Link
               to="/settings"
               aria-label="个人设置"
-              className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+              className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'hidden sm:inline-flex')}
             >
               <Settings />
             </Link>
@@ -166,14 +184,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link
                   to="/invites"
                   aria-label="邀请"
-                  className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+                  className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'hidden sm:inline-flex')}
                 >
                   <Ticket />
                 </Link>
                 <Link
                   to="/admin"
                   aria-label="管理后台"
-                  className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+                  className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'hidden sm:inline-flex')}
                 >
                   <ShieldCheck />
                 </Link>
@@ -207,7 +225,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <SidebarNote />
           </div>
         </aside>
-        <Separator orientation="vertical" className={cn('md:block', authed ? '' : 'hidden')} />
+        <Separator orientation="vertical" className={cn(authed ? 'hidden md:block' : 'hidden')} />
         <main className="min-w-0 flex-1">{children}</main>
       </div>
     </div>

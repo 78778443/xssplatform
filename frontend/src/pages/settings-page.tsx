@@ -65,7 +65,7 @@ export function SettingsPage() {
 
       {query.isError && <QueryError error={query.error} />}
 
-      <Card>
+      <Card className="max-w-3xl">
         <CardHeader className="flex flex-row items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary ring-1 ring-primary/15">
             <BellRing className="size-5" />
@@ -75,7 +75,7 @@ export function SettingsPage() {
             <CardDescription>收到新的收包内容时，通过邮件或飞书提醒你。</CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="flex max-w-2xl flex-col gap-5">
+        <CardContent className="flex flex-col gap-5">
           <div className="flex items-center gap-3 rounded-xl border border-border/70 bg-muted/30 px-3 py-2.5 text-sm">
             <Mail className="size-4 text-muted-foreground" />
             <span className="text-muted-foreground">账号邮箱</span>
@@ -113,9 +113,12 @@ export function SettingsPage() {
             </div>
           </div>
 
-          <Button onClick={() => save.mutate()} disabled={save.isPending} className="self-start">
-            提交
-          </Button>
+          <div className="-mx-4 -mb-4 mt-1 flex items-center gap-2.5 rounded-b-2xl border-t border-border/70 bg-muted/20 px-4 py-3.5">
+            <Button onClick={() => save.mutate()} disabled={save.isPending}>
+              保存设置
+            </Button>
+            <span className="text-xs text-muted-foreground">保存后立即生效</span>
+          </div>
         </CardContent>
       </Card>
     </div>

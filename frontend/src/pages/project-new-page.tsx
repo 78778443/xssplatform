@@ -74,7 +74,7 @@ export function ProjectNewPage() {
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <div className="flex items-center gap-2 border-t border-border/70 pt-4">
+            <div className="-mx-4 -mb-4 mt-1 flex items-center gap-2.5 rounded-b-2xl border-t border-border/70 bg-muted/20 px-4 py-3.5">
               <Button type="submit" disabled={pending}>
                 创建
               </Button>

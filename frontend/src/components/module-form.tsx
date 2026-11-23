@@ -44,9 +44,7 @@ export function ModuleForm({
     <Card className="max-w-4xl">
       <CardContent className="flex flex-col gap-6">
         <section className="flex flex-col gap-4">
-          <h3 className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-            基本信息
-          </h3>
+          <h3 className="text-[13px] font-semibold text-foreground">基本信息</h3>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="flex flex-col gap-2">
               <Label htmlFor="module-title">模块名称</Label>
@@ -75,9 +73,7 @@ export function ModuleForm({
 
         <section className="flex flex-col gap-4 border-t border-border/60 pt-5">
           <div className="flex flex-col gap-0.5">
-            <h3 className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-              参数
-            </h3>
+            <h3 className="text-[13px] font-semibold text-foreground">参数</h3>
             <p className="text-xs text-muted-foreground">
               参数决定收包时保存哪些字段，配置参数会在生成代码时替换 {'{set.***}'}。
             </p>
@@ -111,9 +107,7 @@ export function ModuleForm({
 
         <section className="flex flex-col gap-3 border-t border-border/60 pt-5">
           <div className="flex items-center justify-between gap-2">
-            <h3 className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-              代码
-            </h3>
+            <h3 className="text-[13px] font-semibold text-foreground">代码</h3>
             <span className="font-mono text-[11px] text-muted-foreground">
               {'{projectId}'} · {'{set.***}'}
             </span>
@@ -152,7 +146,7 @@ export function ModuleForm({
 
         {error && <p className="text-sm text-destructive">{error}</p>}
         {!readOnly && (
-          <div className="flex items-center gap-2 border-t border-border/70 pt-4">
+          <div className="-mx-4 -mb-4 flex items-center gap-2.5 rounded-b-2xl border-t border-border/70 bg-muted/20 px-4 py-3.5">
             <Button onClick={() => onSubmit(value)} disabled={pending}>
               {submitLabel}
             </Button>

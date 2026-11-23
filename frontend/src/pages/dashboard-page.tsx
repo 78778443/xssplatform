@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Plus } from 'lucide-react'
+import { Blocks, FolderKanban, Inbox, Plus } from 'lucide-react'
 import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import type { DashboardData } from '@/lib/types'
@@ -31,14 +31,20 @@ export function DashboardPage() {
   const publicModules = modules.filter((module) => module.isOpen === 1 && module.isAudit === 1)
   const contentTotal = projects.reduce((total, project) => total + (project.contentNum ?? 0), 0)
 
+  const stats = [
+    { label: '验证项目', value: projects.length, icon: FolderKanban },
+    { label: '收包内容', value: contentTotal, icon: Inbox },
+    { label: '可用模块', value: modules.length, icon: Blocks },
+  ]
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
         eyebrow="Overview"
         title="工作台"
-        description={`${projects.length} 个项目 · ${contentTotal} 条收录内容 · ${modules.length} 个可用模块`}
+        description="集中管理授权验证项目与模块，实时查看收包结果。"
         actions={
-          <Link to="/project/new" className={buttonVariants()}>
+          <Link to="/project/new" className={buttonVariants({ size: 'lg' })}>
             <Plus />
             创建项目
           </Link>
@@ -48,13 +54,34 @@ export function DashboardPage() {
       {dashboard.isError && <QueryError error={dashboard.error} />}
 
       <Card>
+        <div className="grid grid-cols-3 divide-x divide-border/60">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="flex flex-col gap-0.5 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 sm:py-4"
+            >
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs text-muted-foreground">{stat.label}</span>
+                <span className="text-2xl font-semibold tracking-tight tabular-nums">
+                  {stat.value}
+                </span>
+              </div>
+              <span className="hidden size-9 items-center justify-center rounded-lg bg-primary/[0.07] text-primary ring-1 ring-primary/10 sm:flex">
+                <stat.icon className="size-4" />
+              </span>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
         <CardHeader className="flex flex-row items-center gap-2">
           <CardTitle>我的项目</CardTitle>
           <Badge variant="secondary">{projects.length}</Badge>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {dashboard.isLoading ? (
-            <p className="text-sm text-muted-foreground">加载中…</p>
+            <p className="px-5 pb-1 text-sm text-muted-foreground">加载中…</p>
           ) : (
             <ProjectTable projects={projects} onDelete={(id) => remove.mutate(id)} />
           )}

@@ -62,43 +62,51 @@ function InviteTable({
           生成邀请码
         </Button>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         {invites.length === 0 ? (
-          <EmptyState
-            title="暂无未使用的邀请码"
-            description="邀请码模式下，新用户必须持码才能注册。"
-          />
+          <div className="p-4">
+            <EmptyState
+              title="暂无未使用的邀请码"
+              description="邀请码模式下，新用户必须持码才能注册。"
+            />
+          </div>
         ) : (
-          <Table>
-            <TableHeader className="bg-muted/40">
-              <TableRow>
-                <TableHead>邀请码</TableHead>
-                <TableHead className="w-44">生成时间</TableHead>
-                <TableHead className="w-20">操作</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {invites.map((invite) => (
-                <TableRow key={invite.id}>
-                  <TableCell>
-                    <code className="rounded bg-muted px-2 py-1 font-mono text-xs">{invite.code}</code>
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">{formatTime(invite.addTime)}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="px-2 text-xs"
-                      onClick={() => copyCode(invite.code)}
-                    >
-                      <Copy className="size-3.5" />
-                      复制
-                    </Button>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table className="min-w-[560px]">
+              <TableHeader className="bg-muted/30">
+                <TableRow>
+                  <TableHead>邀请码</TableHead>
+                  <TableHead className="w-44">生成时间</TableHead>
+                  <TableHead className="w-24 text-right">操作</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {invites.map((invite) => (
+                  <TableRow key={invite.id}>
+                    <TableCell>
+                      <code className="rounded-md border border-border/60 bg-muted/40 px-2 py-1 font-mono text-xs">
+                        {invite.code}
+                      </code>
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">
+                      {formatTime(invite.addTime)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-muted-foreground hover:text-foreground"
+                        onClick={() => copyCode(invite.code)}
+                      >
+                        <Copy className="size-3.5" />
+                        复制
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </CardContent>
     </Card>
