@@ -4,6 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoginPage } from '@/pages/login-page'
 import { RegisterPage } from '@/pages/register-page'
 import { InstallPage } from '@/pages/install-page'
+import { DashboardPage } from '@/pages/dashboard-page'
+import { ProjectNewPage } from '@/pages/project-new-page'
+import { ProjectViewPage } from '@/pages/project-view-page'
+import { ProjectConfigPage } from '@/pages/project-config-page'
+import { ProjectCodePage } from '@/pages/project-code-page'
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -20,14 +25,14 @@ export function AppRoutes() {
   return (
     <AppShell>
       <Routes>
-        <Route path="/" element={<Placeholder title="我的项目" />} />
+        <Route path="/" element={<DashboardPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/install" element={<InstallPage />} />
-        <Route path="/project/new" element={<Placeholder title="创建项目" />} />
-        <Route path="/project/:id" element={<Placeholder title="项目内容" />} />
-        <Route path="/project/:id/config" element={<Placeholder title="配置代码" />} />
-        <Route path="/project/:id/code" element={<Placeholder title="项目代码" />} />
+        <Route path="/project/new" element={<ProjectNewPage />} />
+        <Route path="/project/:id" element={<ProjectViewPage />} />
+        <Route path="/project/:id/config" element={<ProjectConfigPage />} />
+        <Route path="/project/:id/code" element={<ProjectCodePage />} />
         <Route path="/modules" element={<Placeholder title="模块" />} />
         <Route path="/modules/new" element={<Placeholder title="创建模块" />} />
         <Route path="/modules/:id" element={<Placeholder title="查看模块" />} />
