@@ -15,10 +15,12 @@ import { Button } from '@/components/ui/button'
 export function ConfirmDelete({
   label = '删除',
   description = '确定删除吗?',
+  variant = 'ghost',
   onConfirm,
 }: {
   label?: string
   description?: string
+  variant?: 'ghost' | 'outline'
   onConfirm: () => void
 }) {
   const [open, setOpen] = useState(false)
@@ -26,7 +28,7 @@ export function ConfirmDelete({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
         render={
-          <Button variant="ghost" size="sm" className="px-1 text-destructive">
+          <Button variant={variant} size="sm" className={variant === 'ghost' ? 'px-1 text-destructive' : 'text-destructive'}>
             {label}
           </Button>
         }

@@ -1,6 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/layout/app-shell'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { buttonVariants } from '@/components/ui/button'
+import { EmptyState } from '@/components/empty-state'
+import { Link } from 'react-router-dom'
 import { LoginPage } from '@/pages/login-page'
 import { RegisterPage } from '@/pages/register-page'
 import { InstallPage } from '@/pages/install-page'
@@ -20,12 +22,12 @@ import { AdminModulesPage } from '@/pages/admin-modules-page'
 
 function Placeholder({ title }: { title: string }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="text-sm text-muted-foreground">页面建设中</CardContent>
-    </Card>
+    <div className="flex flex-col items-center gap-4 py-16">
+      <EmptyState title={title} description="链接可能已失效，或者页面已被移动。" />
+      <Link to="/" className={buttonVariants()}>
+        返回首页
+      </Link>
+    </div>
   )
 }
 

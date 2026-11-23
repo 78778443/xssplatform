@@ -15,7 +15,7 @@ test('create a module and read it back', async ({ page }) => {
   await page.getByLabel(/代码/).fill('x=1')
   await page.getByRole('button', { name: /^创建$/ }).click()
   await expect(page).toHaveURL(/\/modules\/\d+$/)
-  await expect(page.getByLabel(/模块名称/)).toHaveValue('E2E 模块')
+  await expect(page.getByRole('heading', { name: 'E2E 模块', level: 1 })).toBeVisible()
 })
 
 test('admin overview and module audit pages render', async ({ page }) => {

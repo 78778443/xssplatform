@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import { ModuleForm, DEFAULT_KEYS, type ModuleFormValue } from '@/components/module-form'
+import { PageHeader } from '@/components/layout/page-header'
 
 export function ModuleNewPage() {
   const { data: session } = useSession()
@@ -42,13 +43,19 @@ export function ModuleNewPage() {
   }
 
   return (
-    <ModuleForm
-      heading="创建模块"
-      initial={{ title: '', description: '', keys: [...DEFAULT_KEYS], setkeys: [], code: '', isOpen: false }}
-      submitLabel="创建"
-      pending={pending}
-      error={error}
-      onSubmit={submit}
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Module"
+        title="创建模块"
+        description="组合需要收集的字段与 Payload 代码，保存后可在项目中选用。"
+      />
+      <ModuleForm
+        initial={{ title: '', description: '', keys: [...DEFAULT_KEYS], setkeys: [], code: '', isOpen: false }}
+        submitLabel="创建"
+        pending={pending}
+        error={error}
+        onSubmit={submit}
+      />
+    </div>
   )
 }

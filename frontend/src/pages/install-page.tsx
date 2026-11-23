@@ -4,6 +4,7 @@ import { api } from '@/lib/api'
 import { agreementText } from '@/lib/agreement'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { CheckCircle2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
@@ -78,14 +79,19 @@ export function InstallPage() {
 
   if (status?.installed) {
     return (
-      <div className="mx-auto max-w-xl py-10">
-        <Card>
-          <CardHeader>
-            <CardTitle>已安装</CardTitle>
-            <CardDescription>程序已经安装完成，无需重复安装</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link to="/">返回首页</Link>
+      <div className="flex min-h-[calc(100svh-10rem)] items-center justify-center">
+        <Card className="w-full max-w-md text-center">
+          <CardContent className="flex flex-col items-center gap-3 py-6">
+            <span className="flex size-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
+              <CheckCircle2 className="size-6" />
+            </span>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-lg font-semibold">已安装</h2>
+              <p className="text-sm text-muted-foreground">程序已经安装完成，无需重复安装。</p>
+            </div>
+            <Link to="/" className="mt-2 text-sm font-medium text-primary hover:underline">
+              进入控制台
+            </Link>
           </CardContent>
         </Card>
       </div>

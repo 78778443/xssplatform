@@ -59,6 +59,8 @@ export interface ModuleForProject {
   keys: string
   setkeys?: SetkeyValue[]
   choosed?: number
+  isOpen: number
+  isAudit: number
 }
 
 export interface ProjectConfig {

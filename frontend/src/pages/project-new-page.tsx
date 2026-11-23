@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { PageHeader } from '@/components/layout/page-header'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -42,30 +43,48 @@ export function ProjectNewPage() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>创建项目</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form className="flex max-w-xl flex-col gap-4" onSubmit={submit}>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="project-title">项目名称</Label>
-            <Input id="project-title" value={title} onChange={(e) => setTitle(e.target.value)} />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="project-description">项目描述</Label>
-            <Textarea
-              id="project-description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-          {error && <p className="text-sm text-destructive">{error}</p>}
-          <Button type="submit" disabled={pending}>
-            创建
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Project"
+        title="创建项目"
+        description="为一次授权验证建立独立的收包项目，随后选择模块并生成代码。"
+      />
+
+      <Card className="max-w-2xl">
+        <CardContent>
+          <form className="flex flex-col gap-5" onSubmit={submit}>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="project-title">项目名称</Label>
+              <Input
+                id="project-title"
+                className="h-10"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="例如：后台管理系统验证"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="project-description">项目描述</Label>
+              <Textarea
+                id="project-description"
+                rows={4}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="记录目标、验证范围或授权信息"
+              />
+            </div>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <div className="flex items-center gap-2 border-t border-border/70 pt-4">
+              <Button type="submit" disabled={pending}>
+                创建
+              </Button>
+              <Link to="/" className={buttonVariants({ variant: 'outline' })}>
+                取消
+              </Link>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
