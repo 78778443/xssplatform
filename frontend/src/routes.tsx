@@ -9,6 +9,14 @@ import { ProjectNewPage } from '@/pages/project-new-page'
 import { ProjectViewPage } from '@/pages/project-view-page'
 import { ProjectConfigPage } from '@/pages/project-config-page'
 import { ProjectCodePage } from '@/pages/project-code-page'
+import { ModulesPage } from '@/pages/modules-page'
+import { ModuleNewPage } from '@/pages/module-new-page'
+import { ModuleViewPage } from '@/pages/module-view-page'
+import { ModuleEditPage } from '@/pages/module-edit-page'
+import { SettingsPage } from '@/pages/settings-page'
+import { InvitesPage } from '@/pages/invites-page'
+import { AdminPage } from '@/pages/admin-page'
+import { AdminModulesPage } from '@/pages/admin-modules-page'
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -33,14 +41,14 @@ export function AppRoutes() {
         <Route path="/project/:id" element={<ProjectViewPage />} />
         <Route path="/project/:id/config" element={<ProjectConfigPage />} />
         <Route path="/project/:id/code" element={<ProjectCodePage />} />
-        <Route path="/modules" element={<Placeholder title="模块" />} />
-        <Route path="/modules/new" element={<Placeholder title="创建模块" />} />
-        <Route path="/modules/:id" element={<Placeholder title="查看模块" />} />
-        <Route path="/modules/:id/edit" element={<Placeholder title="配置模块" />} />
-        <Route path="/settings" element={<Placeholder title="个人设置" />} />
-        <Route path="/invites" element={<Placeholder title="邀请码" />} />
-        <Route path="/admin" element={<Placeholder title="管理后台" />} />
-        <Route path="/admin/modules" element={<Placeholder title="模块审核" />} />
+        <Route path="/modules" element={<ModulesPage />} />
+        <Route path="/modules/new" element={<ModuleNewPage />} />
+        <Route path="/modules/:id" element={<ModuleViewPage />} />
+        <Route path="/modules/:id/edit" element={<ModuleEditPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/invites" element={<InvitesPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/modules" element={<AdminModulesPage />} />
         <Route path="*" element={<Placeholder title="页面不存在" />} />
       </Routes>
     </AppShell>
