@@ -100,6 +100,28 @@ final class Api
                     $data = $project->deleteContents($input);
                 }
                 break;
+            case 'modules.list':
+            case 'module.create':
+            case 'module.get':
+            case 'module.save':
+            case 'module.delete':
+                if (!$installed) {
+                    throw new AppError('not_installed', 409, '尚未安装');
+                }
+                require_once ROOT_PATH . '/source/services/ModuleService.php';
+                $moduleService = new ModuleService();
+                if ($action === 'modules.list') {
+                    $data = $moduleService->list();
+                } elseif ($action === 'module.create') {
+                    $data = $moduleService->create($input);
+                } elseif ($action === 'module.get') {
+                    $data = $moduleService->get($input);
+                } elseif ($action === 'module.save') {
+                    $data = $moduleService->save($input);
+                } else {
+                    $data = $moduleService->delete($input);
+                }
+                break;
             case 'install.status':
             case 'install.testDb':
             case 'install.submit':
