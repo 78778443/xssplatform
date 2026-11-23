@@ -5,7 +5,7 @@ import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import type { ProjectViewData } from '@/lib/types'
 import { ContentTable } from '@/components/content-table'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 

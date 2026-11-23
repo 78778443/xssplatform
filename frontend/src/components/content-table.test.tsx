@@ -22,7 +22,7 @@ describe('ContentTable', () => {
       />,
     )
     fireEvent.click(screen.getByText(/展开/i))
-    expect(screen.getByText(/added-bing/i === 'never' ? '' : /sid=1/)).toBeTruthy()
+    expect(screen.getByText(/sid=1/)).toBeTruthy()
     expect(screen.getByText(/1\.2\.3\.4/)).toBeTruthy()
   })
 })
