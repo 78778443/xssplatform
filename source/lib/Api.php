@@ -22,6 +22,19 @@ final class Api
                 throw new AppError('no_permission', 403, '没有操作权限');
             }
 
+            $csrfActions = [
+                'logout',
+                'project.create', 'project.setcode.save', 'project.delete',
+                'project.contents.delete', 'project.contents.deleteMany',
+                'module.create', 'module.save', 'module.delete',
+                'user.settings.save', 'user.invite.create', 'admin.module.audit',
+            ];
+            if ($installed && in_array($action, $csrfActions, true)) {
+                if (!current_user()->checkToken((string) ($server['HTTP_X_CSRF_TOKEN'] ?? ''))) {
+                    throw new AppError('operation_failed', 419, '操作失败');
+                }
+            }
+
             switch ($action) {
             case 'meta':
                 $data = self::sessionPayload($installed, false);
@@ -46,14 +59,45 @@ final class Api
                 if ($action === 'login') {
                     $data = $auth->login($input);
                 } elseif ($action === 'logout') {
-                    if (!current_user()->checkToken((string) ($server['HTTP_X_CSRF_TOKEN'] ?? ''))) {
-                        throw new AppError('operation_failed', 419, '操作失败');
-                    }
                     $data = $auth->logout();
                 } elseif ($action === 'register.check') {
                     $data = $auth->registerCheck($input);
                 } else {
                     $data = $auth->register($input);
+                }
+                break;
+            case 'dashboard':
+            case 'project.create':
+            case 'project.get':
+            case 'project.setcode.get':
+            case 'project.setcode.save':
+            case 'project.viewcode':
+            case 'project.delete':
+            case 'project.contents.delete':
+            case 'project.contents.deleteMany':
+                if (!$installed) {
+                    throw new AppError('not_installed', 409, '尚未安装');
+                }
+                require_once ROOT_PATH . '/source/services/ProjectService.php';
+                $project = new ProjectService();
+                if ($action === 'dashboard') {
+                    $data = $project->dashboard();
+                } elseif ($action === 'project.create') {
+                    $data = $project->create($input);
+                } elseif ($action === 'project.get') {
+                    $data = $project->get($input);
+                } elseif ($action === 'project.setcode.get') {
+                    $data = $project->setcodeGet($input);
+                } elseif ($action === 'project.setcode.save') {
+                    $data = $project->setcodeSave($input);
+                } elseif ($action === 'project.viewcode') {
+                    $data = $project->viewcode($input);
+                } elseif ($action === 'project.delete') {
+                    $data = $project->delete($input);
+                } elseif ($action === 'project.contents.delete') {
+                    $data = $project->deleteContent($input);
+                } else {
+                    $data = $project->deleteContents($input);
                 }
                 break;
             case 'install.status':
