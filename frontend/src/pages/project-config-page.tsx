@@ -67,7 +67,7 @@ export function ProjectConfigPage({ id }: { id?: number }) {
       await api('project.setcode.save', { method: 'POST', csrf: session?.csrf, body })
       await queryClient.invalidateQueries({ queryKey: ['project', projectId] })
       if (created) {
-        navigate(`/project/${projectId}/code`)
+        navigate(`/project/${projectId}/code?ty=create`)
       } else {
         navigate(`/project/${projectId}`)
       }

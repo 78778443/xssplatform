@@ -160,7 +160,7 @@ final class Api
             case 'install.status':
             case 'install.testDb':
             case 'install.submit':
-                if ($installed) {
+                if ($installed && $action !== 'install.status') {
                     throw new AppError('no_permission', 403, '已经安装');
                 }
                 require_once ROOT_PATH . '/source/lib/ConfigWriter.php';

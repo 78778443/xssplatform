@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Activity, Server, Users } from 'lucide-react'
+import { PageHeader } from '@/components/layout/page-header'
 import { api } from '@/lib/api'
 import { AdminGuard } from '@/components/admin-guard'
 import { buttonVariants } from '@/components/ui/button'
@@ -25,7 +26,7 @@ function Stat({
   return (
     <Card>
       <CardContent className="flex items-center gap-4">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary ring-1 ring-primary/15">
           {icon}
         </div>
         <div className="flex flex-col">
@@ -46,6 +47,11 @@ export function AdminPage() {
   return (
     <AdminGuard>
       <div className="flex flex-col gap-6">
+        <PageHeader
+          eyebrow="Admin"
+          title="管理后台"
+          description="账号概况、在线状态、系统环境与公共模块审核。"
+        />
         <div className="grid gap-4 sm:grid-cols-2">
           <Stat label="注册用户总数" value={query.data?.userCount ?? '-'} icon={<Users className="size-5" />} />
           <Stat label="在线用户总数" value={query.data?.onlineCount ?? '-'} icon={<Activity className="size-5" />} />

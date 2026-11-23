@@ -126,6 +126,10 @@ function Val($name, $method = 'GET', $type = 0, $isArray = 0)
         return '';
     }
     $isArray = intval($isArray);
+    if ($isArray === 0 && is_array($value)) {
+        // Scalar callers must never receive an array (or "Array" via a cast).
+        $value = '';
+    }
     switch ($type) {
     case 0:
     case 'string':

@@ -68,11 +68,11 @@ React 19 + shadcn/ui 单页前端 · PHP 8 后端 · 生产部署无需 Node.js<
 ## 安装
 
 1. 把仓库放到 Web 根目录（`index.php` 所在目录即站点根）。
-2. 按 `deploy/nginx.conf` 或 `deploy/.htaccess.example` 配置重写规则（收包地址 `/{6位}`、`/do/auth/...`、`/register/{key}` 必须保留，其余路径回落到 `index.php`）。
-3. 浏览器打开 `/install`，按向导填写数据库信息与管理员账号。
+2. 按 `deploy/nginx.conf` 或 `deploy/.htaccess.example` 配置重写规则（收包地址 `/{6位}`、`/do/auth/...`、`/register/{key}` 必须保留，其余路径回落到 `index.php`）。示例配置已禁止访问 `.git/`、`tests/`、`scripts/`、`deploy/`、`frontend/`；如自行编写配置，请保持同样的拒绝规则。
+3. 浏览器打开 `/install`，按向导填写数据库信息与管理员账号。也可以复制 `config.php.default` 为 `config.php` 后手工填写。
 4. 安装完成后用管理员账号登录。
 
-安装向导会写入 `config.php` 与 `install/install.lock`。旧的 `install/step1.php` 等地址会自动跳转到 `/install`。
+安装向导会写入 `config.php` 与 `install/install.lock`。`config.php` 属于部署状态，不纳入版本库；也可以复制 `config.php.default` 后手工填写。旧的 `install/step1.php` 等地址会自动跳转到 `/install`。
 
 ## 已安装的数据库升级
 
@@ -96,7 +96,7 @@ XSSP_CONFIG=/path/to/config.php php install/upgrade.php
 
 ## 老地址兼容
 
-`index.php?do=...` 等旧页面地址会 302 到新的 SPA 路由；旧表单 POST 仍会执行。收包端点与 `/do/auth/{authCode}` 的 URL、参数、响应保持不变。
+`index.php?do=...` 等旧页面地址会 302 到新的 SPA 路由；旧表单 POST 仍会执行（写操作现在要求 POST 且校验同源，旧表单里的 `token` 继续生效）。收包端点与 `/do/auth/{authCode}` 的 URL、参数、响应保持不变。
 
 ## 开发
 

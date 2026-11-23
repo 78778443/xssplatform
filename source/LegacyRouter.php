@@ -21,11 +21,57 @@ final class LegacyRouter
         }
 
         try {
+            self::guardWrite($do, $act, $server);
             $target = self::runAction($do, $act, $input);
             self::redirect($target);
         } catch (AppError $e) {
             self::redirectBack($do, $act, $input, $e->errorCode);
         }
+    }
+
+    /**
+     * Old forms are kept working, but writes now require a same-origin request,
+     * a POST body and (where the legacy form had one) a CSRF token.
+     */
+    private static function guardWrite(string $do, string $act, array $server): void
+    {
+        if ($do === 'register' && $act === 'checkue') {
+            return;
+        }
+        if (!self::sameOrigin($server)) {
+            throw new AppError('no_permission', 403, '没有操作权限');
+        }
+        $method = strtoupper((string) ($server['REQUEST_METHOD'] ?? 'GET'));
+        if ($method !== 'POST') {
+            throw new AppError('method_not_allowed', 405, '请使用 POST 提交');
+        }
+        if (($do === 'project' && $act === 'create_submit')
+            || ($do === 'module' && $act === 'create_submit')) {
+            self::requireToken();
+        }
+    }
+
+    public static function sameOrigin(array $server): bool
+    {
+        $origin = (string) ($server['HTTP_ORIGIN'] ?? '');
+        $referer = (string) ($server['HTTP_REFERER'] ?? '');
+        $candidate = $origin !== '' ? $origin : $referer;
+        if ($candidate === '') {
+            return true;
+        }
+        $host = parse_url($candidate, PHP_URL_HOST);
+        if (!is_string($host) || $host === '') {
+            return false;
+        }
+        $expected = '';
+        if (defined('URL_ROOT') && URL_ROOT !== '') {
+            $expected = (string) parse_url(URL_ROOT, PHP_URL_HOST);
+        }
+        if ($expected === '') {
+            $expected = (string) ($server['HTTP_HOST'] ?? '');
+            $expected = explode(':', $expected)[0];
+        }
+        return $expected !== '' && hash_equals(strtolower($expected), strtolower($host));
     }
 
     private static function isAction(string $do, string $act): bool

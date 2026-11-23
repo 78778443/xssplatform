@@ -22,9 +22,12 @@ final class ReceiveService
         if (is_array($moduleIds) && $moduleIds !== []) {
             $ids = array_values(array_map('intval', $moduleIds));
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $params = $ids;
+            $params[] = (int) $project['userId'];
             $modules = $db->Dataset(
-                'SELECT * FROM ' . Tb('module') . ' WHERE id IN (' . $placeholders . ')',
-                $ids
+                'SELECT * FROM ' . Tb('module') . ' WHERE id IN (' . $placeholders . ')'
+                . ' AND (userId=? OR (isOpen=1 AND isAudit=1))',
+                $params
             );
             foreach ($modules as $module) {
                 if (!empty($module['keys'])) {
@@ -42,7 +45,9 @@ final class ReceiveService
             $content[$key] = Val($key, 'REQUEST');
         }
         if (in_array('toplocation', $keys, true)) {
-            $content['toplocation'] = !empty($content['toplocation']) ? $content['toplocation'] : $content['location'];
+            $content['toplocation'] = !empty($content['toplocation'])
+                ? $content['toplocation']
+                : ($content['location'] ?? '');
         }
 
         $judgeCookie = in_array('cookie', $keys, true);

@@ -4,6 +4,7 @@ import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PageHeader } from '@/components/layout/page-header'
 import {
   Table,
   TableBody,
@@ -88,6 +89,11 @@ export function InvitesPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Invitations"
+        title="邀请码"
+        description="生成并管理注册邀请码，邀请码模式下新用户必须持码注册。"
+      />
       <InviteTable
         title="乌云币奖品邀请码"
         invites={query.data?.wooyun ?? []}

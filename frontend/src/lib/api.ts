@@ -61,6 +61,10 @@ export async function api<T = unknown>(action: string, opts: ApiOptions = {}): P
     throw new ApiError('internal_error', response.status, '服务器响应异常')
   }
 
+  if (response.status === 401 || payload.error?.code === 'not_logged_in') {
+    window.dispatchEvent(new CustomEvent('xssp:unauthorized'))
+  }
+
   if (!payload.ok) {
     throw new ApiError(
       payload.error?.code ?? 'internal_error',

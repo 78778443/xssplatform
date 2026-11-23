@@ -6,7 +6,9 @@ import { useSession } from '@/lib/session'
 import { AdminGuard } from '@/components/admin-guard'
 import { EmptyState } from '@/components/empty-state'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { PageHeader } from '@/components/layout/page-header'
 import {
   Table,
   TableBody,
@@ -55,13 +57,16 @@ export function AdminModulesPage() {
 
   return (
     <AdminGuard>
+      <div className="flex flex-col gap-6">
+        <PageHeader
+          eyebrow="Admin"
+          title="模块审核"
+          description="审核用户提交的公共模块，通过后会出现在所有用户的模块库中。"
+        />
       <Card>
-        <CardHeader>
-          <CardTitle>模块审核</CardTitle>
-        </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-muted/40">
               <TableRow>
                 <TableHead>模块名称</TableHead>
                 <TableHead>描述</TableHead>
@@ -73,10 +78,14 @@ export function AdminModulesPage() {
             <TableBody>
               {(query.data?.items ?? []).map((module) => (
                 <TableRow key={module.id}>
-                  <TableCell>{module.title}</TableCell>
-                  <TableCell className="max-w-80 truncate">{module.description}</TableCell>
+                  <TableCell className="font-medium">{module.title}</TableCell>
+                  <TableCell className="max-w-80 truncate text-muted-foreground">{module.description}</TableCell>
                   <TableCell>{module.userName}</TableCell>
-                  <TableCell>{module.isAudit === 1 ? '已通过' : '待审核'}</TableCell>
+                  <TableCell>
+                    <Badge variant={module.isAudit === 1 ? 'secondary' : 'destructive'}>
+                      {module.isAudit === 1 ? '已通过' : '待审核'}
+                    </Badge>
+                  </TableCell>
                   <TableCell>
                     {module.isAudit === 1 ? (
                       <Button size="sm" variant="outline" onClick={() => audit.mutate({ id: module.id, isAudit: 0 })}>
@@ -113,6 +122,7 @@ export function AdminModulesPage() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </AdminGuard>
   )
 }

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../lib/Validate.php';
+
 final class InstallService
 {
     public function status(): array
@@ -46,6 +48,14 @@ final class InstallService
         if (!preg_match('/^[A-Za-z0-9_]+$/', $dbName)) {
             throw new AppError('install_failed', 400, '数据库名只能包含字母、数字和下划线');
         }
+        $storedUser = $this->strip($username);
+        if (!Validate::username($storedUser)) {
+            throw new AppError('install_failed', 400, '用户名格式不正确');
+        }
+        $storedPwd = $this->strip($password);
+        if (!Validate::password($storedPwd)) {
+            throw new AppError('install_failed', 400, '密码应为6-20位字符');
+        }
 
         $link = $this->connect($input);
         $create = 'CREATE DATABASE IF NOT EXISTS `' . $dbName . '` DEFAULT CHARSET utf8 COLLATE utf8_general_ci';
@@ -62,11 +72,9 @@ final class InstallService
         mysqli_set_charset($link, 'utf8');
 
         $urlroot = $this->sanitizeUrlRoot((string) ($input['urlroot'] ?? $this->detectUrlRoot()));
-        $hostForSql = (string) parse_url($urlroot, PHP_URL_HOST);
         $sql = (string) file_get_contents(ROOT_PATH . '/xssplatform.sql');
-        if ($hostForSql !== '') {
-            $sql = preg_replace('/http:\/\/(.*?)\//', 'http://' . $hostForSql . '/', $sql);
-        }
+        // Replace the legacy demo origin with the full configured root (scheme, host and port).
+        $sql = str_replace('http://xsser.me/', rtrim($urlroot, '/') . '/', $sql);
         if (!mysqli_multi_query($link, $sql)) {
             $error = mysqli_error($link);
             mysqli_close($link);
@@ -89,15 +97,16 @@ final class InstallService
             mysqli_free_result($result);
         }
         $adminId = (int) ($row[0] ?? 0);
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        // Login always applies StripStr first (legacy behaviour), so store the same transform.
+        $hash = password_hash($storedPwd, PASSWORD_DEFAULT);
         if ($adminId > 0) {
             $stmt = mysqli_prepare($link, 'UPDATE oc_user SET userName=?,userPwd=?,adminLevel=1 WHERE id=?');
-            mysqli_stmt_bind_param($stmt, 'ssi', $username, $hash, $adminId);
+            mysqli_stmt_bind_param($stmt, 'ssi', $storedUser, $hash, $adminId);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
         } else {
             $stmt = mysqli_prepare($link, 'INSERT INTO oc_user(adminLevel,userName,userPwd,addTime) VALUES(1,?,?,UNIX_TIMESTAMP())');
-            mysqli_stmt_bind_param($stmt, 'ss', $username, $hash);
+            mysqli_stmt_bind_param($stmt, 'ss', $storedUser, $hash);
             mysqli_stmt_execute($stmt);
             $adminId = (int) mysqli_insert_id($link);
             mysqli_stmt_close($stmt);
@@ -117,6 +126,11 @@ final class InstallService
         }
 
         return ['adminId' => $adminId];
+    }
+
+    private function strip(string $value): string
+    {
+        return addslashes(htmlspecialchars($value, ENT_QUOTES));
     }
 
     private function connect(array $input)

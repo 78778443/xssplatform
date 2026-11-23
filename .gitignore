@@ -5,3 +5,4 @@ tests/config.test.php
 frontend/node_modules
 frontend/test-results
 frontend/playwright-report
+config.php

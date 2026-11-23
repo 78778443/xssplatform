@@ -6,8 +6,10 @@ import { useSession } from '@/lib/session'
 import type { ProjectViewData } from '@/lib/types'
 import { ContentTable } from '@/components/content-table'
 import { buttonVariants } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { PageHeader } from '@/components/layout/page-header'
 import { Label } from '@/components/ui/label'
+import { QueryError } from '@/components/query-error'
 
 export function ProjectViewPage() {
   const { id } = useParams()
@@ -42,19 +44,25 @@ export function ProjectViewPage() {
   const domains = query.data?.domains ?? []
 
   return (
-    <Card>
-      <CardHeader className="gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <CardTitle>{project?.title ?? '项目内容'}</CardTitle>
-          <div className="flex gap-2">
-            <Link to={`/project/${projectId}/code`} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Project"
+        title={project?.title ?? '项目内容'}
+        description="实时收包结果，按域名过滤并按需批量清理。"
+        actions={
+          <>
+            <Link to={`/project/${projectId}/code`} className={buttonVariants({ variant: 'outline' })}>
               查看代码
             </Link>
-            <Link to={`/project/${projectId}/config`} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+            <Link to={`/project/${projectId}/config`} className={buttonVariants({ variant: 'outline' })}>
               配置
             </Link>
-          </div>
-        </div>
+          </>
+        }
+      />
+      {query.isError && <QueryError error={query.error} />}
+      <Card>
+      <CardHeader className="gap-3">
         <div className="flex flex-wrap items-end gap-3 text-sm">
           <div className="flex flex-col gap-1">
             <Label htmlFor="domain-filter">Domain</Label>
@@ -100,6 +108,7 @@ export function ProjectViewPage() {
           />
         )}
       </CardContent>
-    </Card>
+      </Card>
+    </div>
   )
 }

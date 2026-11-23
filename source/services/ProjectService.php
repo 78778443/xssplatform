@@ -56,6 +56,7 @@ final class ProjectService
         );
         foreach ($modules as $k => $v) {
             $modules[$k]['title'] = Display::decode((string) $v['title']);
+            $modules[$k]['description'] = Display::decode((string) $v['description']);
         }
         return ['projects' => $projects, 'modules' => $modules];
     }
@@ -171,7 +172,7 @@ final class ProjectService
                     $row = ['key' => Display::decode((string) $kv)];
                     $storedKey = 'setkey_' . $v['id'] . '_' . $kv;
                     if (!empty($moduleSetKeys[$storedKey])) {
-                        $row['value'] = urldecode((string) $moduleSetKeys[$storedKey]);
+                        $row['value'] = Display::decode(urldecode((string) $moduleSetKeys[$storedKey]));
                     }
                     $setkeys[] = $row;
                 }
@@ -208,8 +209,14 @@ final class ProjectService
             $values['modules'] = JsonEncode($moduleIds);
             $moduleSetKeys = [];
             foreach ($moduleIds as $mId) {
-                $module = $db->FirstRow('SELECT * FROM ' . Tb('module') . ' WHERE id=?', [$mId]);
-                if (empty($module) || empty($module['setkeys'])) {
+                $module = $db->FirstRow(
+                    'SELECT * FROM ' . Tb('module') . ' WHERE id=? AND (userId=? OR (isOpen=1 AND isAudit=1))',
+                    [$mId, (int) $project['userId']]
+                );
+                if (empty($module)) {
+                    continue;
+                }
+                if (empty($module['setkeys'])) {
                     continue;
                 }
                 $setkeys = json_decode((string) $module['setkeys'], true);
@@ -247,9 +254,12 @@ final class ProjectService
         if (is_array($moduleIds) && $moduleIds !== []) {
             $ids = array_values(array_map('intval', $moduleIds));
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $params = $ids;
+            $params[] = (int) $project['userId'];
             $modules = $db->Dataset(
-                'SELECT * FROM ' . Tb('module') . ' WHERE id IN (' . $placeholders . ')',
-                $ids
+                'SELECT * FROM ' . Tb('module') . ' WHERE id IN (' . $placeholders . ')'
+                . ' AND (userId=? OR (isOpen=1 AND isAudit=1))',
+                $params
             );
             foreach ($modules as $module) {
                 $moduleCode = str_replace('{projectId}', (string) $project['urlKey'], (string) $module['code']);

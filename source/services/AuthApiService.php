@@ -23,9 +23,10 @@ final class AuthApiService
         $data = [];
         foreach ($rows as $raw) {
             $row = (array) json_decode((string) $raw, true);
+            // Legacy emitted null for keys the module did not collect.
             $data[] = [
-                'url' => !empty($row['opener']) ? $row['opener'] : ($row['toplocation'] ?? ''),
-                'cookie' => $row['cookie'] ?? '',
+                'url' => !empty($row['opener']) ? $row['opener'] : ($row['toplocation'] ?? null),
+                'cookie' => $row['cookie'] ?? null,
             ];
         }
         return $data;

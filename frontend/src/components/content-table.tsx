@@ -82,13 +82,13 @@ export function ContentTable({
 
       <div className="overflow-x-auto">
         <Table className="table-fixed">
-          <TableHeader>
+          <TableHeader className="bg-muted/40">
             <TableRow>
               <TableHead className="w-10" />
               <TableHead className="w-20">详情</TableHead>
               <TableHead className="w-36">时间</TableHead>
-              <TableHead className="w-[27%]">接收的内容</TableHead>
-              <TableHead className="w-[30%]">Request Headers</TableHead>
+              <TableHead className="w-[27%]">Domain</TableHead>
+              <TableHead className="w-[18%]">Headers</TableHead>
               <TableHead className="w-16">操作</TableHead>
             </TableRow>
           </TableHeader>
@@ -128,7 +128,9 @@ export function ContentTable({
                     <TableCell className="truncate text-muted-foreground">
                       {item.domain || '-'}
                     </TableCell>
-                    <TableCell className="text-muted-foreground">-</TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {Object.keys(item.serverContent ?? {}).length} 项
+                    </TableCell>
                     <TableCell>
                       <ConfirmDelete onConfirm={() => onDelete(item.id)} />
                     </TableCell>

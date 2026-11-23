@@ -26,7 +26,7 @@ final class UrlMap
             case 'list':
             case 'view':
                 if ($act === '' || $act === 'list') {
-                    return '/project' . ($id !== '' ? '' : '');
+                    return '/';
                 }
                 return '/project/' . rawurlencode($id)
                     . (!empty($query['domain']) ? '?domain=' . rawurlencode((string) $query['domain']) : '');

@@ -27,30 +27,33 @@ test('capture README screenshots', async ({ page }) => {
   execSync(`bash ${fileURLToPath(new URL('../../tests/http/screenshot-reset.sh', import.meta.url))}`, {
     stdio: 'pipe',
   })
+  try {
 
-  await page.goto('/login')
-  await shot(page, 'login')
+    await page.goto('/login')
+    await shot(page, 'login')
 
-  await login(page)
-  await shot(page, 'dashboard', '我的项目')
+    await login(page)
+    await shot(page, 'dashboard', '我的项目')
 
-  await page.goto('/project/194')
-  await page.getByText(/展开/).first().click()
-  await shot(page, 'project', '后台管理系统')
+    await page.goto('/project/194')
+    await page.getByText(/展开/).first().click()
+    await shot(page, 'project', '后台管理系统')
 
-  await page.goto('/project/194/code')
-  await shot(page, 'code', '项目代码')
+    await page.goto('/project/194/code')
+    await shot(page, 'code', '项目代码')
 
-  await page.goto('/modules')
-  await shot(page, 'modules', '公共模块')
+    await page.goto('/modules')
+    await shot(page, 'modules', '公共模块')
 
-  await page.goto('/admin')
-  await shot(page, 'admin', '注册用户总数')
+    await page.goto('/admin')
+    await shot(page, 'admin', '注册用户总数')
 
-  await page.goto('/admin/modules')
-  await shot(page, 'admin-modules', '模块审核')
+    await page.goto('/admin/modules')
+    await shot(page, 'admin-modules', '模块审核')
+  } finally {
+    execSync(`bash ${fileURLToPath(new URL('../../tests/http/screenshot-restore.sh', import.meta.url))}`, {
+      stdio: 'pipe',
+    })
+  }
 
-  execSync(`bash ${fileURLToPath(new URL('../../tests/http/screenshot-restore.sh', import.meta.url))}`, {
-    stdio: 'pipe',
-  })
 })

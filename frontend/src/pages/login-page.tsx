@@ -4,10 +4,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { loginSchema } from '@/lib/validation'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { AuthLayout } from '@/components/layout/auth-layout'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { LockKeyhole, Mail } from 'lucide-react'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -42,55 +43,63 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-[calc(100svh-8rem)] items-center justify-center">
-      <div className="w-full max-w-sm">
-      <Card>
-        <CardHeader>
-          <CardTitle>登陆</CardTitle>
-          <CardDescription>使用用户名或邮箱登录</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form className="flex flex-col gap-4" onSubmit={submit}>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="login-user">用户名或邮箱</Label>
-              <Input
-                id="login-user"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-                placeholder="输入用户名/邮箱"
-                autoComplete="username"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="login-pwd">密码</Label>
-              <Input
-                id="login-pwd"
-                type="password"
-                value={pwd}
-                onChange={(e) => setPwd(e.target.value)}
-                placeholder="输入密码"
-                autoComplete="current-password"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="login-auto"
-                checked={auto}
-                onCheckedChange={(checked) => setAuto(checked === true)}
-              />
-              <Label htmlFor="login-auto">自动登录（360 天）</Label>
-            </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" disabled={pending}>
-              登录
-            </Button>
-            <div className="text-center text-sm text-muted-foreground">
-              还没有账号？<Link to="/register">注册</Link>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-      </div>
-    </div>
+    <AuthLayout
+      title="登陆"
+      description="使用用户名或邮箱登录"
+      footer={
+        <span>
+          还没有账号？{' '}
+          <Link to="/register" className="font-medium text-primary hover:underline">
+            注册
+          </Link>
+        </span>
+      }
+    >
+      <form className="flex flex-col gap-5" onSubmit={submit}>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="login-user">用户名或邮箱</Label>
+          <div className="relative">
+            <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              id="login-user"
+              className="h-10 pl-9"
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
+              placeholder="输入用户名/邮箱"
+              autoComplete="username"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="login-pwd">密码</Label>
+          <div className="relative">
+            <LockKeyhole className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              id="login-pwd"
+              className="h-10 pl-9"
+              type="password"
+              value={pwd}
+              onChange={(e) => setPwd(e.target.value)}
+              placeholder="输入密码"
+              autoComplete="current-password"
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="login-auto"
+            checked={auto}
+            onCheckedChange={(checked) => setAuto(checked === true)}
+          />
+          <Label htmlFor="login-auto" className="text-muted-foreground">
+            自动登录（360 天）
+          </Label>
+        </div>
+        {error && <p className="text-sm text-destructive">{error}</p>}
+        <Button type="submit" size="lg" className="h-10 w-full" disabled={pending}>
+          登录
+        </Button>
+      </form>
+    </AuthLayout>
   )
 }

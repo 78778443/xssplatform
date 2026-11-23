@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { FolderKanban } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 import type { ProjectSummary } from '@/lib/types'
 import { ConfirmDelete } from '@/components/confirm-delete'
 import { EmptyState } from '@/components/empty-state'
@@ -28,7 +30,7 @@ export function ProjectTable({
   return (
     <div className="overflow-x-auto">
       <Table className="table-fixed">
-        <TableHeader>
+        <TableHeader className="bg-muted/40">
           <TableRow>
             <TableHead className="w-[22%]">项目名称</TableHead>
             <TableHead className="w-[42%]">项目描述</TableHead>
@@ -48,11 +50,23 @@ export function ProjectTable({
           {projects.map((project) => (
             <TableRow key={project.id}>
               <TableCell>
-                <Link to={`/project/${project.id}`}>{project.title}</Link>
+                <div className="flex items-center gap-2.5">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+                    <FolderKanban className="size-4" />
+                  </span>
+                  <Link
+                    to={`/project/${project.id}`}
+                    className="truncate font-medium text-foreground hover:text-primary hover:underline"
+                  >
+                    {project.title}
+                  </Link>
+                </div>
               </TableCell>
-              <TableCell className="truncate">{project.description}</TableCell>
-              <TableCell>{project.contentNum}</TableCell>
-              <TableCell>{formatDate(project.addTime)}</TableCell>
+              <TableCell className="truncate text-muted-foreground">{project.description}</TableCell>
+              <TableCell>
+                <Badge variant="secondary">{project.contentNum}</Badge>
+              </TableCell>
+              <TableCell className="text-xs text-muted-foreground tabular-nums">{formatDate(project.addTime)}</TableCell>
               <TableCell>
                 <ConfirmDelete onConfirm={() => onDelete(project.id)} />
               </TableCell>

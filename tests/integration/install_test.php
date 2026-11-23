@@ -31,14 +31,27 @@ test('installer creates config, database, admin hash and lock', function () use 
     $svc = new InstallService();
     assertFalse($svc->status()['installed']);
     assertTrue($svc->status()['configWritable'], 'config writable');
+
+    assertThrows(AppError::class, function () use ($svc, $cfg) {
+        $svc->install([
+            'dbHost' => $cfg['dbHost'],
+            'dbUser' => $cfg['dbUser'],
+            'dbPwd' => $cfg['dbPwd'],
+            'dbName' => 'xssplatform_install_test',
+            'username' => 'a<b',
+            'password' => 'pw123456',
+            'urlroot' => 'http://127.0.0.1:18081',
+        ]);
+    });
+
     $svc->install([
         'dbHost' => $cfg['dbHost'],
         'dbUser' => $cfg['dbUser'],
         'dbPwd' => $cfg['dbPwd'],
         'dbName' => 'xssplatform_install_test',
         'username' => 'admin2',
-        'password' => 'pw123456',
-        'urlroot' => 'http://127.0.0.1:18081',
+        'password' => 'p&ssw0rd',
+        'urlroot' => 'https://xss.example.com:8443',
     ]);
     assertTrue(file_exists($tmp . '/install/install.lock'), 'lock written');
     assertTrue(file_exists($tmp . '/config.php'), 'config written');
@@ -46,8 +59,16 @@ test('installer creates config, database, admin hash and lock', function () use 
     $db = new DB_Mysql();
     assertTrue($db->Connect($cfg['dbHost'], $cfg['dbUser'], $cfg['dbPwd'], 'xssplatform_install_test', 'utf8', 'oc_'), 'connect installed db');
     assertSame('admin2', $db->FirstValue('SELECT userName FROM oc_user ORDER BY id LIMIT 1'));
-    assertTrue(password_verify('pw123456', (string) $db->FirstValue('SELECT userPwd FROM oc_user ORDER BY id LIMIT 1')));
+    // Login applies StripStr before verifying, so the installer must hash the same transform.
+    $stored = (string) $db->FirstValue('SELECT userPwd FROM oc_user ORDER BY id LIMIT 1');
+    assertTrue(password_verify(addslashes(htmlspecialchars('p&ssw0rd', ENT_QUOTES)), $stored), 'stripped password verifies');
+    assertTrue(!password_verify('p&ssw0rd', $stored), 'raw password does not verify');
     assertSame(1, (int) $db->FirstValue('SELECT adminLevel FROM oc_user ORDER BY id LIMIT 1'));
+
+    // Seed module payloads must point at the configured root (scheme, host, port).
+    $moduleCode = (string) $db->FirstValue('SELECT code FROM oc_module ORDER BY id LIMIT 1');
+    assertTrue(str_contains($moduleCode, 'https://xss.example.com:8443/'), 'module url uses full urlroot');
+    assertTrue(!str_contains($moduleCode, 'xsser.me'), 'legacy demo origin replaced');
 
     assertThrows(AppError::class, function () use ($svc, $cfg) {
         $svc->install([

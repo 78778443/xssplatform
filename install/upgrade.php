@@ -3,6 +3,11 @@
  * Idempotent database upgrade for existing installations.
  * Usage: XSSP_CONFIG=/path/to/config.php php install/upgrade.php
  */
+if (PHP_SAPI !== 'cli') {
+    http_response_code(404);
+    exit;
+}
+
 define('ROOT_PATH', dirname(__DIR__));
 define('IN_OLDCMS', true);
 

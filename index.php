@@ -15,7 +15,18 @@ require_once ROOT_PATH . '/source/lib/FrontendShell.php';
 $installed = file_exists(ROOT_PATH . '/install/install.lock');
 $do = isset($_GET['do']) && is_string($_GET['do']) ? $_GET['do'] : '';
 
-if (!$installed || $do === '') {
+if (!$installed) {
+    // Fresh deployments go straight to the installer; the SPA cannot work yet.
+    $path = parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
+    if ($path !== '/install') {
+        header('Location: /install');
+        exit;
+    }
+    FrontendShell::render();
+    exit;
+}
+
+if ($do === '') {
     FrontendShell::render();
     exit;
 }

@@ -24,9 +24,12 @@ final class CodeService
         if (is_array($moduleIds) && $moduleIds !== []) {
             $ids = array_values(array_map('intval', $moduleIds));
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $params = $ids;
+            $params[] = (int) $project['userId'];
             $modules = $db->Dataset(
-                'SELECT * FROM ' . Tb('module') . ' WHERE id IN (' . $placeholders . ')',
-                $ids
+                'SELECT * FROM ' . Tb('module') . ' WHERE id IN (' . $placeholders . ')'
+                . ' AND (userId=? OR (isOpen=1 AND isAudit=1))',
+                $params
             );
             foreach ($modules as $module) {
                 $moduleCode = str_replace('{projectId}', (string) $project['urlKey'], (string) $module['code']);
