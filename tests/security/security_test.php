@@ -61,6 +61,16 @@ test('csrf, origin, auth, injection and install guards', function () {
     assertFalse(str_contains($r, 'javascript:alert(1)'), 'bad referer scheme rejected');
     assertTrue(str_contains($r, 'Location: http://127.0.0.1:18081'), 'fallback to urlroot');
 
+    // CLI maintenance scripts and tooling are not web-executable
+    foreach (['/scripts/keepsession.php', '/install/upgrade.php', '/tests/config.test.php', '/deploy/router.php', '/config.php'] as $u) {
+        $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' '{$base}{$u}'");
+        assertSame('404', trim($r), 'not web accessible: ' . $u);
+    }
+
+    // unknown API action
+    $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' '{$base}/api.php?action=nope'");
+    assertSame('404', trim($r), 'unknown action 404');
+
     // security headers
     $r = (string) shell_exec("curl -sS -i '{$base}/'");
     assertTrue(str_contains($r, 'X-Content-Type-Options: nosniff'), 'nosniff header');

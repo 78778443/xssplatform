@@ -110,6 +110,9 @@ bash tests/http/setup-installed.sh
 php tests/run.php tests/http tests/security
 kill $(cat /tmp/xssp-http-installed.pid)
 
+# 通知链路需要 MailHog（1025/8025）与 mock 钉钉（19090）
+bash tests/http/start-notify-services.sh
+
 # 前端开发与测试
 cd frontend
 npm install
@@ -120,6 +123,9 @@ npm run build        # 输出到仓库根 dist/（构建产物已入库）
 # 端到端测试与 README 截图（先启动 HTTP 测试环境）
 npx playwright test
 npx playwright test e2e/screenshots.spec.ts   # 重新生成 docs/screenshots/
+
+# 安装向导 UI 端到端（临时副本 + 18082，自带数据库清理）
+bash tests/http/install-ui-e2e.sh
 ```
 
 通知链路的集成测试需要 MailHog（`8025`）与 mock 钉钉端点（`19090`）；未启动时该用例会显示 SKIP。

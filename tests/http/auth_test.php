@@ -19,6 +19,14 @@ test('login sets a hardened cookie and session, logout protects csrf', function 
     $json = json_decode($r, true);
     assertSame('admin', $json['data']['user']['userName']);
 
+    // email login path
+    $r = (string) shell_exec("curl -sS -X POST '{$base}/api.php?action=login' -H 'Content-Type: application/json' -d '{\"user\":\"admin@example.com\",\"pwd\":\"pw123456\"}'");
+    assertTrue(str_contains($r, '"userName":"admin"'), 'email login');
+
+    // auto login issues a long-lived cookie
+    $r = (string) shell_exec("curl -sS -i -X POST '{$base}/api.php?action=login' -H 'Content-Type: application/json' -d '{\"user\":\"admin\",\"pwd\":\"pw123456\",\"auto\":1}'");
+    assertTrue(preg_match('/Max-Age=(\d+)/', $r, $m) === 1 && (int) $m[1] > 86400, 'auto login long expiry');
+
     $r = (string) shell_exec("curl -sS -b {$jar} -X POST '{$base}/api.php?action=logout' -H 'X-CSRF-Token: {$csrf}'");
     assertTrue(str_contains($r, '"ok":true'), 'logout');
     $r = (string) shell_exec("curl -sS -b {$jar} '{$base}/api.php?action=session'");

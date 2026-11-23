@@ -312,7 +312,7 @@ final class ProjectService
         return [];
     }
 
-    public function deleteContent(array $input): int
+    public function deleteContent(array $input): array
     {
         $id = (int) ($input['id'] ?? 0);
         $user = $this->requireUser();
@@ -322,13 +322,14 @@ final class ProjectService
             . ' p ON p.id=pc.projectId WHERE p.userId=? AND pc.id=?',
             [$user->userId, $id]
         );
-        if (!empty($content)) {
-            $db->Execute('DELETE FROM ' . Tb('project_content') . ' WHERE id=?', [$id]);
+        if (empty($content)) {
+            return ['deleted' => 0];
         }
-        return 1;
+        $db->Execute('DELETE FROM ' . Tb('project_content') . ' WHERE id=?', [$id]);
+        return ['deleted' => 1];
     }
 
-    public function deleteContents(array $input): int
+    public function deleteContents(array $input): array
     {
         $raw = $input['ids'] ?? [];
         if (is_string($raw)) {
@@ -337,6 +338,7 @@ final class ProjectService
         $ids = is_array($raw) ? array_map('intval', $raw) : [];
         $user = $this->requireUser();
         $db = db();
+        $deleted = 0;
         foreach ($ids as $id) {
             $content = $db->FirstRow(
                 'SELECT pc.projectId FROM ' . Tb('project_content') . ' pc INNER JOIN ' . Tb('project')
@@ -345,8 +347,9 @@ final class ProjectService
             );
             if (!empty($content)) {
                 $db->Execute('DELETE FROM ' . Tb('project_content') . ' WHERE id=?', [$id]);
+                $deleted++;
             }
         }
-        return 1;
+        return ['deleted' => $deleted];
     }
 }

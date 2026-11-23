@@ -29,8 +29,23 @@ test('receiver endpoints keep legacy behaviour', function () {
     assertSame('http://example.com', $d[0]['url']);
     assertSame('abc', $d[0]['cookie']);
 
+    // domain filter narrows the exported rows
+    $r = (string) shell_exec("curl -sS '{$base}/index.php?do=do&auth={$p['authCode']}&domain=example.com'");
+    assertSame(1, count(json_decode($r, true)), 'domain filter keeps matching rows');
+    $r = (string) shell_exec("curl -sS '{$base}/index.php?do=do&auth={$p['authCode']}&domain=other.example'");
+    assertSame([], json_decode($r, true), 'domain filter drops non-matching rows');
+
     $r = (string) shell_exec("curl -sS -i '{$base}/index.php?do=keepsession&id={$urlKey}&url=http%3A%2F%2Fexample.com&cookie=abc'");
     assertTrue(str_contains($r, '200'), 'keepsession 200');
+
+    $db = new mysqli('127.0.0.1', 'root', 'test', 'xssplatform_http', 33061);
+    $hash = md5('http://example.com' . 'abc');
+    $count = (int) $db->query("SELECT COUNT(*) c FROM oc_keepsession WHERE hash='" . $db->real_escape_string($hash) . "'")->fetch_assoc()['c'];
+    assertSame(1, $count, 'keepsession row stored');
+    shell_exec("curl -sS '{$base}/index.php?do=keepsession&id={$urlKey}&url=http%3A%2F%2Fexample.com&cookie=abc'");
+    $count = (int) $db->query("SELECT COUNT(*) c FROM oc_keepsession WHERE hash='" . $db->real_escape_string($hash) . "'")->fetch_assoc()['c'];
+    assertSame(1, $count, 'keepsession deduplicates');
+    $db->close();
 
     // dedupe: second hit with the same cookie increments instead of inserting
     $r = (string) shell_exec("curl -sS -i '{$base}/index.php?do=api&id={$urlKey}&cookie=abc&location=http%3A%2F%2Fexample.com&toplocation=http%3A%2F%2Fexample.com' -H 'Referer: http://example.com/page'");

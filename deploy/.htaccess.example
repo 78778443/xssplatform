@@ -10,6 +10,7 @@ RewriteRule ^register/(.*?)$ /index.php?do=register&key=$1 [L]
 
 # Never expose source, tests, tooling or VCS data
 RewriteRule ^(\.git|tests|scripts|deploy|frontend)/ - [F,L]
+RewriteRule ^config\.php$ - [F,L]
 
 # SPA deep links fall back to index.php
 RewriteCond %{REQUEST_FILENAME} !-f
