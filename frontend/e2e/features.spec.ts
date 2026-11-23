@@ -146,3 +146,9 @@ test('theme toggle switches to dark and persists', async ({ page }) => {
   await page.reload()
   await expect(page.locator('html')).toHaveClass(/dark/)
 })
+
+test('an already logged-in visitor is redirected away from /login', async ({ page }) => {
+  await login(page)
+  await page.goto('/login')
+  await expect(page).toHaveURL(/\/$/)
+})

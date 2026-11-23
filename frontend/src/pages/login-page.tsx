@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { ApiError, api } from '@/lib/api'
+import { useSession } from '@/lib/session'
 import { loginSchema } from '@/lib/validation'
 import { Button } from '@/components/ui/button'
 import { AuthLayout } from '@/components/layout/auth-layout'
@@ -13,6 +14,7 @@ import { LockKeyhole, Mail } from 'lucide-react'
 export function LoginPage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { data: session } = useSession()
   const [user, setUser] = useState('')
   const [pwd, setPwd] = useState('')
   const [auto, setAuto] = useState(false)
@@ -36,10 +38,19 @@ export function LoginPage() {
       await queryClient.invalidateQueries({ queryKey: ['session'] })
       navigate('/')
     } catch (err) {
+      if (err instanceof ApiError && err.code === 'already_logged_in') {
+        await queryClient.invalidateQueries({ queryKey: ['session'] })
+        navigate('/')
+        return
+      }
       setError(err instanceof Error ? err.message : '登录失败')
     } finally {
       setPending(false)
     }
+  }
+
+  if (session?.user) {
+    return <Navigate to="/" replace />
   }
 
   return (
