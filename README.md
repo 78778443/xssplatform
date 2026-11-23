@@ -148,11 +148,21 @@ tests/                 PHP 测试、Playwright 用例与 fixtures
 ## 安全说明
 
 - 所有 SQL 走预处理语句
-- 写操作使用 POST + `X-CSRF-Token`，并校验同源
-- 会话 Cookie 为 HttpOnly + SameSite=Lax，HTTPS 下自动 Secure
-- 密码使用 `password_hash`，兼容旧 md5 并在登录时迁移
+- 写操作使用 POST + `X-CSRF-Token`，并校验同源；旧表单写操作同样要求 POST、同源和表单 token
+- 登录按「账号 + IP」与「IP」双维度限流：连续失败 5 次锁定 15 分钟，同一 IP 15 分钟内失败 25 次同样锁定；注册与注册预检查也有限流
+- 会话 Cookie 为 HttpOnly + SameSite=Lax，HTTPS 下自动 Secure；登录成功后重新生成会话标识
+- 密码使用 `password_hash`，兼容旧 md5 并在登录时迁移；未知账号也会执行一次哈希校验，避免通过响应时间枚举账号
+- 用户名和邮箱建立唯一索引，防止并发注册产生重复账号；`install/upgrade.php` 会为老库补齐索引和限流表
 - 安装完成后 `install.submit` 等安装接口返回 403
-- 收包端点的回跳地址只接受 http/https，空 Referer 回落到站点根
+- 源码、测试、部署脚本、SQL 导出与文档在 nginx / Apache / 内置服务器配置中均禁止直接访问
+- 收包端点的回跳地址只接受 http/https，空 Referer 回落到站点根；keep-session 出站请求限制为公网 http/https
+- 页面默认关闭错误回显并移除 `X-Powered-By`，HTML 响应带 CSP、`X-Frame-Options` 等安全头
+
+## 作者与合规提醒
+
+本项目由汤青松维护，公众号「青松阁主」，微信 `songboy8888`。
+
+本项目仅面向**已获得明确授权**的安全测试、教学与研究：请勿对未授权目标使用；使用前请确认已取得书面授权，并遵守所在地法律法规及目标系统所在平台的服务条款。因未授权使用产生的一切后果由使用者自行承担。
 
 ## 许可
 

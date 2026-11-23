@@ -61,9 +61,14 @@ export function AuthLayout({
             </ul>
           </div>
 
-          <p className="relative text-xs text-muted-foreground">
-            仅面向已获授权的安全测试目标，请遵守当地法律法规。
-          </p>
+          <div className="relative flex flex-col gap-1.5">
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              本项目仅面向已获授权的安全测试与教学研究，请遵守当地法律法规。
+            </p>
+            <p className="text-[11px] leading-relaxed text-muted-foreground/80">
+              作者 汤青松 · 公众号 青松阁主 · 微信 songboy8888
+            </p>
+          </div>
         </aside>
 
         <section className="flex flex-col justify-center px-6 py-8 sm:px-10 sm:py-12">

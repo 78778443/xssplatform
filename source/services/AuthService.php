@@ -26,6 +26,7 @@ final class AuthService
         if ($user->userId > 0) {
             throw new AppError('already_logged_in', 400, '已经登录');
         }
+        $rawUsername = trim((string) ($input['user'] ?? ''));
         $username = StripStr((string) ($input['user'] ?? ''));
         $password = (string) ($input['pwd'] ?? '');
         if ($username === '') {
@@ -34,14 +35,66 @@ final class AuthService
         if ($password === '') {
             throw new AppError('login_empty_pwd', 400, '密码不能为空');
         }
+
+        $identifier = $this->normalizeIdentifier($rawUsername);
+        $accountBucket = RateLimiter::bucket('login-account', $identifier, IP());
+        $ipBucket = RateLimiter::bucket('login-ip', IP());
+        $retryAfter = max(
+            RateLimiter::retryAfter($accountBucket),
+            RateLimiter::retryAfter($ipBucket)
+        );
+        if ($retryAfter > 0) {
+            throw $this->throttled($retryAfter);
+        }
+
         $auto = (int) ($input['auto'] ?? 0) === 1 ? 1 : 0;
         if (!$user->login($username, $password, $auto)) {
+            $retryAfter = max(
+                RateLimiter::hit($accountBucket, 5, 900, 900),
+                RateLimiter::hit($ipBucket, 25, 900, 900)
+            );
+            if ($retryAfter > 0) {
+                throw $this->throttled($retryAfter);
+            }
             throw new AppError('login_failed', 400, '登录失败,请检查用户/邮箱或密码');
         }
+        RateLimiter::clear($accountBucket);
         return [
             'user' => $user->sessionUser(),
             'csrf' => $user->token,
         ];
+    }
+
+    private function normalizeIdentifier(string $value): string
+    {
+        return function_exists('mb_strtolower')
+            ? mb_strtolower($value, 'UTF-8')
+            : strtolower($value);
+    }
+
+    private function enforceRate(string $scope, int $limit, int $window, int $block): void
+    {
+        $bucket = RateLimiter::bucket($scope, IP());
+        $retryAfter = RateLimiter::retryAfter($bucket);
+        if ($retryAfter === 0) {
+            $retryAfter = RateLimiter::hit($bucket, $limit, $window, $block);
+        }
+        if ($retryAfter > 0) {
+            throw $this->throttled($retryAfter);
+        }
+    }
+
+    private function throttled(int $retryAfter): AppError
+    {
+        $retryAfter = max(1, $retryAfter);
+        if (!headers_sent()) {
+            header('Retry-After: ' . $retryAfter);
+        }
+        return new AppError(
+            'too_many_attempts',
+            429,
+            '尝试次数过多，请 ' . $retryAfter . ' 秒后再试'
+        );
     }
 
     public function logout(): array
@@ -52,6 +105,7 @@ final class AuthService
 
     public function registerCheck(array $input): array
     {
+        $this->enforceRate('register-check-ip', 120, 600, 300);
         $db = db();
         $username = StripStr((string) ($input['user'] ?? ''));
         $email = StripStr((string) ($input['email'] ?? ''));
@@ -82,6 +136,7 @@ final class AuthService
         if ($user->userId > 0) {
             throw new AppError('already_logged_in', 400, '您已登录,不能进行注册');
         }
+        $this->enforceRate('register-ip', 60, 3600, 900);
 
         $username = StripStr((string) ($input['user'] ?? ''));
         $email = StripStr((string) ($input['email'] ?? ''));
@@ -118,12 +173,20 @@ final class AuthService
             throw new AppError('email_exists', 400, "邮箱{$email}已存在");
         }
 
-        $id = $db->Insert(Tb('user'), [
-            'userName' => $username,
-            'userPwd' => password_hash(StripStr($rawPwd), PASSWORD_DEFAULT),
-            'email' => $email,
-            'addTime' => time(),
-        ]);
+        try {
+            $id = $db->Insert(Tb('user'), [
+                'userName' => $username,
+                'userPwd' => password_hash(StripStr($rawPwd), PASSWORD_DEFAULT),
+                'email' => $email,
+                'addTime' => time(),
+            ]);
+        } catch (Throwable $e) {
+            // The unique indexes can still race with a concurrent registration.
+            if (stripos($e->getMessage(), 'Duplicate') !== false) {
+                throw new AppError('username_exists', 400, '用户名或邮箱已被注册');
+            }
+            throw $e;
+        }
         if ($id <= 0) {
             throw new AppError('register_failed', 500, '出错了,请与管理员联系');
         }

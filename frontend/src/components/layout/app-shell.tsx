@@ -62,7 +62,10 @@ function SidebarNote() {
         仅限授权测试
       </div>
       <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-        请确保已获得目标系统的明确授权，并遵守当地法律法规。
+        请确认已获得目标系统的明确授权，仅用于合法的安全测试与教学研究，并遵守当地法律法规。
+      </p>
+      <p className="mt-2.5 border-t border-primary/10 pt-2.5 text-[11px] leading-relaxed text-muted-foreground/80">
+        作者 汤青松 · 公众号 青松阁主 · 微信 songboy8888
       </p>
     </div>
   )

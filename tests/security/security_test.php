@@ -8,9 +8,21 @@ test('csrf, origin, auth, injection and install guards', function () {
     $r = (string) shell_exec("curl -sS -c {$jar} -X POST '{$base}/api.php?action=login' -H 'Content-Type: application/json' -d '{\"user\":\"admin\",\"pwd\":\"pw123456\"}'");
     $csrf = json_decode($r, true)['data']['csrf'];
 
+    // state-changing actions cannot be triggered by a GET / image tag
+    $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' '{$base}/api.php?action=login&user=admin&pwd=pw123456'");
+    assertSame('405', trim($r), 'GET login rejected');
+    $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' '{$base}/api.php?action=register.check&user=admin'");
+    assertSame('405', trim($r), 'GET register check rejected');
+
     // missing CSRF
     $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' -b {$jar} -X POST '{$base}/api.php?action=project.create' -H 'Content-Type: application/json' -d '{\"title\":\"x\",\"description\":\"\"}'");
     assertSame('419', trim($r), 'missing csrf rejected');
+
+    // authenticated legacy writes require the old form token too
+    $r = (string) shell_exec("curl -sS -i -b {$jar} -X POST '{$base}/index.php?do=user&act=submit' -d 'emsg=0&fmsg=0'");
+    assertTrue(str_contains($r, 'error=operation_failed'), 'legacy settings write requires token');
+    $r = (string) shell_exec("curl -sS -i -b {$jar} -X POST '{$base}/admin/index.php?do=admin_module&act=audit' -d 'id=1&isAudit=1'");
+    assertTrue(str_contains($r, 'error=operation_failed'), 'legacy admin audit requires token');
 
     // cross origin
     $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' -b {$jar} -X POST '{$base}/api.php?action=project.create' -H 'Origin: http://evil.com' -H 'X-CSRF-Token: {$csrf}' -H 'Content-Type: application/json' -d '{\"title\":\"x\",\"description\":\"\"}'");
@@ -61,8 +73,13 @@ test('csrf, origin, auth, injection and install guards', function () {
     assertFalse(str_contains($r, 'javascript:alert(1)'), 'bad referer scheme rejected');
     assertTrue(str_contains($r, 'Location: http://127.0.0.1:18081'), 'fallback to urlroot');
 
-    // CLI maintenance scripts and tooling are not web-executable
-    foreach (['/scripts/keepsession.php', '/install/upgrade.php', '/tests/config.test.php', '/deploy/router.php', '/config.php'] as $u) {
+    // CLI maintenance scripts, source, schema dumps and tooling are not web-accessible
+    foreach ([
+        '/scripts/keepsession.php', '/install/upgrade.php', '/install/install.lock',
+        '/tests/config.test.php', '/deploy/router.php', '/config.php',
+        '/xssplatform.sql', '/source/lib/Api.php', '/docs/screenshots/dashboard.png',
+        '/README.md', '/.env', '/init.php',
+    ] as $u) {
         $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' '{$base}{$u}'");
         assertSame('404', trim($r), 'not web accessible: ' . $u);
     }
@@ -88,8 +105,17 @@ test('csrf, origin, auth, injection and install guards', function () {
     $r = (string) shell_exec("curl -sS {$lh} -b {$lhJar} -H 'Origin: http://evil.example' -X POST 'http://localhost:18081/api.php?action=project.create' -H 'X-CSRF-Token: {$lhCsrf}' -H 'Content-Type: application/json' -d '{\"title\":\"x\",\"description\":\"\"}'");
     assertTrue(str_contains($r, 'no_permission'), 'cross origin still rejected with alternate host');
 
+    // path traversal must not reach config.php
+    $r = (string) shell_exec("curl -sS --path-as-is -o /dev/null -w '%{http_code}' '{$base}/../config.php'");
+    assertFalse(trim($r) === '200', 'traversal blocked');
+
     // security headers
     $r = (string) shell_exec("curl -sS -i '{$base}/'");
     assertTrue(str_contains($r, 'X-Content-Type-Options: nosniff'), 'nosniff header');
     assertTrue(str_contains($r, 'Content-Security-Policy'), 'csp header');
+    assertTrue(stripos($r, 'X-Powered-By:') === false, 'php version header removed');
+
+    $r = (string) shell_exec("curl -sS -i '{$base}/api.php?action=meta'");
+    assertTrue(str_contains($r, 'X-Frame-Options: DENY'), 'api frame header');
+    assertTrue(stripos($r, 'X-Powered-By:') === false, 'api php version header removed');
 });

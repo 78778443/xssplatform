@@ -57,6 +57,41 @@ if ($col === false) {
     $db->Execute('ALTER TABLE `' . $userTable . '` MODIFY feishu varchar(500) NULL');
 }
 
+// Rate limiting for login and registration.
+$rateTable = Tb('rate_limit');
+$db->Execute(
+    'CREATE TABLE IF NOT EXISTS `' . $rateTable . '` ('
+    . '`bucketKey` varchar(191) NOT NULL,'
+    . '`attempts` int(11) NOT NULL DEFAULT 0,'
+    . '`windowStart` int(11) NOT NULL DEFAULT 0,'
+    . '`blockedUntil` int(11) NOT NULL DEFAULT 0,'
+    . '`updateTime` int(11) NOT NULL DEFAULT 0,'
+    . 'PRIMARY KEY (`bucketKey`)'
+    . ') ENGINE=MyISAM DEFAULT CHARSET=utf8'
+);
+
+// Usernames and e-mail addresses must stay unique even under concurrent registration.
+foreach (['uniq_userName' => 'userName', 'uniq_email' => 'email'] as $indexName => $column) {
+    $index = $db->FirstRow(
+        'SELECT INDEX_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? AND INDEX_NAME=?',
+        [$schema, $userTable, $indexName]
+    );
+    if ($index !== false) {
+        continue;
+    }
+    $duplicates = (int) $db->FirstValue(
+        'SELECT COUNT(*) FROM (SELECT `' . $column . '` FROM `' . $userTable . '`'
+        . ' WHERE `' . $column . '` IS NOT NULL AND `' . $column . "`<>''"
+        . ' GROUP BY `' . $column . '` HAVING COUNT(*)>1) duplicates'
+    );
+    if ($duplicates > 0) {
+        echo "skipped {$indexName}: duplicate {$column} values need manual cleanup\n";
+        continue;
+    }
+    $db->Execute('ALTER TABLE `' . $userTable . '` ADD UNIQUE KEY `' . $indexName . '` (`' . $column . '`)');
+    echo "added {$indexName} to {$userTable}\n";
+}
+
 // The Wooyun coin prize invite category was removed; invites are now a single list.
 $inviteTable = Tb('invite_reg');
 $col = $db->FirstRow(

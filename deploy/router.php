@@ -7,16 +7,23 @@
 $root = dirname(__DIR__);
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $path = is_string($path) ? $path : '/';
+if ($path === '' || str_contains($path, '..') || str_contains($path, "\0")) {
+    http_response_code(400);
+    echo 'Bad Request';
+    return;
+}
 
 // Same deny-list as the production examples: tooling, tests and config are not web content.
-foreach (['/tests/', '/scripts/', '/deploy/', '/frontend/', '/.git/'] as $prefix) {
+foreach (['/tests/', '/scripts/', '/deploy/', '/frontend/', '/.git/', '/source/', '/docs/'] as $prefix) {
     if (str_starts_with($path, $prefix)) {
         http_response_code(404);
         echo 'Not Found';
         return;
     }
 }
-if ($path === '/config.php') {
+if (preg_match('~^/(?:config\.php.*|xssplatform\.sql|init\.php|composer\.(?:json|lock)|package(?:-lock)?\.json|README\.md)$~i', $path)
+    || preg_match('~^/\.~', $path)
+    || preg_match('~^/install/(?:upgrade\.php|install\.lock)$~i', $path)) {
     http_response_code(404);
     echo 'Not Found';
     return;

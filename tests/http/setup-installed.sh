@@ -12,7 +12,7 @@ rm -rf /tmp/xssp-http-installed
 rsync -a --exclude .git --exclude frontend/node_modules --exclude .superpowers ./ /tmp/xssp-http-installed/
 rm -f /tmp/xssp-http-installed/config.php /tmp/xssp-http-installed/install/install.lock
 cd /tmp/xssp-http-installed
-setsid php -S 127.0.0.1:18081 deploy/router.php > /tmp/xssp-http-installed.log 2>&1 &
+setsid php -d opcache.enable=0 -S 127.0.0.1:18081 deploy/router.php > /tmp/xssp-http-installed.log 2>&1 &
 echo $! > /tmp/xssp-http-installed.pid
 sleep 1
 

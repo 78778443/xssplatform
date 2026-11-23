@@ -8,9 +8,11 @@ RewriteRule ^([0-9a-zA-Z]{6})$ /index.php?do=code&urlKey=$1 [L]
 RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$ /index.php?do=do&auth=$1&domain=$3 [L]
 RewriteRule ^register/(.*?)$ /index.php?do=register&key=$1 [L]
 
-# Never expose source, tests, tooling or VCS data
-RewriteRule ^(\.git|tests|scripts|deploy|frontend)/ - [F,L]
-RewriteRule ^config\.php$ - [F,L]
+# Never expose source, tests, tooling, schema dumps or VCS data
+Options -Indexes
+RewriteRule ^(\.git|tests|scripts|deploy|frontend|source|docs)/ - [F,L]
+RewriteRule ^(config\.php.*|xssplatform\.sql|init\.php|composer\.(json|lock)|package(-lock)?\.json|README\.md)$ - [F,L]
+RewriteRule ^install/(upgrade\.php|install\.lock)$ - [F,L]
 
 # SPA deep links fall back to index.php
 RewriteCond %{REQUEST_FILENAME} !-f

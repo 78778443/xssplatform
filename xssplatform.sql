@@ -151,6 +151,19 @@ CREATE TABLE `oc_project_content` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Table structure for oc_rate_limit
+-- ----------------------------
+DROP TABLE IF EXISTS `oc_rate_limit`;
+CREATE TABLE `oc_rate_limit` (
+  `bucketKey` varchar(191) NOT NULL,
+  `attempts` int(11) NOT NULL DEFAULT '0',
+  `windowStart` int(11) NOT NULL DEFAULT '0',
+  `blockedUntil` int(11) NOT NULL DEFAULT '0',
+  `updateTime` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`bucketKey`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Table structure for oc_remind
 -- ----------------------------
 DROP TABLE IF EXISTS `oc_remind`;
@@ -220,7 +233,9 @@ CREATE TABLE `oc_user` (
   `hotNum` int(11) DEFAULT '0',
   `loginTime` int(11) DEFAULT '0',
   `addTime` int(11) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_userName` (`userName`),
+  UNIQUE KEY `uniq_email` (`email`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------

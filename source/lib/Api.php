@@ -18,6 +18,19 @@ final class Api
 
             $input = self::parseInput($input, $server, $get, $post);
 
+            $method = strtoupper((string) ($server['REQUEST_METHOD'] ?? 'GET'));
+            $postActions = [
+                'login', 'logout', 'register.check', 'register.submit',
+                'project.create', 'project.setcode.save', 'project.delete',
+                'project.contents.delete', 'project.contents.deleteMany',
+                'module.create', 'module.save', 'module.delete',
+                'user.settings.save', 'user.invite.create', 'admin.module.audit',
+                'install.testDb', 'install.submit',
+            ];
+            if (in_array($action, $postActions, true) && $method !== 'POST') {
+                throw new AppError('method_not_allowed', 405, '请使用 POST 提交');
+            }
+
             if (!self::sameOrigin($server)) {
                 throw new AppError('no_permission', 403, '没有操作权限');
             }
@@ -290,9 +303,12 @@ final class Api
     public static function respond(array $data, int $status = 200): void
     {
         http_response_code($status);
+        header_remove('X-Powered-By');
         header('Content-Type: application/json; charset=utf-8');
         header('Cache-Control: no-store');
         header('X-Content-Type-Options: nosniff');
+        header('X-Frame-Options: DENY');
+        header('Referrer-Policy: no-referrer');
         echo json_encode(['ok' => true, 'data' => $data], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
@@ -300,9 +316,12 @@ final class Api
     public static function respondError(AppError $error): void
     {
         http_response_code($error->httpStatus);
+        header_remove('X-Powered-By');
         header('Content-Type: application/json; charset=utf-8');
         header('Cache-Control: no-store');
         header('X-Content-Type-Options: nosniff');
+        header('X-Frame-Options: DENY');
+        header('Referrer-Policy: no-referrer');
         $payload = [
             'ok' => false,
             'error' => [

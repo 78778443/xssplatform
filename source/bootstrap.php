@@ -6,11 +6,18 @@ if (!defined('IN_OLDCMS')) {
     define('IN_OLDCMS', true);
 }
 
+if (PHP_SAPI !== 'cli') {
+    // Never print stack traces or framework paths to visitors; use the error log.
+    ini_set('display_errors', '0');
+    header_remove('X-Powered-By');
+}
+
 require_once ROOT_PATH . '/source/lib/Config.php';
 require_once ROOT_PATH . '/source/lib/Security.php';
 require_once ROOT_PATH . '/source/lib/Display.php';
 require_once ROOT_PATH . '/source/lib/Validate.php';
 require_once ROOT_PATH . '/source/lib/Notify.php';
+require_once ROOT_PATH . '/source/lib/RateLimiter.php';
 
 Config::load(getenv('XSSP_CONFIG') ?: ROOT_PATH . '/config.php');
 

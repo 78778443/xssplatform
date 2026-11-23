@@ -26,6 +26,11 @@ final class LegacyRouter
             self::redirect($target);
         } catch (AppError $e) {
             self::redirectBack($do, $act, $input, $e->errorCode);
+        } catch (Throwable $e) {
+            error_log('legacy action error: ' . $e->getMessage());
+            http_response_code(500);
+            header('Content-Type: text/plain; charset=utf-8');
+            echo 'Internal Server Error';
         }
     }
 
@@ -45,8 +50,10 @@ final class LegacyRouter
         if ($method !== 'POST') {
             throw new AppError('method_not_allowed', 405, '请使用 POST 提交');
         }
-        if (($do === 'project' && $act === 'create_submit')
-            || ($do === 'module' && $act === 'create_submit')) {
+        // Unauthenticated login/registration cannot carry a session token yet.
+        // Every authenticated legacy write must present the old form token.
+        if ($do === 'project' || $do === 'module' || $do === 'user' || $do === 'admin_module'
+            || ($do === 'login' && $act === 'logout')) {
             self::requireToken();
         }
     }

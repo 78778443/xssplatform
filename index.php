@@ -6,6 +6,9 @@ if (version_compare(PHP_VERSION, '8.0', '<')) {
     die('此程序需PHP版本大于8.0 !');
 }
 
+ini_set('display_errors', '0');
+header_remove('X-Powered-By');
+
 define('ROOT_PATH', dirname(__FILE__));
 define('IN_OLDCMS', true);
 

@@ -3,6 +3,9 @@
  * authtest.php Basic Auth 钓鱼端点
  * ----------------------------------------------------------------
  */
+ini_set('display_errors', '0');
+header_remove('X-Powered-By');
+
 define('ROOT_PATH', dirname(__FILE__));
 define('IN_OLDCMS', true);
 

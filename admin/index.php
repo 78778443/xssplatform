@@ -24,10 +24,18 @@ if ($act === 'audit' && $do === 'admin_module') {
         if (!LegacyRouter::sameOrigin($_SERVER)) {
             throw new AppError('no_permission', 403, '没有操作权限');
         }
+        $token = (string) ($_POST['token'] ?? '');
+        if (!current_user()->checkToken($token)) {
+            throw new AppError('operation_failed', 419, '操作失败');
+        }
         (new AdminService())->audit(array_merge($_GET, $_POST));
         header('Location: /admin/modules?ok=audited');
     } catch (AppError $e) {
         header('Location: /admin/modules?error=' . rawurlencode($e->errorCode));
+    } catch (Throwable $e) {
+        error_log('legacy admin error: ' . $e->getMessage());
+        http_response_code(500);
+        echo 'Internal Server Error';
     }
     exit;
 }

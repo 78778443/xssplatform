@@ -26,6 +26,18 @@ test('upgrade widens password and session columns idempotently', function () use
         $db->Execute('ALTER TABLE oc_invite_reg ADD COLUMN isWooyun tinyint(1) NOT NULL DEFAULT 0');
     }
 
+    // Simulate an older installation without the hardening indexes/table.
+    foreach (['uniq_userName', 'uniq_email'] as $indexName) {
+        $idx = $db->FirstRow(
+            "SELECT INDEX_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? AND TABLE_NAME='oc_user' AND INDEX_NAME=?",
+            [$cfg['database'], $indexName]
+        );
+        if ($idx !== false) {
+            $db->Execute('ALTER TABLE oc_user DROP INDEX `' . $indexName . '`');
+        }
+    }
+    $db->Execute('DROP TABLE IF EXISTS oc_rate_limit');
+
     $cmd = 'XSSP_CONFIG=' . escapeshellarg(realpath(__DIR__ . '/../config.test.php'))
         . ' php ' . escapeshellarg(dirname(__DIR__, 2) . '/install/upgrade.php') . ' 2>&1';
     shell_exec($cmd);
@@ -51,6 +63,18 @@ test('upgrade widens password and session columns idempotently', function () use
         [$cfg['database']]
     );
     assertTrue($col === false, 'removed wooyun invite column dropped');
+    foreach (['uniq_userName', 'uniq_email'] as $indexName) {
+        $idx = $db->FirstRow(
+            "SELECT INDEX_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=? AND TABLE_NAME='oc_user' AND INDEX_NAME=?",
+            [$cfg['database'], $indexName]
+        );
+        assertTrue($idx !== false, 'unique index added: ' . $indexName);
+    }
+    $rate = $db->FirstRow(
+        "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME='oc_rate_limit'",
+        [$cfg['database']]
+    );
+    assertTrue($rate !== false, 'rate limit table created');
 
     // second run must be a no-op, not an error
     $out = shell_exec($cmd);

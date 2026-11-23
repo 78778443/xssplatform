@@ -10,6 +10,10 @@ if (!defined('IN_OLDCMS')) {
 
 class User
 {
+    // Compared against when the account does not exist so response time does
+    // not reveal whether a username is registered.
+    private const DUMMY_HASH = '$2y$10$6ZfVUEMDSxuxQK5Q0nhjjOPD/Rh084JSBHuy.0n7XiW35yZFf4tfe';
+
     public int $userId = 0;
     public int $adminLevel = 0;
     public string $userName = '';
@@ -78,6 +82,7 @@ class User
             [$username]
         );
         if (empty($row)) {
+            password_verify($password, self::DUMMY_HASH);
             return false;
         }
 
@@ -85,6 +90,11 @@ class User
         $ok = password_verify($password, $stored);
         if (!$ok && preg_match('/^[a-f0-9]{32}$/i', $stored) && hash_equals(OCEncrypt($password), $stored)) {
             $ok = true;
+            $this->db->Execute(
+                'UPDATE ' . $this->tbUser . ' SET userPwd=? WHERE id=?',
+                [password_hash($password, PASSWORD_DEFAULT), (int) $row['id']]
+            );
+        } elseif ($ok && password_needs_rehash($stored, PASSWORD_DEFAULT)) {
             $this->db->Execute(
                 'UPDATE ' . $this->tbUser . ' SET userPwd=? WHERE id=?',
                 [password_hash($password, PASSWORD_DEFAULT), (int) $row['id']]
