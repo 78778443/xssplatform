@@ -22,4 +22,5 @@ result=$(curl -sS -X POST 'http://127.0.0.1:18081/api.php?action=install.submit'
   -H 'Content-Type: application/json' \
   -d '{"dbHost":"127.0.0.1:33061","dbUser":"root","dbPwd":"test","dbName":"xssplatform_http","username":"admin","password":"pw123456"}')
 echo "$result" | grep -q '"ok":true' || { echo "install failed: $result"; exit 1; }
+php "$(dirname "$0")/patch-notify-config.php" >/dev/null
 echo "installed test server ready"

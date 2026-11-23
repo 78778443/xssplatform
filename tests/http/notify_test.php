@@ -2,6 +2,13 @@
 require __DIR__ . '/../lib.php';
 
 test('receiver notifications use smtp without leaking debug output', function () {
+    $mailhog = @fsockopen('127.0.0.1', 8025, $errno, $errstr, 2);
+    $mock = @fsockopen('127.0.0.1', 19090, $errno, $errstr, 2);
+    if (!is_resource($mailhog) || !is_resource($mock)) {
+        skipTest('MailHog (8025) or mock DingTalk (19090) not running');
+    }
+    fclose($mailhog);
+    fclose($mock);
     $base = 'http://127.0.0.1:18081';
     $jar = '/tmp/xssp-notify.cookies';
     @unlink($jar);

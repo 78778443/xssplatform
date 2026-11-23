@@ -1,30 +1,38 @@
 ## 路由重写范例
+
+前端为单页应用，收包端点必须保持原有重写规则，其余路径回落到 index.php。
+
 ### .htaccess方式
 
-文件写入以下代码：
 RewriteEngine On
-RewriteRule ^([0-9a-zA-Z]{6})$ /xss/index.php?do=code&urlKey=$1 [L]
-RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$  /xss/index.php?do=do&auth=$1&domain=$3 [L]
-RewriteRule ^register/(.*?)$ /xss/index.php?do=register&key=$1 [L]
-RewriteRule ^register-validate/(.*?)$ /xss/index.php?do=register&act=validate&key=$1 [L]
-RewriteRule ^login$ /xss/index.php?do=login [L]
-
-
-
+RewriteRule ^([0-9a-zA-Z]{6})$ /index.php?do=code&urlKey=$1 [L]
+RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$ /index.php?do=do&auth=$1&domain=$3 [L]
+RewriteRule ^register/(.*?)$ /index.php?do=register&key=$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
 
 ### apache方式
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
 RewriteRule ^([0-9a-zA-Z]{6})$ /index.php?do=code&urlKey=$1 [L]
-RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$  /index.php?do=do&auth=$1&domain=$3 [L]
+RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$ /index.php?do=do&auth=$1&domain=$3 [L]
 RewriteRule ^register/(.*?)$ /index.php?do=register&key=$1 [L]
-RewriteRule ^register-validate/(.*?)$ /index.php?do=register&act=validate&key=$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
 </IfModule>
 
+### nginx方式
 
-#### nginx方式
 rewrite "^/([0-9a-zA-Z]{6})$" /index.php?do=code&urlKey=$1 last;
 rewrite "^/do/auth/(\w+?)(/domain/([\w\.]+?))?$" /index.php?do=do&auth=$1&domain=$3 last;
 rewrite "^/register/(.*?)$" /index.php?do=register&key=$1 last;
-rewrite "^/register-validate/(.*?)$" /index.php?do=register&act=validate&key=$1 last;
+location / {
+    try_files $uri $uri/ /index.php$is_args$args;
+}
+
+说明：
+- PHP 版本要求 8.0 及以上。
+- `/register-validate`（邮箱验证）与验证码相关地址已随功能删除。
+- 安装向导地址为 `/install`，旧的 `install/step1.php` 会自动跳转。

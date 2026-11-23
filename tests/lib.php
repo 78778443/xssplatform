@@ -7,12 +7,24 @@
 $GLOBALS['__tests_passed'] = 0;
 $GLOBALS['__tests_failed'] = 0;
 
+final class SkipTest extends Exception
+{
+}
+
+function skipTest(string $reason): void
+{
+    throw new SkipTest($reason);
+}
+
 function test(string $name, callable $fn): void
 {
     try {
         $fn();
         $GLOBALS['__tests_passed']++;
         echo "PASS  {$name}\n";
+    } catch (SkipTest $e) {
+        $GLOBALS['__tests_skipped'] = ($GLOBALS['__tests_skipped'] ?? 0) + 1;
+        echo "SKIP  {$name} ({$e->getMessage()})\n";
     } catch (Throwable $e) {
         $GLOBALS['__tests_failed']++;
         fwrite(STDERR, "FAIL  {$name}\n  {$e->getMessage()}\n  {$e->getFile()}:{$e->getLine()}\n");
@@ -64,7 +76,12 @@ function assertThrows(string $class, callable $fn, string $label = ''): void
 
 register_shutdown_function(function (): void {
     $total = $GLOBALS['__tests_passed'] + $GLOBALS['__tests_failed'];
-    echo sprintf("\n%d passed, %d failed\n", $GLOBALS['__tests_passed'], $GLOBALS['__tests_failed']);
+    echo sprintf(
+        "\n%d passed, %d failed, %d skipped\n",
+        $GLOBALS['__tests_passed'],
+        $GLOBALS['__tests_failed'],
+        $GLOBALS['__tests_skipped'] ?? 0
+    );
     if ($total === 0) {
         fwrite(STDERR, "NO TESTS RAN\n");
         exit(1);
