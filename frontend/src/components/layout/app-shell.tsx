@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Blocks, FolderKanban, LogOut, Menu, Settings, ShieldCheck, Ticket } from 'lucide-react'
+import { Blocks, ExternalLink, FolderKanban, LogOut, Menu, Settings, ShieldCheck, Ticket } from 'lucide-react'
 import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import { cn } from '@/lib/utils'
@@ -54,20 +54,29 @@ function NavLinks({ isAdmin }: { isAdmin: boolean }) {
   )
 }
 
-function SidebarNote() {
+function SiteFooter() {
   return (
-    <div className="rounded-xl border border-primary/15 bg-primary/[0.04] p-3">
-      <div className="flex items-center gap-2 text-xs font-medium text-primary">
-        <ShieldCheck className="size-4" />
-        仅限授权测试
+    <footer className="border-t border-border/50 bg-background/40">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-4 text-[11px] leading-relaxed text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <p className="flex items-start gap-1.5">
+          <ShieldCheck className="mt-px size-3.5 shrink-0 text-primary/70" />
+          <span>仅限授权测试：请确保已获得目标系统的明确授权，并遵守当地法律法规。</span>
+        </p>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pl-5 text-muted-foreground/80 sm:pl-0">
+          <p>作者 汤青松 · 公众号 青松阁主 · 微信 songboy8888</p>
+          <span className="hidden h-3 w-px bg-border sm:block" aria-hidden />
+          <a
+            href="https://github.com/78778443/xssplatform"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+          >
+            <ExternalLink className="size-3.5" />
+            78778443/xssplatform
+          </a>
+        </div>
       </div>
-      <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-        请确认已获得目标系统的明确授权，仅用于合法的安全测试与教学研究，并遵守当地法律法规。
-      </p>
-      <p className="mt-2.5 border-t border-primary/10 pt-2.5 text-[11px] leading-relaxed text-muted-foreground/80">
-        作者 汤青松 · 公众号 青松阁主 · 微信 songboy8888
-      </p>
-    </div>
+    </footer>
   )
 }
 
@@ -150,7 +159,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     </Link>
                   )}
                 </div>
-                <SidebarNote />
               </div>
             </SheetContent>
           </Sheet>
@@ -224,13 +232,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       >
         <aside className={cn('w-56 shrink-0 flex-col gap-6', authed ? 'hidden md:flex' : 'hidden')}>
           <NavLinks isAdmin={isAdmin} />
-          <div className="mt-2">
-            <SidebarNote />
-          </div>
         </aside>
         <Separator orientation="vertical" className={cn(authed ? 'hidden md:block' : 'hidden')} />
         <main className="min-w-0 flex-1">{children}</main>
       </div>
+      {authed && <SiteFooter />}
     </div>
   )
 }
