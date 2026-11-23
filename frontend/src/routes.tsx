@@ -1,6 +1,9 @@
 import { Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/layout/app-shell'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { LoginPage } from '@/pages/login-page'
+import { RegisterPage } from '@/pages/register-page'
+import { InstallPage } from '@/pages/install-page'
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -18,9 +21,9 @@ export function AppRoutes() {
     <AppShell>
       <Routes>
         <Route path="/" element={<Placeholder title="我的项目" />} />
-        <Route path="/login" element={<Placeholder title="登陆" />} />
-        <Route path="/register" element={<Placeholder title="注册" />} />
-        <Route path="/install" element={<Placeholder title="安装向导" />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/install" element={<InstallPage />} />
         <Route path="/project/new" element={<Placeholder title="创建项目" />} />
         <Route path="/project/:id" element={<Placeholder title="项目内容" />} />
         <Route path="/project/:id/config" element={<Placeholder title="配置代码" />} />
