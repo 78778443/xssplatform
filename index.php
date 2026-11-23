@@ -1,19 +1,33 @@
 <?php
-
-if (version_compare(PHP_VERSION, '7.0', '<')) {
-    die('此程序需PHP版本大于7.0 !');
+/**
+ * index.php front controller: install shell, SPA shell, legacy routes and receivers.
+ */
+if (version_compare(PHP_VERSION, '8.0', '<')) {
+    die('此程序需PHP版本大于8.0 !');
 }
-if (!file_exists("./install/install.lock")) {
-    header("location:http://{$_SERVER['HTTP_HOST']}/install/step1.php");exit();
+
+define('ROOT_PATH', dirname(__FILE__));
+define('IN_OLDCMS', true);
+
+require_once ROOT_PATH . '/source/lib/Config.php';
+require_once ROOT_PATH . '/source/lib/FrontendShell.php';
+
+$installed = file_exists(ROOT_PATH . '/install/install.lock');
+$do = isset($_GET['do']) && is_string($_GET['do']) ? $_GET['do'] : '';
+
+if (!$installed || $do === '') {
+    FrontendShell::render();
+    exit;
 }
 
-require 'init.php';
-$do = Val('do', 'GET', 0);
-$dos = array('index', 'login', 'project', 'module', 'code', 'api', 'do', 'register', 'user', 'keepsession');
-if (!in_array($do, $dos)) {
-    $do = 'index';
+$receivers = ['code', 'api', 'do', 'keepsession'];
+if (in_array($do, $receivers, true)) {
+    require ROOT_PATH . '/init.php';
+    require ROOT_PATH . '/source/' . $do . '.php';
+    exit;
 }
-require ROOT_PATH . '/source/' . $do . '.php';
 
-
-?>
+// Legacy UI routes are handled by LegacyRouter in Task 11.
+http_response_code(404);
+header('Content-Type: text/plain; charset=utf-8');
+echo 'Not Found';

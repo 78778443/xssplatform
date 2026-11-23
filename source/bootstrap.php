@@ -40,6 +40,12 @@ $show = Config::get('show', []);
 $db = DBConnect();
 $user = new User($db);
 
+// bootstrap may be included from a method scope (e.g. Api::handle); publish the
+// request context as real globals so db()/current_user() and legacy endpoints see it.
+$GLOBALS['show'] = $show;
+$GLOBALS['db'] = $db;
+$GLOBALS['user'] = $user;
+
 /**
  * Shared database connection for this request.
  */
