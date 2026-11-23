@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="XSS 平台">
+  <defs>
+    <linearGradient id="g" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#4338ca"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#g)"/>
+  <circle cx="32" cy="32" r="13.5" fill="none" stroke="#fff" stroke-width="4"/>
+  <path d="M32 7.5v9M32 47.5v9M7.5 32h9M47.5 32h9" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="32" cy="32" r="3.5" fill="#fff"/>
+</svg>

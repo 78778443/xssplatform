@@ -45,6 +45,12 @@ test('capture README screenshots', async ({ page }) => {
     await page.goto('/modules')
     await shot(page, 'modules', '公共模块')
 
+    await page.goto('/modules/new')
+    await shot(page, 'module-editor', '基本信息')
+
+    await page.goto('/settings')
+    await shot(page, 'settings', '通知设置')
+
     await page.goto('/admin')
     await shot(page, 'admin', '注册用户总数')
 

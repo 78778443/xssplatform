@@ -1,104 +1,173 @@
 <div align="center">
 
+<img src="docs/logo.svg" width="76" height="76" alt="XSS Platform logo" />
+
 <h1>XSS Platform</h1>
 
-<p><strong>面向授权安全测试的 XSS 收包平台</strong><br>
-React 19 + shadcn/ui 单页前端 · PHP 8 后端 · 生产部署无需 Node.js</p>
+<p><strong>面向授权安全测试的 XSS 收包与验证工作台</strong></p>
 
-<img src="https://img.shields.io/badge/PHP-8.0%2B-777BB4?logo=php&logoColor=white" alt="PHP 8.0+" />
-<img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19" />
-<img src="https://img.shields.io/badge/shadcn%2Fui-base--nova-000000" alt="shadcn/ui" />
-<img src="https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white" alt="MySQL 8" />
-<img src="https://img.shields.io/badge/%E5%90%88%E6%B3%95%E6%8E%88%E6%9D%83-%E4%BB%85%E9%99%90%E6%B5%8B%E8%AF%95-critical" alt="授权测试" />
+<p>把 Payload 管理、项目收包、模块复用与审核流程放进同一个现代化界面。</p>
 
 <p>
-  <a href="#安装">安装</a> ·
-  <a href="#功能">功能</a> ·
-  <a href="#开发">开发</a> ·
-  <a href="#安全说明">安全说明</a>
+  <img src="https://img.shields.io/badge/PHP-8.0%2B-777BB4?logo=php&logoColor=white" alt="PHP 8.0+" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/shadcn%2Fui-base--nova-000000" alt="shadcn/ui" />
+  <img src="https://img.shields.io/badge/MySQL-5.6%2B-4479A1?logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/%E4%BB%85%E9%99%90%E6%8E%88%E6%9D%83%E6%B5%8B%E8%AF%95-critical" alt="仅限授权测试" />
 </p>
+
+<p>
+  <a href="https://github.com/78778443/xssplatform"><img src="https://img.shields.io/badge/GitHub-78778443%2Fxssplatform-181717?logo=github" alt="GitHub" /></a>
+  <a href="#界面">界面</a> ·
+  <a href="#核心功能">核心功能</a> ·
+  <a href="#快速开始">快速开始</a> ·
+  <a href="#安全基线">安全基线</a> ·
+  <a href="#开发与测试">开发与测试</a> ·
+  <a href="#作者与合规提醒">作者</a>
+</p>
+
+<p><sub>项目地址：<a href="https://github.com/78778443/xssplatform">github.com/78778443/xssplatform</a></sub></p>
 
 </div>
 
 <p align="center">
-  <img src="docs/screenshots/dashboard.png" alt="XSS Platform 控制台" width="100%" />
+  <img src="docs/screenshots/dashboard.png" alt="XSS Platform 工作台" width="100%" />
 </p>
 
 > [!WARNING]
-> 本工具仅面向合法授权的企业安全建设与安全测试行为。使用前请确保你已获得目标系统的明确授权，并遵守当地法律法规。
+> 本项目仅面向**已获得明确授权**的安全测试、教学与研究。请勿对未授权目标使用；使用前请确认已取得书面授权，并遵守所在地法律法规及目标平台的服务条款。
 
-## 界面一览
+## 界面
 
-截图由 Playwright 在测试环境中自动生成，覆盖登录、项目收包、代码植入、模块管理与后台审核。
+截图由 Playwright 在测试环境中自动生成，使用浅色主题，覆盖登录、工作台、项目收包、代码植入、模块编辑、通知设置与后台审核。
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/login.png" alt="登录" /></td>
-    <td width="50%"><img src="docs/screenshots/project.png" alt="项目内容" /></td>
+    <td width="50%"><img src="docs/screenshots/login.png" alt="登录页" /></td>
+    <td width="50%"><img src="docs/screenshots/project.png" alt="项目收包" /></td>
   </tr>
   <tr>
-    <td align="center"><sub>登录</sub></td>
-    <td align="center"><sub>项目内容与收包结果</sub></td>
+    <td align="center"><sub>登录 / 授权测试提示</sub></td>
+    <td align="center"><sub>项目收包、域名筛选与批量清理</sub></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/code.png" alt="项目代码" /></td>
-    <td><img src="docs/screenshots/modules.png" alt="模块" /></td>
+    <td><img src="docs/screenshots/modules.png" alt="模块库" /></td>
   </tr>
   <tr>
-    <td align="center"><sub>项目代码与植入方式</sub></td>
-    <td align="center"><sub>模块管理</sub></td>
+    <td align="center"><sub>项目代码与多种植入方式</sub></td>
+    <td align="center"><sub>私有模块与公共模块</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/module-editor.png" alt="模块编辑" /></td>
+    <td><img src="docs/screenshots/settings.png" alt="通知设置" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>模块字段、配置参数与 Payload</sub></td>
+    <td align="center"><sub>邮件与飞书机器人提醒</sub></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/admin.png" alt="管理后台" /></td>
     <td><img src="docs/screenshots/admin-modules.png" alt="模块审核" /></td>
   </tr>
   <tr>
-    <td align="center"><sub>管理后台概况</sub></td>
+    <td align="center"><sub>账号概况、在线状态与系统环境</sub></td>
     <td align="center"><sub>公共模块审核</sub></td>
   </tr>
 </table>
 
-## 环境要求
+## 核心功能
 
-- PHP ≥ 8.0（推荐 8.1–8.4）
+| 能力 | 说明 |
+| --- | --- |
+| 项目与收包 | 每个验证目标独立建项目；页面地址、Cookie、请求头与自定义字段实时回传，支持域名筛选、展开详情、单条/批量删除 |
+| 模块化 Payload | 用「接收参数 + 配置参数 + 代码」组合模块；私有模块可复用，公开模块经管理员审核后进入公共模块库 |
+| 代码生成 | 按项目生成图片、`<script>`、`textarea` 逃逸等多种植入代码，并给出短链接与长链接 |
+| 通知提醒 | 新内容到达时发送邮件或飞书机器人消息；飞书 Webhook 只接受官方机器人地址 |
+| 账号与权限 | 普通注册 / 邀请码注册 / 关闭注册三种模式；管理员审核公共模块；邀请码可批量生成与复制 |
+| 旧站兼容 | `index.php?do=...`、`/{6位}`、`/do/auth/{authCode}`、`/register/{key}` 等旧地址保持可用；旧表单 POST 继续执行 |
+| 部署友好 | 生产环境不需要 Node.js；前端构建产物已入库，PHP + MySQL 即可运行 |
+| 现代界面 | React 19 + shadcn/ui；明暗主题、移动端布局、代码与内容一键复制 |
+
+## 快速开始
+
+### 环境要求
+
+- PHP ≥ 8.0（推荐 8.1–8.4），扩展：`mysqli`、`curl`、`openssl`、`json`
 - MySQL ≥ 5.6（推荐 8.0）
-- PHP 扩展：`mysqli`、`curl`、`openssl`、`json`
-- 生产部署**不需要** Node.js；只有修改前端时才需要 Node 22 + npm
+- 生产部署不需要 Node.js；仅修改前端时需要 Node 22 + npm
 
-## 安装
+### 部署
 
-1. 把仓库放到 Web 根目录（`index.php` 所在目录即站点根）。
-2. 按 `deploy/nginx.conf` 或 `deploy/.htaccess.example` 配置重写规则（收包地址 `/{6位}`、`/do/auth/...`、`/register/{key}` 必须保留，其余路径回落到 `index.php`）。示例配置已禁止访问 `.git/`、`tests/`、`scripts/`、`deploy/`、`frontend/`；如自行编写配置，请保持同样的拒绝规则。
-3. 浏览器打开 `/install`，按向导填写数据库信息与管理员账号。也可以复制 `config.php.default` 为 `config.php` 后手工填写。
+```bash
+git clone https://github.com/78778443/xssplatform.git
+cd xssplatform
+```
+
+1. 将仓库放到 Web 根目录（`index.php` 所在目录即站点根）。
+2. 参考 `deploy/nginx.conf` 或 `deploy/.htaccess.example` 配置重写规则。`/{6位}`、`/do/auth/...`、`/register/{key}` 必须保留，其余路径回落到 `index.php`。示例配置已禁止访问 `source/`、`docs/`、`tests/`、`scripts/`、`deploy/`、`frontend/`、`config.php` 与 SQL 导出文件。
+3. 浏览器打开 `/install`，填写数据库信息与管理员账号。也可以复制 `config.php.default` 为 `config.php` 后手工填写。
 4. 安装完成后用管理员账号登录。
 
-安装向导会写入 `config.php` 与 `install/install.lock`。`config.php` 属于部署状态，不纳入版本库；也可以复制 `config.php.default` 后手工填写。旧的 `install/step1.php` 等地址会自动跳转到 `/install`。
+安装向导会写入 `config.php` 与 `install/install.lock`。`config.php` 属于部署状态，不纳入版本库。
 
-## 已安装的数据库升级
+### 已有安装升级
 
-老版本升级时运行一次：
+老版本升级时运行一次，脚本可重复执行：
 
 ```bash
 XSSP_CONFIG=/path/to/config.php php install/upgrade.php
 ```
 
-脚本会把 `oc_user.userPwd` 扩到 `varchar(255)`（用于 `password_hash`）并把 `oc_session.data` 改为 `TEXT`，可重复执行。老用户的 md5 密码会在首次登录成功后自动升级为 `password_hash`。
+它会：
 
-## 功能
+- 将 `oc_user.userPwd` 扩到 `varchar(255)`，并把 `oc_session.data` 改为 `TEXT`
+- 迁移旧通知字段为 `feishu varchar(500)`
+- 移除已废弃的乌云币邀请码分类
+- 创建登录/注册限流表 `oc_rate_limit`
+- 为用户名、邮箱补齐唯一索引（存在重复数据时会跳过并提示）
 
-- 注册（普通 / 邀请 / 关闭三种模式）、登录、自动登录、邀请码管理
-- 项目 CRUD、内容收包查看、域名过滤、批量删除、代码查看
-- 模块 CRUD、公共模块审核
-- 邮件提醒（PHPMailer 6）、飞书机器人通知
-- 收包端点：`index.php?do=code|api|do|keepsession`、`authtest.php`
-- keepsession 定时任务：`XSSP_CONFIG=/path/to/config.php php scripts/keepsession.php`
-- 明暗主题、移动端布局、代码/内容一键复制
+老用户的 md5 密码会在首次登录成功后自动升级为 `password_hash`。
+
+## 配置说明
+
+主要配置位于 `config.php`：
+
+| 配置 | 说明 |
+| --- | --- |
+| `urlroot` | 站点完整地址，例如 `https://xss.example.com`；用于收包地址、邮件与跳转 |
+| `register` | 注册模式：`normal` / `invite` / `close` |
+| `expires` | 登录会话滑动有效期（秒） |
+| `timezone` | 时区，默认 `Asia/Shanghai` |
+| `email.*` | SMTP 主机、端口、账号与加密方式 |
+| `show.*` | 站点名称、描述等展示信息 |
+
+通知方式在「个人设置」中按用户配置：邮件提醒与飞书机器人 Webhook。飞书地址必须是 `https://open.feishu.cn/open-apis/bot/v2/hook/...`。
+
+`keepsession` 需要定时任务：
+
+```bash
+XSSP_CONFIG=/path/to/config.php php scripts/keepsession.php
+```
+
+## 安全基线
+
+| 领域 | 措施 |
+| --- | --- |
+| 认证 | 登录按「账号 + IP」与「IP」双维度限流；同一账号连续失败 5 次或同一 IP 15 分钟内失败 25 次即锁定；注册与注册预检查同样限流 |
+| 密码 | `password_hash` + 自动迁移旧 md5；未知账号也执行一次哈希校验，避免通过响应时间枚举账号 |
+| 会话 | HttpOnly + SameSite=Lax，HTTPS 下自动 Secure；登录成功后重新生成会话标识 |
+| 请求 | 所有写接口只允许 POST；使用 `X-CSRF-Token` 并校验同源；旧表单写操作同样要求 POST、同源与表单 token |
+| 数据 | 所有 SQL 走 mysqli 预处理语句；用户名与邮箱唯一索引；安全反序列化只接受数组 |
+| 部署 | 源码、测试、部署脚本、SQL 导出与文档默认禁止 Web 访问；关闭错误回显并移除 `X-Powered-By` |
+| 响应头 | CSP、`X-Frame-Options`、`X-Content-Type-Options`、`Referrer-Policy`、HTTPS 下的 HSTS |
+| 出站 | keep-session 仅允许公网 http/https；飞书通知只接受官方机器人域名 |
 
 ## 老地址兼容
 
-`index.php?do=...` 等旧页面地址会 302 到新的 SPA 路由；旧表单 POST 仍会执行（写操作现在要求 POST 且校验同源，旧表单里的 `token` 继续生效）。收包端点与 `/do/auth/{authCode}` 的 URL、参数、响应保持不变。
+`index.php?do=...` 等旧页面地址会 302 到新的 SPA 路由；旧表单 POST 仍会执行。收包端点 `index.php?do=code|api|do|keepsession` 与 `authtest.php` 的 URL、参数和响应保持兼容。
 
-## 开发
+## 开发与测试
 
 ```bash
 # 后端测试（需要 Docker 拉取 MySQL 8）
@@ -128,39 +197,28 @@ npx playwright test e2e/screenshots.spec.ts   # 重新生成 docs/screenshots/
 bash tests/http/install-ui-e2e.sh
 ```
 
-通知链路的集成测试需要 MailHog（`8025`）与 mock 飞书端点（`19090`）；未启动时该用例会显示 SKIP。
+通知链路的集成测试需要 MailHog 与 mock 飞书端点；未启动时会显示 SKIP。
 
-## 代码结构
+## 目录结构
 
-```
+```text
 index.php              SPA 壳 / 老地址路由 / 收包端点分发
 api.php                JSON API 前控制器（?action=...）
 source/services/       业务服务（认证、项目、模块、用户、管理员、安装、收包）
 source/class/          DB（mysqli 预处理语句）、User（会话/密码/CSRF）
-source/lib/            Config、Api、UrlMap、Notify 等
+source/lib/            Config、Api、RateLimiter、UrlGuard、Notify 等
 frontend/              React + shadcn/ui 源码
 dist/                  前端构建产物
 docs/screenshots/      README 截图（由 Playwright 生成）
-deploy/                nginx / apache / PHP 内置服务器示例
+deploy/                nginx / Apache / PHP 内置服务器示例
 tests/                 PHP 测试、Playwright 用例与 fixtures
 ```
 
-## 安全说明
-
-- 所有 SQL 走预处理语句
-- 写操作使用 POST + `X-CSRF-Token`，并校验同源；旧表单写操作同样要求 POST、同源和表单 token
-- 登录按「账号 + IP」与「IP」双维度限流：连续失败 5 次锁定 15 分钟，同一 IP 15 分钟内失败 25 次同样锁定；注册与注册预检查也有限流
-- 会话 Cookie 为 HttpOnly + SameSite=Lax，HTTPS 下自动 Secure；登录成功后重新生成会话标识
-- 密码使用 `password_hash`，兼容旧 md5 并在登录时迁移；未知账号也会执行一次哈希校验，避免通过响应时间枚举账号
-- 用户名和邮箱建立唯一索引，防止并发注册产生重复账号；`install/upgrade.php` 会为老库补齐索引和限流表
-- 安装完成后 `install.submit` 等安装接口返回 403
-- 源码、测试、部署脚本、SQL 导出与文档在 nginx / Apache / 内置服务器配置中均禁止直接访问
-- 收包端点的回跳地址只接受 http/https，空 Referer 回落到站点根；keep-session 出站请求限制为公网 http/https
-- 页面默认关闭错误回显并移除 `X-Powered-By`，HTML 响应带 CSP、`X-Frame-Options` 等安全头
-
 ## 作者与合规提醒
 
-本项目由汤青松维护，公众号「青松阁主」，微信 `songboy8888`。
+项目地址：[https://github.com/78778443/xssplatform](https://github.com/78778443/xssplatform)
+
+本项目由汤青松维护，公众号「青松阁主」，微信 `songboy8888`。如果这个项目对你有帮助，欢迎在 GitHub 点一个 Star。
 
 本项目仅面向**已获得明确授权**的安全测试、教学与研究：请勿对未授权目标使用；使用前请确认已取得书面授权，并遵守所在地法律法规及目标系统所在平台的服务条款。因未授权使用产生的一切后果由使用者自行承担。
 
