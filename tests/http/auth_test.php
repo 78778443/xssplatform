@@ -28,10 +28,11 @@ test('login sets a hardened cookie and session, logout protects csrf', function 
 
 test('registration validates duplicates and keeps the legacy message', function () {
     $base = 'http://127.0.0.1:18081';
-    $r = (string) shell_exec("curl -sS -X POST '{$base}/api.php?action=register.submit' -H 'Content-Type: application/json' -d '{\"user\":\"newuser\",\"email\":\"new@example.com\",\"pwd\":\"123456\"}'");
+    $uname = 'newuser' . substr(md5((string) microtime(true)), 0, 6);
+    $r = (string) shell_exec("curl -sS -X POST '{$base}/api.php?action=register.submit' -H 'Content-Type: application/json' -d '{\"user\":\"{$uname}\",\"email\":\"{$uname}@example.com\",\"pwd\":\"123456\"}'");
     assertTrue(str_contains($r, '"ok":true'), 'register');
 
-    $r = (string) shell_exec("curl -sS -X POST '{$base}/api.php?action=register.check' -H 'Content-Type: application/json' -d '{\"user\":\"newuser\",\"email\":\"other@example.com\",\"key\":\"\"}'");
+    $r = (string) shell_exec("curl -sS -X POST '{$base}/api.php?action=register.check' -H 'Content-Type: application/json' -d '{\"user\":\"{$uname}\",\"email\":\"other@example.com\",\"key\":\"\"}'");
     assertTrue(str_contains($r, '"userExisted":1'), 'duplicate user');
 
     $r = (string) shell_exec("curl -sS -X POST '{$base}/api.php?action=login' -H 'Content-Type: application/json' -d '{\"user\":\"admin\",\"pwd\":\"wrong\"}'");
