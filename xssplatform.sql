@@ -53,7 +53,6 @@ CREATE TABLE `oc_invite_reg` (
   `regUserId` int(11) DEFAULT '0',
   `regTime` int(11) DEFAULT '0',
   `addTime` int(11) DEFAULT '0',
-  `isWooyun` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -4,7 +4,7 @@ import { api } from '@/lib/api'
 import { agreementText } from '@/lib/agreement'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { CheckCircle2 } from 'lucide-react'
+import { Check, CheckCircle2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
@@ -98,17 +98,51 @@ export function InstallPage() {
     )
   }
 
+  const steps = ['阅读协议', '数据库', '完成安装']
+
   return (
-    <div className="mx-auto max-w-3xl py-10">
+    <div className="mx-auto flex min-h-[calc(100svh-6rem)] w-full max-w-3xl flex-col justify-center py-8">
       <Card>
-        <CardHeader>
-          <CardTitle>安装向导 · 第 {step} 步</CardTitle>
-          <CardDescription>
-            PHP {status?.phpVersion ?? '...'} · mysqli {status?.extensions.mysqli ? '可用' : '缺失'} · curl{' '}
-            {status?.extensions.curl ? '可用' : '缺失'} · openssl {status?.extensions.openssl ? '可用' : '缺失'}
-          </CardDescription>
+        <CardHeader className="gap-4">
+          <div className="flex flex-col gap-1">
+            <CardTitle>安装向导</CardTitle>
+            <CardDescription>几步完成部署，生产环境不需要 Node.js。</CardDescription>
+          </div>
+          <ol className="flex items-center gap-2">
+            {steps.map((label, index) => {
+              const number = index + 1
+              const done = step > number
+              const active = step === number
+              return (
+                <li key={label} className="flex flex-1 items-center gap-2">
+                  <span
+                    className={[
+                      'flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold',
+                      active
+                        ? 'bg-primary text-primary-foreground'
+                        : done
+                          ? 'bg-primary/15 text-primary'
+                          : 'bg-muted text-muted-foreground',
+                    ].join(' ')}
+                  >
+                    {done ? <Check className="size-3.5" /> : number}
+                  </span>
+                  <span className={active ? 'text-xs font-medium' : 'text-xs text-muted-foreground'}>
+                    {label}
+                  </span>
+                  {index < steps.length - 1 && <span className="h-px flex-1 bg-border" />}
+                </li>
+              )
+            })}
+          </ol>
+          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+            <span>PHP {status?.phpVersion ?? '...'}</span>
+            <span>mysqli {status?.extensions.mysqli ? '可用' : '缺失'}</span>
+            <span>curl {status?.extensions.curl ? '可用' : '缺失'}</span>
+            <span>openssl {status?.extensions.openssl ? '可用' : '缺失'}</span>
+          </div>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <CardContent className="flex flex-col gap-5">
           {step === 1 && (
             <>
               <div className="max-h-80 overflow-auto rounded-lg border p-4 text-sm leading-relaxed">
@@ -122,57 +156,76 @@ export function InstallPage() {
                 <p className="text-sm text-destructive">config.php 不可写，无法继续安装</p>
               )}
               {error && <p className="text-sm text-destructive">{error}</p>}
-              <Button disabled={!ready} onClick={() => setStep(2)}>
-                我同意此协议
-              </Button>
+              <div className="flex justify-end border-t border-border/60 pt-4">
+                <Button disabled={!ready} onClick={() => setStep(2)}>
+                  我同意此协议
+                </Button>
+              </div>
             </>
           )}
 
           {step === 2 && (
             <>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="db-host">数据库地址</Label>
-                  <Input id="db-host" value={form.dbHost} onChange={(e) => update('dbHost', e.target.value)} />
+              <section className="flex flex-col gap-4">
+                <h3 className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+                  数据库
+                </h3>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="db-host">数据库地址</Label>
+                    <Input id="db-host" className="h-10" value={form.dbHost} onChange={(e) => update('dbHost', e.target.value)} />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="db-name">数据库名称</Label>
+                    <Input id="db-name" className="h-10" value={form.dbName} onChange={(e) => update('dbName', e.target.value)} />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="db-user">数据库用户名</Label>
+                    <Input id="db-user" className="h-10" value={form.dbUser} onChange={(e) => update('dbUser', e.target.value)} />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="db-pwd">数据库密码</Label>
+                    <Input
+                      id="db-pwd"
+                      className="h-10"
+                      type="password"
+                      value={form.dbPwd}
+                      onChange={(e) => update('dbPwd', e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="db-name">数据库名称</Label>
-                  <Input id="db-name" value={form.dbName} onChange={(e) => update('dbName', e.target.value)} />
+              </section>
+              <section className="flex flex-col gap-4 border-t border-border/60 pt-5">
+                <h3 className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+                  管理员账号
+                </h3>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="admin-user">管理员</Label>
+                    <Input
+                      id="admin-user"
+                      className="h-10"
+                      value={form.username}
+                      onChange={(e) => update('username', e.target.value)}
+                      placeholder="admin"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="admin-pwd">管理员密码</Label>
+                    <Input
+                      id="admin-pwd"
+                      className="h-10"
+                      type="password"
+                      value={form.password}
+                      onChange={(e) => update('password', e.target.value)}
+                      placeholder="6-20 位字符"
+                    />
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="db-user">数据库用户名</Label>
-                  <Input id="db-user" value={form.dbUser} onChange={(e) => update('dbUser', e.target.value)} />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="db-pwd">数据库密码</Label>
-                  <Input
-                    id="db-pwd"
-                    type="password"
-                    value={form.dbPwd}
-                    onChange={(e) => update('dbPwd', e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="admin-user">管理员</Label>
-                  <Input
-                    id="admin-user"
-                    value={form.username}
-                    onChange={(e) => update('username', e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="admin-pwd">管理员密码</Label>
-                  <Input
-                    id="admin-pwd"
-                    type="password"
-                    value={form.password}
-                    onChange={(e) => update('password', e.target.value)}
-                  />
-                </div>
-              </div>
+              </section>
               {message && <p className="text-sm text-emerald-600">{message}</p>}
               {error && <p className="text-sm text-destructive">{error}</p>}
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2 border-t border-border/60 pt-4">
                 <Button variant="outline" onClick={() => setStep(1)}>
                   上一步
                 </Button>
@@ -197,7 +250,7 @@ export function InstallPage() {
                     将创建数据库、导入初始数据并把管理员账号写入第一位用户。
                   </p>
                   {error && <p className="text-sm text-destructive">{error}</p>}
-                  <div className="flex gap-2">
+                  <div className="flex items-center gap-2 border-t border-border/60 pt-4">
                     <Button variant="outline" onClick={() => setStep(2)}>
                       上一步
                     </Button>

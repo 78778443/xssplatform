@@ -31,7 +31,8 @@ test('settings and invites persist through the UI', async ({ page }) => {
   const beforeCount = ((await before.json()).data.other as unknown[]).length
 
   await page.goto('/invites')
-  await page.getByRole('button', { name: /生成邀请码/ }).last().click()
+  await expect(page.getByText('乌云币')).toHaveCount(0)
+  await page.getByRole('button', { name: /生成邀请码/ }).click()
   await expect(page.getByText('操作成功')).toBeVisible()
   const after = await page.request.get('/api.php?action=user.invites')
   expect(((await after.json()).data.other as unknown[]).length).toBe(beforeCount + 1)
@@ -82,7 +83,7 @@ test('content can be filtered by domain and deleted', async ({ page }) => {
   await expect(page.getByRole('row', { name: /alpha\.example/ })).toBeVisible()
   await expect(page.getByRole('row', { name: /beta\.example/ })).toBeVisible()
 
-  await page.getByLabel('Domain').selectOption('beta.example')
+  await page.getByLabel('域名筛选').selectOption('beta.example')
   await expect(page.getByRole('row', { name: /beta\.example/ })).toBeVisible()
   await expect(page.getByRole('row', { name: /alpha\.example/ })).toHaveCount(0)
 

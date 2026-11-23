@@ -60,20 +60,11 @@ final class UserService
     {
         $user = $this->requireUser();
         $invites = db()->Dataset(
-            'SELECT id,inviteKey as code,isWooyun,addTime FROM ' . Tb('invite_reg')
+            'SELECT id,inviteKey as code,addTime FROM ' . Tb('invite_reg')
             . ' WHERE userId=? AND isUsed=0 ORDER BY id DESC',
             [$user->userId]
         );
-        $wooyun = [];
-        $other = [];
-        foreach ($invites as $v) {
-            if ((int) $v['isWooyun'] === 1) {
-                $wooyun[] = $v;
-            } else {
-                $other[] = $v;
-            }
-        }
-        return ['wooyun' => $wooyun, 'other' => $other];
+        return ['other' => $invites];
     }
 
     public function createInvite(array $input): array
@@ -90,11 +81,9 @@ final class UserService
         if ($count >= $limit) {
             throw new AppError('invite_limit', 400, '最多可生成' . $limit . '条未使用的邀请链接');
         }
-        $isWooyun = (int) ($input['isWooyun'] ?? 0) === 1 ? 1 : 0;
         db()->Insert(Tb('invite_reg'), [
             'userId' => $user->userId,
             'inviteKey' => bin2hex(random_bytes(16)),
-            'isWooyun' => $isWooyun,
             'addTime' => time(),
         ]);
         return [];

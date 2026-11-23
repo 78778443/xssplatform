@@ -17,7 +17,7 @@ test('settings persist feishu and admin sees overview/modules', function () {
     assertSame('1', $s['emsg']);
     assertSame('1', $s['fmsg']);
 
-    $r = (string) shell_exec("curl -sS -b {$jar} -X POST '{$base}/api.php?action=user.invite.create' -H 'X-CSRF-Token: {$csrf}' -H 'Content-Type: application/json' -d '{\"isWooyun\":0}'");
+    $r = (string) shell_exec("curl -sS -b {$jar} -X POST '{$base}/api.php?action=user.invite.create' -H 'X-CSRF-Token: {$csrf}' -H 'Content-Type: application/json' -d '{}'");
     assertTrue(str_contains($r, '"ok":true'), 'invite create');
     $r = (string) shell_exec("curl -sS -b {$jar} '{$base}/api.php?action=user.invites'");
     $inv = json_decode($r, true)['data'];

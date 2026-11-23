@@ -1,6 +1,6 @@
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Download } from 'lucide-react'
+import { ChevronDown, Download } from 'lucide-react'
 import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import type { ProjectViewData } from '@/lib/types'
@@ -65,25 +65,28 @@ export function ProjectViewPage() {
       <CardHeader className="gap-3">
         <div className="flex flex-wrap items-end gap-3 text-sm">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="domain-filter">Domain</Label>
-            <select
-              id="domain-filter"
-              className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm"
-              value={domain}
-              onChange={(event) => {
-                const next = new URLSearchParams(params)
-                if (event.target.value) next.set('domain', event.target.value)
-                else next.delete('domain')
-                setParams(next)
-              }}
-            >
-              <option value="">全部</option>
-              {domains.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
+            <Label htmlFor="domain-filter">域名筛选</Label>
+            <div className="relative">
+              <select
+                id="domain-filter"
+                className="h-9 w-56 appearance-none rounded-lg border border-input bg-card pr-8 pl-3 text-sm shadow-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                value={domain}
+                onChange={(event) => {
+                  const next = new URLSearchParams(params)
+                  if (event.target.value) next.set('domain', event.target.value)
+                  else next.delete('domain')
+                  setParams(next)
+                }}
+              >
+                <option value="">全部域名</option>
+                {domains.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute top-1/2 right-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+            </div>
           </div>
           {project && (
             <span className="text-muted-foreground">

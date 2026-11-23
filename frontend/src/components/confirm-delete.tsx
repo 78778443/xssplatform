@@ -16,11 +16,13 @@ export function ConfirmDelete({
   label = '删除',
   description = '确定删除吗?',
   variant = 'ghost',
+  icon,
   onConfirm,
 }: {
   label?: string
   description?: string
   variant?: 'ghost' | 'outline'
+  icon?: React.ReactNode
   onConfirm: () => void
 }) {
   const [open, setOpen] = useState(false)
@@ -28,8 +30,14 @@ export function ConfirmDelete({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
         render={
-          <Button variant={variant} size="sm" className={variant === 'ghost' ? 'px-1 text-destructive' : 'text-destructive'}>
-            {label}
+          <Button
+            variant={variant}
+            size="sm"
+            aria-label={label}
+            title={label}
+            className={variant === 'ghost' ? 'px-1 text-destructive' : 'text-destructive'}
+          >
+            {icon ?? label}
           </Button>
         }
       />

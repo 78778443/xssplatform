@@ -32,7 +32,7 @@ test('registration honours invite and closed modes', function () {
 
         $r = (string) shell_exec("curl -sS -c {$jar} -X POST '{$base}/api.php?action=login' -H 'Content-Type: application/json' -d '{\"user\":\"admin\",\"pwd\":\"pw123456\"}'");
         $csrf = (string) (json_decode($r, true)['data']['csrf'] ?? '');
-        shell_exec("curl -sS -b {$jar} -X POST '{$base}/api.php?action=user.invite.create' -H 'X-CSRF-Token: {$csrf}' -H 'Content-Type: application/json' -d '{\"isWooyun\":0}'");
+        shell_exec("curl -sS -b {$jar} -X POST '{$base}/api.php?action=user.invite.create' -H 'X-CSRF-Token: {$csrf}' -H 'Content-Type: application/json' -d '{}'");
         $r = (string) shell_exec("curl -sS -b {$jar} '{$base}/api.php?action=user.invites'");
         $invites = json_decode($r, true)['data']['other'];
         $key = (string) $invites[0]['code'];

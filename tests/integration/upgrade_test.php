@@ -18,6 +18,14 @@ test('upgrade widens password and session columns idempotently', function () use
         $db->Execute('ALTER TABLE oc_user CHANGE feishu dingding varchar(255) NULL');
     }
 
+    $col = $db->FirstRow(
+        "SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='oc_invite_reg' AND COLUMN_NAME='isWooyun'",
+        [$cfg['database']]
+    );
+    if ($col === false) {
+        $db->Execute('ALTER TABLE oc_invite_reg ADD COLUMN isWooyun tinyint(1) NOT NULL DEFAULT 0');
+    }
+
     $cmd = 'XSSP_CONFIG=' . escapeshellarg(realpath(__DIR__ . '/../config.test.php'))
         . ' php ' . escapeshellarg(dirname(__DIR__, 2) . '/install/upgrade.php') . ' 2>&1';
     shell_exec($cmd);
@@ -38,6 +46,11 @@ test('upgrade widens password and session columns idempotently', function () use
     );
     assertTrue($col !== false, 'dingding column renamed to feishu');
     assertSame('varchar(500)', $col['COLUMN_TYPE'], 'feishu column width');
+    $col = $db->FirstRow(
+        "SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='oc_invite_reg' AND COLUMN_NAME='isWooyun'",
+        [$cfg['database']]
+    );
+    assertTrue($col === false, 'removed wooyun invite column dropped');
 
     // second run must be a no-op, not an error
     $out = shell_exec($cmd);

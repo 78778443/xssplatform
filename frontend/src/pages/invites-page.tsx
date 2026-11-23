@@ -24,7 +24,6 @@ interface Invite {
 }
 
 interface InvitesData {
-  wooyun: Invite[]
   other: Invite[]
 }
 
@@ -115,8 +114,8 @@ export function InvitesPage() {
   })
 
   const create = useMutation({
-    mutationFn: (isWooyun: number) =>
-      api('user.invite.create', { method: 'POST', csrf: session?.csrf, body: { isWooyun } }),
+    mutationFn: () =>
+      api('user.invite.create', { method: 'POST', csrf: session?.csrf, body: {} }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['invites'] })
       toast.success('操作成功')
@@ -132,14 +131,9 @@ export function InvitesPage() {
         description="生成并管理注册邀请码，邀请码模式下新用户必须持码注册。"
       />
       <InviteTable
-        title="乌云币奖品邀请码"
-        invites={query.data?.wooyun ?? []}
-        onGenerate={() => create.mutate(1)}
-      />
-      <InviteTable
-        title="其它邀请码"
+        title="未使用的邀请码"
         invites={query.data?.other ?? []}
-        onGenerate={() => create.mutate(0)}
+        onGenerate={() => create.mutate()}
       />
     </div>
   )

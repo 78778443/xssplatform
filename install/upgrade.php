@@ -57,4 +57,15 @@ if ($col === false) {
     $db->Execute('ALTER TABLE `' . $userTable . '` MODIFY feishu varchar(500) NULL');
 }
 
+// The Wooyun coin prize invite category was removed; invites are now a single list.
+$inviteTable = Tb('invite_reg');
+$col = $db->FirstRow(
+    'SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? AND COLUMN_NAME=?',
+    [$schema, $inviteTable, 'isWooyun']
+);
+if ($col !== false) {
+    $db->Execute('ALTER TABLE `' . $inviteTable . '` DROP COLUMN isWooyun');
+    echo "dropped {$inviteTable}.isWooyun\n";
+}
+
 echo "upgrade complete\n";

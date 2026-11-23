@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { FolderKanban } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import { ArrowUpRight, FolderKanban, Trash2 } from 'lucide-react'
 import type { ProjectSummary } from '@/lib/types'
 import { ConfirmDelete } from '@/components/confirm-delete'
 import { EmptyState } from '@/components/empty-state'
+import { Badge } from '@/components/ui/badge'
 import {
   Table,
   TableBody,
@@ -32,11 +32,11 @@ export function ProjectTable({
       <Table className="table-fixed">
         <TableHeader className="bg-muted/40">
           <TableRow>
-            <TableHead className="w-[22%]">项目名称</TableHead>
-            <TableHead className="w-[42%]">项目描述</TableHead>
-            <TableHead className="w-24">内容数</TableHead>
+            <TableHead className="w-[30%]">项目</TableHead>
+            <TableHead className="w-[34%]">描述</TableHead>
+            <TableHead className="w-20">内容</TableHead>
             <TableHead className="w-28">创建时间</TableHead>
-            <TableHead className="w-16">操作</TableHead>
+            <TableHead className="w-20 text-right">操作</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -48,7 +48,7 @@ export function ProjectTable({
             </TableRow>
           )}
           {projects.map((project) => (
-            <TableRow key={project.id}>
+            <TableRow key={project.id} className="group">
               <TableCell>
                 <div className="flex items-center gap-2.5">
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
@@ -56,19 +56,30 @@ export function ProjectTable({
                   </span>
                   <Link
                     to={`/project/${project.id}`}
-                    className="truncate font-medium text-foreground hover:text-primary hover:underline"
+                    className="flex min-w-0 items-center gap-1 truncate font-medium text-foreground hover:text-primary"
                   >
-                    {project.title}
+                    <span className="truncate">{project.title}</span>
+                    <ArrowUpRight className="size-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-60" />
                   </Link>
                 </div>
               </TableCell>
-              <TableCell className="truncate text-muted-foreground">{project.description}</TableCell>
-              <TableCell>
-                <Badge variant="secondary">{project.contentNum}</Badge>
+              <TableCell className="truncate text-sm text-muted-foreground">
+                {project.description || '—'}
               </TableCell>
-              <TableCell className="text-xs text-muted-foreground tabular-nums">{formatDate(project.addTime)}</TableCell>
               <TableCell>
-                <ConfirmDelete onConfirm={() => onDelete(project.id)} />
+                <Badge variant={project.contentNum > 0 ? 'secondary' : 'outline'}>
+                  {project.contentNum}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-xs text-muted-foreground tabular-nums">
+                {formatDate(project.addTime)}
+              </TableCell>
+              <TableCell className="text-right">
+                <ConfirmDelete
+                  icon={<Trash2 className="size-4" />}
+                  variant="ghost"
+                  onConfirm={() => onDelete(project.id)}
+                />
               </TableCell>
             </TableRow>
           ))}

@@ -1,10 +1,11 @@
 import { Fragment, useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import type { ContentItem } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ConfirmDelete } from '@/components/confirm-delete'
 import { EmptyState } from '@/components/empty-state'
+import { Badge } from '@/components/ui/badge'
 import {
   Table,
   TableBody,
@@ -53,29 +54,37 @@ export function ContentTable({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between text-sm">
-        <label className="flex items-center gap-2">
-          <Checkbox
-            checked={allChecked}
-            onCheckedChange={(checked) => {
-              const next: Record<number, boolean> = {}
-              if (checked === true) {
-                for (const item of contents) next[item.id] = true
-              }
-              setSelected(next)
-            }}
-          />
-          全选
-        </label>
+      <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2 text-muted-foreground">
+            <Checkbox
+              checked={allChecked}
+              onCheckedChange={(checked) => {
+                const next: Record<number, boolean> = {}
+                if (checked === true) {
+                  for (const item of contents) next[item.id] = true
+                }
+                setSelected(next)
+              }}
+            />
+            全选
+          </label>
+          <Badge variant="secondary">共 {contents.length} 条</Badge>
+          {selectedIds.length > 0 && (
+            <span className="text-xs text-muted-foreground">已选 {selectedIds.length} 条</span>
+          )}
+        </div>
         <Button
           variant="outline"
           size="sm"
+          className="text-destructive"
           disabled={selectedIds.length === 0}
           onClick={() => {
             onDeleteMany(selectedIds)
             setSelected({})
           }}
         >
+          <Trash2 className="size-3.5" />
           删除选中项
         </Button>
       </div>
@@ -87,9 +96,9 @@ export function ContentTable({
               <TableHead className="w-10" />
               <TableHead className="w-20">详情</TableHead>
               <TableHead className="w-36">时间</TableHead>
-              <TableHead className="w-[27%]">Domain</TableHead>
-              <TableHead className="w-[18%]">Headers</TableHead>
-              <TableHead className="w-16">操作</TableHead>
+              <TableHead className="w-[27%]">域名</TableHead>
+              <TableHead className="w-[18%]">请求头</TableHead>
+              <TableHead className="w-16 text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -120,23 +129,26 @@ export function ContentTable({
                         className="px-1"
                         onClick={() => setExpanded((prev) => ({ ...prev, [item.id]: !open }))}
                       >
-                        {open ? <ChevronUp /> : <ChevronDown />}
+                        {open ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />}
                         {open ? '折叠' : '展开'}
                       </Button>
                     </TableCell>
-                    <TableCell className="whitespace-nowrap">{formatTime(item.addTime)}</TableCell>
+                    <TableCell className="text-xs whitespace-nowrap text-muted-foreground tabular-nums">{formatTime(item.addTime)}</TableCell>
                     <TableCell className="truncate text-muted-foreground">
                       {item.domain || '-'}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {Object.keys(item.serverContent ?? {}).length} 项
                     </TableCell>
-                    <TableCell>
-                      <ConfirmDelete onConfirm={() => onDelete(item.id)} />
+                    <TableCell className="text-right">
+                      <ConfirmDelete
+                        icon={<Trash2 className="size-4" />}
+                        onConfirm={() => onDelete(item.id)}
+                      />
                     </TableCell>
                   </TableRow>
                   {open && (
-                    <TableRow className="bg-muted/30 hover:bg-muted/30">
+                    <TableRow className="bg-muted/20 hover:bg-muted/20">
                       <TableCell colSpan={6} className="whitespace-normal">
                         <div className="grid gap-6 px-2 py-2 md:grid-cols-2">
                           <section className="flex flex-col gap-1">
