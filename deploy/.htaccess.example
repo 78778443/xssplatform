@@ -1,0 +1,15 @@
+# Apache example: place this file at the repository root as .htaccess
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Receiver endpoints keep their legacy URLs
+RewriteRule ^([0-9a-zA-Z]{6})$ /index.php?do=code&urlKey=$1 [L]
+RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$ /index.php?do=do&auth=$1&domain=$3 [L]
+RewriteRule ^register/(.*?)$ /index.php?do=register&key=$1 [L]
+
+# SPA deep links fall back to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+</IfModule>

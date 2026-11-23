@@ -1,184 +1,93 @@
-## 推荐使用docker方式搭建
+# XSS Platform
 
+一个用于授权安全测试的 XSS 收包平台。前端为 React + shadcn/ui 单页应用，后端为 PHP（无需 Node 运行时即可部署）。
 
+> 本工具仅面向合法授权的企业安全建设与安全测试行为。使用前请确保你已获得目标系统的明确授权，并遵守当地法律法规。
 
-参考文章：
-- https://segmentfault.com/a/1190000021899373          使用docker快速搭建xssPlatform测试平台实践
-- https://www.bilibili.com/video/BV1ke4y1P7Ek/         使用蜻蜓安全平台一键搭建XSS平台
-## 一、背景
+## 环境要求
 
-笔者将源代码放到GitHub当中，给有需要的同行研究，为了简化安装步骤，特意写一篇文章来帮助大家。
+- PHP ≥ 8.0（推荐 8.1–8.4）
+- MySQL ≥ 5.6（推荐 8.0）
+- PHP 扩展：`mysqli`、`curl`、`openssl`、`json`
+- 生产部署**不需要** Node.js；只有修改前端时才需要 Node 22 + npm
 
-### 📑 Licenses
-本工具禁止进行未授权商业用途，禁止二次开发后进行未授权商业用途。
+## 安装
 
-本工具仅面向合法授权的企业安全建设行为，在使用本工具进行检测时，您应确保该行为符合当地的法律法规，并且已经取得了足够的授权。
+1. 把仓库放到 Web 根目录（`index.php` 所在目录即站点根）。
+2. 按 `deploy/nginx.conf` 或 `deploy/.htaccess.example` 配置重写规则（收包地址 `/{6位}`、`/do/auth/...`、`/register/{key}` 必须保留，其余路径回落到 `index.php`）。
+3. 浏览器打开 `/install`，按向导填写数据库信息与管理员账号。
+4. 安装完成后用管理员账号登录。
 
-如您在使用本工具的过程中存在任何非法行为，您需自行承担相应后果，我们将不承担任何法律及连带责任。
+安装向导会写入 `config.php` 与 `install/install.lock`。旧的 `install/step1.php` 等地址会自动跳转到 `/install`。
 
-在使用本工具前，请您务必审慎阅读、充分理解各条款内容，限制、免责条款或者其他涉及您重大权益的条款可能会以加粗、加下划线等形式提示您重点注意。 除非您已充分阅读、完全理解并接受本协议所有条款，否则，请您不要使用本工具。您的使用行为或者您以其他任何明示或者默示方式表示接受本协议的，即视为您已阅读并同意本协议的约束。  
+## 已安装的数据库升级
 
-### 联系我
+老版本升级时运行一次：
 
-![](http://oss.songboy.site/blog/20211212225324.png)
-
-![](http://oss.songboy.site/blog/be07f380d5b834650bc3bf1e7ab055d.jpg)
-
-
-## 二、操作概要
-1. 源码下载
-2. 安装配置
-3. 攻击测试
-
-
-## 三、下载源码
-
-github地址:`https://github.com/78778443/xssplatform`
-
-首先通过cd命令将代码放到指定位置，参考命令如下
-
-
-```
-cd /Users/song/mycode/safe/
-```
-之后通过git下载源码，参考命令如下:
-
-```
-git clone https://github.com/78778443/xssplatform.git
+```bash
+XSSP_CONFIG=/path/to/config.php php install/upgrade.php
 ```
 
+脚本会把 `oc_user.userPwd` 扩到 `varchar(255)`（用于 `password_hash`）并把 `oc_session.data` 改为 `TEXT`，可重复执行。老用户的 md5 密码会在首次登录成功后自动升级为 `password_hash`。
 
-## 四、安装配置
+## 常用功能
 
+- 注册（普通 / 邀请 / 关闭三种模式）、登录、自动登录、邀请码管理
+- 项目 CRUD、内容收包查看、域名过滤、批量删除、代码查看
+- 模块 CRUD、公共模块审核
+- 邮件提醒（PHPMailer 6）、钉钉机器人通知
+- 收包端点：`index.php?do=code|api|do|keepsession`、`authtest.php`
+- keepsession 定时任务：`XSSP_CONFIG=/path/to/config.php php scripts/keepsession.php`
 
-### 4.1 增加虚拟主机
+## 老地址兼容
 
-XSS Platform 需要在根目录中运行，因此需要单独添加一个虚拟主机，笔者以nginx环境为例，配置虚拟主机的配置代码如下所示:
+`index.php?do=...` 等旧页面地址会 302 到新的 SPA 路由；旧表单 POST 仍会执行。收包端点与 `/do/auth/{authCode}` 的 URL、参数、响应保持不变。
 
-```
-server {
-    listen       80;
-    server_name  xss.localhost;
-    root  /Users/song/mycode/safe/xssplatform/;
+## 开发
 
+```bash
+# 后端测试（需要 Docker 拉取 MySQL 8）
+bash tests/setup-db.sh
+php tests/run.php tests/unit tests/integration
 
-    rewrite "^/([0-9a-zA-Z]{6})$" /index.php?do=code&urlKey=$1 last;
-    rewrite "^/do/auth/(\w+?)(/domain/([\w\.]+?))?$" /index.php?do=do&auth=$1&domain=$3 last;
-    rewrite "^/register/(.*?)$" /index.php?do=register&key=$1 last;
-    rewrite "^/register-validate/(.*?)$" /index.php?do=register&act=validate&key=$1 last;
+# HTTP / 安全测试（临时副本 + PHP 内置服务器，端口 18081）
+bash tests/http/setup-installed.sh
+php tests/run.php tests/http tests/security
+kill $(cat /tmp/xssp-http-installed.pid)
 
-    location / {
-
-        index index.html index.htm index.php;
-    }
-
-    location ~ \.php$ {
-        fastcgi_pass   127.0.0.1:9000;
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-        include        fastcgi_params;
-    }
-
-}
-```
-
-修改配置文件后，需要重启nginx让其配置生效，重启命令参考如下:
-
-```
-nginx -s reload
+# 前端开发与测试
+cd frontend
+npm install
+npm run dev          # http://127.0.0.1:5173，代理 /api.php 到 18081
+npm test
+npm run build        # 输出到仓库根 dist/（构建产物已入库）
 ```
 
-### 4.2 添加HOST记录
+通知链路的集成测试需要 MailHog（`8025`）与 mock 钉钉端点（`19090`）；未启动时该用例会显示 SKIP。
 
-hosts文件位置是`/etc/hosts`，通过vim命令进行编辑，参考命令如下所示:
+## 代码结构
+
 ```
-vim /etc/hosts
+index.php              SPA 壳 / 老地址路由 / 收包端点分发
+api.php                JSON API 前控制器（?action=...）
+source/services/       业务服务（认证、项目、模块、用户、管理员、安装、收包）
+source/class/          DB（mysqli 预处理语句）、User（会话/密码/CSRF）
+source/lib/            Config、Api、UrlMap、Notify 等
+frontend/              React + shadcn/ui 源码
+dist/                  前端构建产物
+deploy/                nginx / apache / PHP 内置服务器示例
+tests/                 PHP 测试与前端测试
 ```
-在文件中添加一行记录，内容如下所示：
-```
-127.0.0.1	xss.localhost
-```
 
-### 4.3 系统安装
+## 安全说明
 
-通过前面添加虚拟主机和添加host解析之后，便可以通过浏览器访问此平台，URL地址为`http://xss.localhost/`,打开后会自动跳转到安装界面，如下图所示
+- 所有 SQL 走预处理语句
+- 写操作使用 POST + `X-CSRF-Token`，并校验同源
+- 会话 Cookie 为 HttpOnly + SameSite=Lax，HTTPS 下自动 Secure
+- 密码使用 `password_hash`，兼容旧 md5 并在登录时迁移
+- 安装完成后 `install.submit` 等安装接口返回 403
+- 收包端点的回跳地址只接受 http/https，空 Referer 回落到站点根
 
-![image](http://tuchuang.songboy.site/xssplatform/1.png)
+## 许可
 
-
-点击 `我同意此协议`按钮之后，将跳转到第二步的填写配置信息界面，在此界面需要填写数据库信息，和管理员账号信息，如下图所示
-
-![image](http://tuchuang.songboy.site/xssplatform/2.png)
-
-如果数据库信息填写无误，将会看到导入数据成功的提，如下图所示
-
-![image](http://tuchuang.songboy.site/xssplatform/3.png)
-
-此时便代表安装成功
-
-
-
-### 4.4 功能简介
-先来熟悉一些XSS Platform的一些功能，在安装完成界面点击进入首页，会要求先登录，在登录界面输入刚才安装时所填写的管理员账号信息，点击登录即可，登录成功之后会自动跳转到首页，如下图所示
-
-![image](http://tuchuang.songboy.site/xssplatform/4.png)
-
-在首页中可以看到有一个默认项目，点击`default`后可以看到受害者列表，不过刚刚安装肯定是还没有数据的，如下图所示
-
-![image](http://tuchuang.songboy.site/xssplatform/5.png)
-
-在图中右上方有一个查看代码的链接，点击进去便可以查看XSS Platform预备好的攻击代码，如下图所示
-
-![image](http://tuchuang.songboy.site/xssplatform/6.png)
-
-## 五、攻击测试
-
-现在笔者将正是开始进行一些实践演示，首先会找出一个permeate渗透测试系统的XSS漏洞，将XSS Platform的攻击代码插入进去；
-
-然后模拟受害者访问到被攻击的页面，会到XSS platform系统中查看收到的cookie值，最后使用接收到的cookie来冒充受害者。
-
-permeate 渗透测试系统源码和搭建教程地址可以参考：`https://github.com/78778443/permeate`
-
-
-
-
-### 5.1 插入XSS代码
-
-笔者此前已经将permeate渗透测试系统搭建成功，下面将在此系统发表一个帖子，并在帖子标题中插入`XSS Platform`中预备好的攻击代码，如下图所示
-
-![image](http://tuchuang.songboy.site/xssplatform/7.png)
-
-点击发表按钮，便将帖子发布成功，此时假定自己为受害者，访问了此帖子列表，在列表中会读取帖子的标题，帖子`<script>`标签别浏览器执行便不会显示出来，如下图所示
-
-![image](http://tuchuang.songboy.site/xssplatform/8.png)
-
-
-### 5.2 接收cookie
-
-可以看到并没有显示出来，再回到XSS Platform当中，查看`default`项目中的受害者列表，可以看到一个受害者，如下图所示
-
-![image](http://tuchuang.songboy.site/xssplatform/9.png)
-
-说明受害者已经成功中招，并且通过攻击代码已经获取到对方的cookie值和header信息
-
-### 5.3 替换cookie
-
-有了cookie值之后，笔者将使用另外一个浏览器，通过修改cookie的方式来登录受害者的账户，如下图修改cookie的操作
-![image](http://tuchuang.songboy.site/xssplatform/10.png)
-
-再次刷新时，已经变成了登录身份，如下图所示
-![image](http://tuchuang.songboy.site/xssplatform/11.png)
-
-
-## 六、图书推荐
-
-如果对笔者的文章较为感兴趣，可以关注笔者新书《PHP Web安全开发实战》，现已在各大平台上架销售，封面如下图所示
-
-![image](http://tuchuang.songboy.site/xss2/19.png?1)
-
---------------
-作者：汤青松
-
-日期：2018-12-08
-
-微信：songboy8888
+本工具禁止进行未授权商业用途，禁止二次开发后进行未授权商业用途。详见仓库内原授权协议（安装向导第一步）。
