@@ -18,7 +18,7 @@ final class Api
 
             $input = self::parseInput($input, $server, $get, $post);
 
-            if ($installed && !self::sameOrigin($server)) {
+            if (!self::sameOrigin($server)) {
                 throw new AppError('no_permission', 403, '没有操作权限');
             }
 
@@ -26,6 +26,24 @@ final class Api
             case 'meta':
             case 'session':
                 $data = self::sessionPayload($installed, $action === 'session');
+                break;
+            case 'install.status':
+            case 'install.testDb':
+            case 'install.submit':
+                if ($installed) {
+                    throw new AppError('no_permission', 403, '已经安装');
+                }
+                require_once ROOT_PATH . '/source/lib/ConfigWriter.php';
+                require_once ROOT_PATH . '/source/services/InstallService.php';
+                $installer = new InstallService();
+                if ($action === 'install.status') {
+                    $data = $installer->status();
+                } elseif ($action === 'install.testDb') {
+                    $installer->testDb($input);
+                    $data = [];
+                } else {
+                    $data = $installer->install($input);
+                }
                 break;
             default:
                 throw new AppError('not_found', 404, '接口不存在');

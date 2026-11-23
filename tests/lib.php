@@ -63,7 +63,12 @@ function assertThrows(string $class, callable $fn, string $label = ''): void
 }
 
 register_shutdown_function(function (): void {
+    $total = $GLOBALS['__tests_passed'] + $GLOBALS['__tests_failed'];
     echo sprintf("\n%d passed, %d failed\n", $GLOBALS['__tests_passed'], $GLOBALS['__tests_failed']);
+    if ($total === 0) {
+        fwrite(STDERR, "NO TESTS RAN\n");
+        exit(1);
+    }
     if ($GLOBALS['__tests_failed'] > 0) {
         exit(1);
     }
