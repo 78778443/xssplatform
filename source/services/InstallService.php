@@ -150,9 +150,10 @@ final class InstallService
         $parts = parse_url($urlroot);
         $scheme = $parts['scheme'] ?? '';
         $host = $parts['host'] ?? '';
+        $port = $parts['port'] ?? null;
         if (!in_array($scheme, ['http', 'https'], true) || $host === '' || !preg_match('/^[A-Za-z0-9.:-]+$/', $host)) {
             return $this->detectUrlRoot();
         }
-        return $scheme . '://' . $host;
+        return $scheme . '://' . $host . ($port !== null ? ':' . (int) $port : '');
     }
 }

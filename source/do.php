@@ -1,37 +1,20 @@
 <?php
 /**
- * api.php 接口
+ * do.php 认证数据接口
  * ----------------------------------------------------------------
  * OldCMS,site:http://www.oldcms.com
  */
-if(!defined('IN_OLDCMS')) { die('Access Denied');
+if (!defined('IN_OLDCMS')) {
+    die('Access Denied');
 }
 
-$auth=Val('auth', 'GET');
-$act=Val('act', 'GET');
-$domain=Val('domain', 'GET');
-$db=DBConnect();
-$project=$db->FirstRow("SELECT * FROM ".Tb('project')." WHERE authCode='{$auth}'");
-if(empty($project)) { exit('Auth Err.');
+require_once ROOT_PATH . '/source/services/AuthApiService.php';
+
+$auth = Val('auth', 'GET');
+$project = db()->FirstRow('SELECT id FROM ' . Tb('project') . ' WHERE authCode=?', [$auth]);
+if (empty($project)) {
+    exit('Auth Err.');
 }
 
-switch($act){
-case 'content':
-default:
-    $domain=Val('domain', 'GET');
-    $where='';
-    if(!empty($domain)) { $where.=" AND domain='{$domain}'";
-    }
-    $contents=$db->FirstColumn("SELECT content FROM ".Tb('project_content')." WHERE projectId='{$project['id']}' {$where} ORDER BY id DESC");
-    $data=array();
-    foreach($contents as $k=>$v){
-        $row=array();
-        $v=(array)json_decode($v);
-        $row['url']=$v['opener']?$v['opener']: $v['toplocation'];
-        $row['cookie']=$v['cookie'];
-        $data[]=$row;
-    }
-    echo JsonEncode($data);
-    break;
-}
-?>
+$service = new AuthApiService();
+echo JsonEncode($service->data($auth, Val('domain', 'GET')));

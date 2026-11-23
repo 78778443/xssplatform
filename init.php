@@ -4,8 +4,12 @@
  * ----------------------------------------------------------------
  * OldCMS,site:http://www.oldcms.com
  */
-define('ROOT_PATH', dirname(__FILE__));
-define('IN_OLDCMS', true);
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', dirname(__FILE__));
+}
+if (!defined('IN_OLDCMS')) {
+    define('IN_OLDCMS', true);
+}
 
 require ROOT_PATH . '/source/bootstrap.php';
 

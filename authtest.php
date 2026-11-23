@@ -1,25 +1,36 @@
-<?
-error_reporting(0);
-/* ������ $PHP_AUTH_USER ��$PHP_AUTH_PW ��ֵ*/
+<?php
+/**
+ * authtest.php Basic Auth 钓鱼端点
+ * ----------------------------------------------------------------
+ */
+define('ROOT_PATH', dirname(__FILE__));
+define('IN_OLDCMS', true);
 
-if ((!isset($_SERVER['PHP_AUTH_USER'])) || (!isset($_SERVER['PHP_AUTH_PW']))) {
+require_once ROOT_PATH . '/source/lib/Config.php';
+require_once ROOT_PATH . '/source/lib/Display.php';
 
- /* ��ֵ�����Ͳ�����ʾ�ı��������ͷ��*/
+$configFile = ROOT_PATH . '/config.php';
+if (!is_file($configFile)) {
+    http_response_code(503);
+    exit('Not installed.');
+}
+Config::load($configFile);
+$urlRoot = (string) Config::get('urlroot', '');
 
-    header('WWW-Authenticate: Basic realm="'.addslashes(trim($_GET['info'])).'"');
+$info = str_replace(["\r", "\n"], '', (string) ($_GET['info'] ?? ''));
+$id = (string) ($_GET['id'] ?? '');
 
+if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+    header('WWW-Authenticate: Basic realm="' . addslashes($info) . '"');
     header('HTTP/1.0 401 Unauthorized');
-
     echo 'Authorization Required.';
-
     exit;
-
-} else if ((isset($_SERVER['PHP_AUTH_USER'])) && (isset($_SERVER['PHP_AUTH_PW']))){
-
-    /* ����ֵ���ڣ�������Ƿ���ȷ */
-
-	header("Location: http://127.0.0.1:8080/index.php?do=api&id={$_GET['id']}&username={$_SERVER[PHP_AUTH_USER]}&password={$_SERVER[PHP_AUTH_PW]}");
-
 }
 
-?>
+$params = [
+    'do' => 'api',
+    'id' => $id,
+    'username' => (string) $_SERVER['PHP_AUTH_USER'],
+    'password' => (string) $_SERVER['PHP_AUTH_PW'],
+];
+header('Location: ' . $urlRoot . '/index.php?' . http_build_query($params));
