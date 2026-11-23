@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ContentItem } from '@/lib/types'
 import { Button } from '@/components/ui/button'
@@ -23,10 +23,11 @@ function formatTime(value: number) {
 
 function KeyList({ data }: { data: Record<string, string> }) {
   return (
-    <ul className="font-mono text-xs break-all">
+    <ul className="font-mono text-xs">
       {Object.entries(data).map(([key, value]) => (
-        <li key={key}>
-          {key} : {value}
+        <li key={key} className="flex gap-2 border-b border-border/40 py-1 last:border-0">
+          <span className="w-28 shrink-0 text-muted-foreground">{key}</span>
+          <span className="break-all">{value}</span>
         </li>
       ))}
     </ul>
@@ -80,14 +81,14 @@ export function ContentTable({
       </div>
 
       <div className="overflow-x-auto">
-        <Table>
+        <Table className="table-fixed">
           <TableHeader>
             <TableRow>
               <TableHead className="w-10" />
-              <TableHead className="w-16">详情</TableHead>
-              <TableHead className="w-40">时间</TableHead>
-              <TableHead>接收的内容</TableHead>
-              <TableHead>Request Headers</TableHead>
+              <TableHead className="w-20">详情</TableHead>
+              <TableHead className="w-36">时间</TableHead>
+              <TableHead className="w-[27%]">接收的内容</TableHead>
+              <TableHead className="w-[30%]">Request Headers</TableHead>
               <TableHead className="w-16">操作</TableHead>
             </TableRow>
           </TableHeader>
@@ -102,35 +103,53 @@ export function ContentTable({
             {contents.map((item) => {
               const open = Boolean(expanded[item.id])
               return (
-                <TableRow key={item.id} className="align-top">
-                  <TableCell>
-                    <Checkbox
-                      checked={Boolean(selected[item.id])}
-                      onCheckedChange={(checked) =>
-                        setSelected((prev) => ({ ...prev, [item.id]: checked === true }))
-                      }
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="px-1"
-                      onClick={() => setExpanded((prev) => ({ ...prev, [item.id]: !open }))}
-                    >
-                      {open ? <ChevronUp /> : <ChevronDown />}
-                      {open ? '折叠' : '展开'}
-                    </Button>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">{formatTime(item.addTime)}</TableCell>
-                  <TableCell>
-                    {open ? <KeyList data={item.content} /> : <span className="text-muted-foreground">{item.domain || '-'}</span>}
-                  </TableCell>
-                  <TableCell>{open ? <KeyList data={item.serverContent} /> : <span className="text-muted-foreground">-</span>}</TableCell>
-                  <TableCell>
-                    <ConfirmDelete onConfirm={() => onDelete(item.id)} />
-                  </TableCell>
-                </TableRow>
+                <Fragment key={item.id}>
+                  <TableRow className="align-top">
+                    <TableCell>
+                      <Checkbox
+                        checked={Boolean(selected[item.id])}
+                        onCheckedChange={(checked) =>
+                          setSelected((prev) => ({ ...prev, [item.id]: checked === true }))
+                        }
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="px-1"
+                        onClick={() => setExpanded((prev) => ({ ...prev, [item.id]: !open }))}
+                      >
+                        {open ? <ChevronUp /> : <ChevronDown />}
+                        {open ? '折叠' : '展开'}
+                      </Button>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">{formatTime(item.addTime)}</TableCell>
+                    <TableCell className="truncate text-muted-foreground">
+                      {item.domain || '-'}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">-</TableCell>
+                    <TableCell>
+                      <ConfirmDelete onConfirm={() => onDelete(item.id)} />
+                    </TableCell>
+                  </TableRow>
+                  {open && (
+                    <TableRow className="bg-muted/30 hover:bg-muted/30">
+                      <TableCell colSpan={6} className="whitespace-normal">
+                        <div className="grid gap-6 px-2 py-2 md:grid-cols-2">
+                          <section className="flex flex-col gap-1">
+                            <h4 className="text-xs font-medium text-muted-foreground">接收的内容</h4>
+                            <KeyList data={item.content} />
+                          </section>
+                          <section className="flex flex-col gap-1">
+                            <h4 className="text-xs font-medium text-muted-foreground">Request Headers</h4>
+                            <KeyList data={item.serverContent} />
+                          </section>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </Fragment>
               )
             })}
           </TableBody>

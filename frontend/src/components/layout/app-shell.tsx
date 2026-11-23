@@ -55,7 +55,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-svh flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-3 px-4">
+        <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-3 px-4">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
               className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'md:hidden')}
@@ -133,11 +133,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-1 gap-6 px-4 py-6">
-        <aside className="hidden w-56 shrink-0 md:block">
-          <NavLinks isAdmin={isAdmin} />
-        </aside>
-        <Separator orientation="vertical" className="hidden md:block" />
+      <div className="mx-auto flex w-full max-w-7xl flex-1 gap-6 px-4 py-6">
+        {data?.user && (
+          <>
+            <aside className="hidden w-56 shrink-0 md:block">
+              <NavLinks isAdmin={isAdmin} />
+            </aside>
+            <Separator orientation="vertical" className="hidden md:block" />
+          </>
+        )}
         <main className="min-w-0 flex-1">{children}</main>
       </div>
     </div>

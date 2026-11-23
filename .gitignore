@@ -3,3 +3,5 @@ admin/templates_c
 .idea
 tests/config.test.php
 frontend/node_modules
+frontend/test-results
+frontend/playwright-report

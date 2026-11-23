@@ -1,8 +1,17 @@
 import { Button } from '@/components/ui/button'
 import { Copy } from 'lucide-react'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
-export function CodeBlock({ label, value }: { label: string; value: string }) {
+export function CodeBlock({
+  label,
+  value,
+  className,
+}: {
+  label: string
+  value: string
+  className?: string
+}) {
   async function copy() {
     try {
       await navigator.clipboard.writeText(value)
@@ -13,7 +22,7 @@ export function CodeBlock({ label, value }: { label: string; value: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={cn('flex flex-col gap-2', className)}>
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-medium">{label}</span>
         <Button variant="outline" size="sm" onClick={copy}>

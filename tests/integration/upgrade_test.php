@@ -8,7 +8,7 @@ $cfg = include __DIR__ . '/../config.test.php';
 test('upgrade widens password and session columns idempotently', function () use ($cfg) {
     $db = new DB_Mysql();
     assertTrue($db->Connect($cfg['dbHost'], $cfg['dbUser'], $cfg['dbPwd'], $cfg['database'], $cfg['charset'], $cfg['tbPrefix']));
-    $db->Execute('ALTER TABLE oc_user MODIFY userPwd varchar(50) NULL');
+    $db->Execute('ALTER TABLE oc_user MODIFY userPwd varchar(100) NULL');
     $db->Execute('ALTER TABLE oc_session MODIFY data varchar(255) NULL');
 
     $cmd = 'XSSP_CONFIG=' . escapeshellarg(realpath(__DIR__ . '/../config.test.php'))

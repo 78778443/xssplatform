@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { Activity, Server, Users } from 'lucide-react'
 import { api } from '@/lib/api'
 import { AdminGuard } from '@/components/admin-guard'
 import { buttonVariants } from '@/components/ui/button'
@@ -12,13 +13,26 @@ interface Overview {
   sysInfo: Record<string, string>
 }
 
-function Stat({ label, value }: { label: string; value: string | number }) {
+function Stat({
+  label,
+  value,
+  icon,
+}: {
+  label: string
+  value: string | number
+  icon: React.ReactNode
+}) {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-sm text-muted-foreground">{label}</CardTitle>
-      </CardHeader>
-      <CardContent className="text-2xl font-semibold">{value}</CardContent>
+      <CardContent className="flex items-center gap-4">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          {icon}
+        </div>
+        <div className="flex flex-col">
+          <span className="text-sm text-muted-foreground">{label}</span>
+          <span className="text-3xl font-semibold tracking-tight">{value}</span>
+        </div>
+      </CardContent>
     </Card>
   )
 }
@@ -33,12 +47,12 @@ export function AdminPage() {
     <AdminGuard>
       <div className="flex flex-col gap-6">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Stat label="注册用户总数" value={query.data?.userCount ?? '-'} />
-          <Stat label="在线用户总数" value={query.data?.onlineCount ?? '-'} />
+          <Stat label="注册用户总数" value={query.data?.userCount ?? '-'} icon={<Users className="size-5" />} />
+          <Stat label="在线用户总数" value={query.data?.onlineCount ?? '-'} icon={<Activity className="size-5" />} />
         </div>
 
         <Card>
-          <CardHeader className="flex-row items-center justify-between">
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>在线用户</CardTitle>
             <Link to="/admin/modules" className={buttonVariants({ variant: 'outline', size: 'sm' })}>
               模块审核
@@ -46,9 +60,17 @@ export function AdminPage() {
           </CardHeader>
           <CardContent className="text-sm">
             {query.data?.onlineUsers.length ? (
-              <ul className="flex flex-col gap-1">
+              <ul className="flex flex-wrap gap-2">
                 {query.data.onlineUsers.map((user) => (
-                  <li key={user.id}>{user.userName}</li>
+                  <li
+                    key={user.id}
+                    className="flex items-center gap-2 rounded-full border bg-background py-1 pr-3 pl-1"
+                  >
+                    <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
+                      {user.userName.slice(0, 1).toUpperCase()}
+                    </span>
+                    {user.userName}
+                  </li>
                 ))}
               </ul>
             ) : (
@@ -58,15 +80,16 @@ export function AdminPage() {
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center gap-2">
+            <Server className="size-4 text-muted-foreground" />
             <CardTitle>系统环境</CardTitle>
           </CardHeader>
           <CardContent>
             <dl className="grid gap-2 text-sm sm:grid-cols-2">
               {Object.entries(query.data?.sysInfo ?? {}).map(([key, value]) => (
-                <div key={key} className="flex gap-2">
-                  <dt className="text-muted-foreground">{key}:</dt>
-                  <dd className="font-mono break-all">{value}</dd>
+                <div key={key} className="flex flex-col gap-0.5 rounded-lg border bg-background px-3 py-2">
+                  <dt className="text-xs text-muted-foreground">{key}</dt>
+                  <dd className="font-mono text-xs break-all">{value}</dd>
                 </div>
               ))}
             </dl>

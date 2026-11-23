@@ -27,11 +27,11 @@ export function ProjectTable({
 }) {
   return (
     <div className="overflow-x-auto">
-      <Table>
+      <Table className="table-fixed">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-48">项目名称</TableHead>
-            <TableHead>项目描述</TableHead>
+            <TableHead className="w-[22%]">项目名称</TableHead>
+            <TableHead className="w-[42%]">项目描述</TableHead>
             <TableHead className="w-24">内容数</TableHead>
             <TableHead className="w-28">创建时间</TableHead>
             <TableHead className="w-16">操作</TableHead>
@@ -50,7 +50,7 @@ export function ProjectTable({
               <TableCell>
                 <Link to={`/project/${project.id}`}>{project.title}</Link>
               </TableCell>
-              <TableCell className="max-w-80 truncate">{project.description}</TableCell>
+              <TableCell className="truncate">{project.description}</TableCell>
               <TableCell>{project.contentNum}</TableCell>
               <TableCell>{formatDate(project.addTime)}</TableCell>
               <TableCell>

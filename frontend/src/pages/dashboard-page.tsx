@@ -5,7 +5,9 @@ import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import type { DashboardData } from '@/lib/types'
 import { ProjectTable } from '@/components/project-table'
+import { ModuleList } from '@/components/module-list'
 import { buttonVariants } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function DashboardPage() {
@@ -22,11 +24,13 @@ export function DashboardPage() {
   })
 
   const modules = dashboard.data?.modules ?? []
+  const mine = modules.filter((module) => module.isOpen === 0 || module.isAudit === 0)
+  const publicModules = modules.filter((module) => module.isOpen === 1 && module.isAudit === 1)
 
   return (
     <div className="flex flex-col gap-6">
       <Card>
-        <CardHeader className="flex-row items-center justify-between">
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>我的项目</CardTitle>
           <Link to="/project/new" className={buttonVariants({ size: 'sm' })}>
             <Plus />
@@ -47,46 +51,35 @@ export function DashboardPage() {
 
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>我的模块</CardTitle>
+            <Badge variant="secondary">{mine.length}</Badge>
           </CardHeader>
           <CardContent>
-            <ul className="flex flex-col gap-2 text-sm">
-              {modules
-                .filter((module) => module.isOpen === 0 || module.isAudit === 0)
-                .map((module) => (
-                  <li key={module.id}>
-                    <Link to={`/modules/${module.id}/edit`}>{module.title}</Link>
-                  </li>
-                ))}
-              {modules.filter((module) => module.isOpen === 0 || module.isAudit === 0).length === 0 && (
-                <li className="text-muted-foreground">暂无私有模块</li>
-              )}
-            </ul>
+            <ModuleList
+              modules={mine}
+              href={(module) => `/modules/${module.id}/edit`}
+              emptyTitle="暂无私有模块"
+              emptyDescription="创建模块后可在这里快速编辑"
+            />
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>公共模块</CardTitle>
+            <Badge variant="secondary">{publicModules.length}</Badge>
           </CardHeader>
           <CardContent>
-            <ul className="flex flex-col gap-2 text-sm">
-              {modules
-                .filter((module) => module.isOpen === 1 && module.isAudit === 1)
-                .map((module) => (
-                  <li key={module.id}>
-                    <Link to={`/modules/${module.id}`}>{module.title}</Link>
-                  </li>
-                ))}
-              {modules.filter((module) => module.isOpen === 1 && module.isAudit === 1).length === 0 && (
-                <li className="text-muted-foreground">暂无公共模块</li>
-              )}
-            </ul>
+            <ModuleList
+              modules={publicModules}
+              href={(module) => `/modules/${module.id}`}
+              emptyTitle="暂无公共模块"
+              emptyDescription="审核通过的公共模块会显示在这里"
+            />
           </CardContent>
         </Card>
       </div>
     </div>
   )
 }
-

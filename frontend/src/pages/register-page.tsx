@@ -70,7 +70,8 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-xl py-10">
+    <div className="flex min-h-[calc(100svh-8rem)] items-center justify-center">
+      <div className="w-full max-w-xl">
       <Card>
         <CardHeader>
           <CardTitle>注册</CardTitle>
@@ -145,6 +146,7 @@ export function RegisterPage() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }

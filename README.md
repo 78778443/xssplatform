@@ -1,8 +1,62 @@
-# XSS Platform
+<div align="center">
 
-一个用于授权安全测试的 XSS 收包平台。前端为 React + shadcn/ui 单页应用，后端为 PHP（无需 Node 运行时即可部署）。
+<h1>XSS Platform</h1>
 
+<p><strong>面向授权安全测试的 XSS 收包平台</strong><br>
+React 19 + shadcn/ui 单页前端 · PHP 8 后端 · 生产部署无需 Node.js</p>
+
+<img src="https://img.shields.io/badge/PHP-8.0%2B-777BB4?logo=php&logoColor=white" alt="PHP 8.0+" />
+<img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19" />
+<img src="https://img.shields.io/badge/shadcn%2Fui-base--nova-000000" alt="shadcn/ui" />
+<img src="https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white" alt="MySQL 8" />
+<img src="https://img.shields.io/badge/%E5%90%88%E6%B3%95%E6%8E%88%E6%9D%83-%E4%BB%85%E9%99%90%E6%B5%8B%E8%AF%95-critical" alt="授权测试" />
+
+<p>
+  <a href="#安装">安装</a> ·
+  <a href="#功能">功能</a> ·
+  <a href="#开发">开发</a> ·
+  <a href="#安全说明">安全说明</a>
+</p>
+
+</div>
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" alt="XSS Platform 控制台" width="100%" />
+</p>
+
+> [!WARNING]
 > 本工具仅面向合法授权的企业安全建设与安全测试行为。使用前请确保你已获得目标系统的明确授权，并遵守当地法律法规。
+
+## 界面一览
+
+截图由 Playwright 在测试环境中自动生成，覆盖登录、项目收包、代码植入、模块管理与后台审核。
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/login.png" alt="登录" /></td>
+    <td width="50%"><img src="docs/screenshots/project.png" alt="项目内容" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>登录</sub></td>
+    <td align="center"><sub>项目内容与收包结果</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/code.png" alt="项目代码" /></td>
+    <td><img src="docs/screenshots/modules.png" alt="模块" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>项目代码与植入方式</sub></td>
+    <td align="center"><sub>模块管理</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/admin.png" alt="管理后台" /></td>
+    <td><img src="docs/screenshots/admin-modules.png" alt="模块审核" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>管理后台概况</sub></td>
+    <td align="center"><sub>公共模块审核</sub></td>
+  </tr>
+</table>
 
 ## 环境要求
 
@@ -30,7 +84,7 @@ XSSP_CONFIG=/path/to/config.php php install/upgrade.php
 
 脚本会把 `oc_user.userPwd` 扩到 `varchar(255)`（用于 `password_hash`）并把 `oc_session.data` 改为 `TEXT`，可重复执行。老用户的 md5 密码会在首次登录成功后自动升级为 `password_hash`。
 
-## 常用功能
+## 功能
 
 - 注册（普通 / 邀请 / 关闭三种模式）、登录、自动登录、邀请码管理
 - 项目 CRUD、内容收包查看、域名过滤、批量删除、代码查看
@@ -38,6 +92,7 @@ XSSP_CONFIG=/path/to/config.php php install/upgrade.php
 - 邮件提醒（PHPMailer 6）、钉钉机器人通知
 - 收包端点：`index.php?do=code|api|do|keepsession`、`authtest.php`
 - keepsession 定时任务：`XSSP_CONFIG=/path/to/config.php php scripts/keepsession.php`
+- 明暗主题、移动端布局、代码/内容一键复制
 
 ## 老地址兼容
 
@@ -61,6 +116,10 @@ npm install
 npm run dev          # http://127.0.0.1:5173，代理 /api.php 到 18081
 npm test
 npm run build        # 输出到仓库根 dist/（构建产物已入库）
+
+# 端到端测试与 README 截图（先启动 HTTP 测试环境）
+npx playwright test
+npx playwright test e2e/screenshots.spec.ts   # 重新生成 docs/screenshots/
 ```
 
 通知链路的集成测试需要 MailHog（`8025`）与 mock 钉钉端点（`19090`）；未启动时该用例会显示 SKIP。
@@ -75,8 +134,9 @@ source/class/          DB（mysqli 预处理语句）、User（会话/密码/CSR
 source/lib/            Config、Api、UrlMap、Notify 等
 frontend/              React + shadcn/ui 源码
 dist/                  前端构建产物
+docs/screenshots/      README 截图（由 Playwright 生成）
 deploy/                nginx / apache / PHP 内置服务器示例
-tests/                 PHP 测试与前端测试
+tests/                 PHP 测试、Playwright 用例与 fixtures
 ```
 
 ## 安全说明
@@ -90,4 +150,4 @@ tests/                 PHP 测试与前端测试
 
 ## 许可
 
-本工具禁止进行未授权商业用途，禁止二次开发后进行未授权商业用途。详见仓库内原授权协议（安装向导第一步）。
+本工具禁止进行未授权商业用途，禁止二次开发后进行未授权商业用途。详见安装向导第一步的授权协议。

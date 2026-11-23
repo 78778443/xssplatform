@@ -4,7 +4,9 @@ import { Plus } from 'lucide-react'
 import { api } from '@/lib/api'
 import type { ModuleSummary } from '@/lib/types'
 import { buttonVariants } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ModuleList } from '@/components/module-list'
 
 interface ModulesData {
   modules: ModuleSummary[]
@@ -22,44 +24,40 @@ export function ModulesPage() {
   return (
     <div className="flex flex-col gap-6">
       <Card>
-        <CardHeader className="flex-row items-center justify-between">
-          <CardTitle>我的模块</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CardTitle>我的模块</CardTitle>
+            <Badge variant="secondary">{mine.length}</Badge>
+          </div>
           <Link to="/modules/new" className={buttonVariants({ size: 'sm' })}>
             <Plus />
             创建模块
           </Link>
         </CardHeader>
         <CardContent>
-          <ul className="flex flex-col gap-2 text-sm">
-            {mine.map((module) => (
-              <li key={module.id}>
-                <Link to={`/modules/${module.id}/edit`}>{module.title}</Link>
-                {module.isOpen === 1 && module.isAudit === 0 && (
-                  <span className="ml-2 text-muted-foreground">（待审核）</span>
-                )}
-              </li>
-            ))}
-            {mine.length === 0 && <li className="text-muted-foreground">暂无私有模块</li>}
-          </ul>
+          <ModuleList
+            modules={mine}
+            href={(module) => `/modules/${module.id}/edit`}
+            emptyTitle="暂无私有模块"
+            emptyDescription="创建一个模块，组合要收集的字段与代码"
+          />
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>公共模块</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CardTitle>公共模块</CardTitle>
+            <Badge variant="secondary">{publicModules.length}</Badge>
+          </div>
         </CardHeader>
         <CardContent>
-          <ul className="flex flex-col gap-2 text-sm">
-            {publicModules.map((module) => (
-              <li key={module.id}>
-                <Link to={`/modules/${module.id}`}>{module.title}</Link>
-                {module.description && (
-                  <span className="ml-2 text-muted-foreground">{module.description}</span>
-                )}
-              </li>
-            ))}
-            {publicModules.length === 0 && <li className="text-muted-foreground">暂无公共模块</li>}
-          </ul>
+          <ModuleList
+            modules={publicModules}
+            href={(module) => `/modules/${module.id}`}
+            emptyTitle="暂无公共模块"
+            emptyDescription="审核通过的公共模块会显示在这里"
+          />
         </CardContent>
       </Card>
     </div>

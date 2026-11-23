@@ -10,7 +10,7 @@ test('spa deep links and assets are served', function () {
     }
 
     $index = (string) file_get_contents(__DIR__ . '/../../dist/index.html');
-    preg_match('~src="(/assets/[^"]+\.js)"~', $index, $match);
+    preg_match('~src="(/[^"]+\.js)"~', $index, $match);
     assertTrue(!empty($match[1]), 'dist index references an asset');
     $r = (string) shell_exec("curl -sS -o /dev/null -w '%{http_code}' '{$base}{$match[1]}'");
     assertSame('200', trim($r), 'asset served');

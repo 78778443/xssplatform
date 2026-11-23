@@ -35,7 +35,7 @@ function InviteTable({
 }) {
   return (
     <Card>
-      <CardHeader className="flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>
           {title}（{invites.length}）
         </CardTitle>

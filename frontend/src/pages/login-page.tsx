@@ -42,7 +42,8 @@ export function LoginPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-sm py-10">
+    <div className="flex min-h-[calc(100svh-8rem)] items-center justify-center">
+      <div className="w-full max-w-sm">
       <Card>
         <CardHeader>
           <CardTitle>登陆</CardTitle>
@@ -89,6 +90,7 @@ export function LoginPage() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }
