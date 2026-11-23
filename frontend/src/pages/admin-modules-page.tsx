@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import { useSession } from '@/lib/session'
 import { AdminGuard } from '@/components/admin-guard'
+import { EmptyState } from '@/components/empty-state'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -91,8 +92,8 @@ export function AdminModulesPage() {
               ))}
               {(query.data?.items ?? []).length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
-                    暂无模块
+                  <TableCell colSpan={5}>
+                    <EmptyState title="暂无模块" />
                   </TableCell>
                 </TableRow>
               )}

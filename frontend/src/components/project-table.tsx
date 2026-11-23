@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { ProjectSummary } from '@/lib/types'
 import { ConfirmDelete } from '@/components/confirm-delete'
+import { EmptyState } from '@/components/empty-state'
 import {
   Table,
   TableBody,
@@ -39,8 +40,8 @@ export function ProjectTable({
         <TableBody>
           {projects.length === 0 && (
             <TableRow>
-              <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
-                还没有项目
+              <TableCell colSpan={5}>
+                <EmptyState title="还没有项目" description="点击右上角创建第一个项目" />
               </TableCell>
             </TableRow>
           )}

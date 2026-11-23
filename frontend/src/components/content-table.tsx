@@ -4,6 +4,7 @@ import type { ContentItem } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ConfirmDelete } from '@/components/confirm-delete'
+import { EmptyState } from '@/components/empty-state'
 import {
   Table,
   TableBody,
@@ -93,8 +94,8 @@ export function ContentTable({
           <TableBody>
             {contents.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
-                  暂无内容
+                <TableCell colSpan={6}>
+                  <EmptyState title="暂无内容" description="把项目代码植入目标页面后会在这里显示" />
                 </TableCell>
               </TableRow>
             )}

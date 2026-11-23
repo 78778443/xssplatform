@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 function NavLinks({ isAdmin }: { isAdmin: boolean }) {
   const location = useLocation()
@@ -75,6 +76,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Link>
 
           <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle />
             {data?.user ? (
               <>
                 <span className="hidden text-sm text-muted-foreground sm:inline">
